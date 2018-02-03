@@ -1,0 +1,74 @@
+#macro(includeStatsTable, $tableKey, $parallel, $items, $summary)
+
+<table id="tablesorter" class="stats-table table-hover">
+  #includeReportHeader($tableKey, $parallel)
+
+  <tbody>
+    #foreach($item in $items)
+      <tr>
+        <td class="tagname"><a href="$item.getReportFileName()">$item.name</a></td>
+        #if ($parallel)
+          <td>$item.getDeviceName()</td>
+        #end
+
+        <td #if ($item.stepsSummary.passed > 0)     class="passed"    #end>$item.stepsSummary.passed</td>
+        <td #if ($item.stepsSummary.failed > 0)     class="failed"    #end>$item.stepsSummary.failed</td>
+        <td #if ($item.stepsSummary.skipped > 0)    class="skipped"   #end>$item.stepsSummary.skipped</td>
+        <td #if ($item.stepsSummary.pending > 0)    class="pending"   #end>$item.stepsSummary.pending</td>
+        <td #if ($item.stepsSummary.undefined > 0)  class="undefined" #end>$item.stepsSummary.undefined</td>
+        <td class="total">$item.stepsSummary.total</td>
+
+        <td #if ($item.scenariosSummary.passed > 0) class="passed"    #end>$item.scenariosSummary.passed</td>
+        <td #if ($item.scenariosSummary.skipped > 0) class="skipped"    #end>$item.scenariosSummary.skipped</td>
+        <td #if ($item.scenariosSummary.failed > 0) class="failed"    #end>$item.scenariosSummary.failed</td>
+        <td class="total">$item.scenariosSummary.total</td>
+
+        <td class="duration" data-value="$item.result.duration">$item.result.duration</td>
+        <td class="$item.result.status">$item.result.status.label</td>
+      </tr>
+    #end
+  </tbody>
+
+  <tfoot class="total">
+    <tr>
+      <td></td>
+      #if ($parallel)
+        <td>-</td>
+      #end
+      <td>$summary.steps.passed</td>
+      <td>$summary.steps.failed</td>
+      <td>$summary.steps.skipped</td>
+      <td>$summary.steps.pending</td>
+      <td>$summary.steps.undefined</td>
+      <td>$summary.steps.total</td>
+
+      <td>$summary.scenarios.passed</td>
+      <td>$summary.scenarios.skipped</td>
+      <td>$summary.scenarios.failed</td>
+      <td>$summary.scenarios.total</td>
+
+      <td class="duration">$summary.duration</td>
+      <td>$items.size()</td>
+    </tr>
+    <tr>
+      <td></td>
+      #if ($parallel)
+        <td>-</td>
+      #end
+      <td>$util.formatAsPercentage($summary.steps.passed, $summary.steps.total)</td>
+      <td>$util.formatAsPercentage($summary.steps.failed, $summary.steps.total)</td>
+      <td>$util.formatAsPercentage($summary.steps.skipped, $summary.steps.total)</td>
+      <td>$util.formatAsPercentage($summary.steps.pending, $summary.steps.total)</td>
+      <td>$util.formatAsPercentage($summary.steps.undefined, $summary.steps.total)</td>
+      <td></td>
+      <td>$util.formatAsPercentage($summary.scenarios.passed, $summary.scenarios.total)</td>
+      <td>$util.formatAsPercentage($summary.scenarios.skipped, $summary.scenarios.total)</td>
+      <td>$util.formatAsPercentage($summary.scenarios.failed, $summary.scenarios.total)</td>
+      <td></td>
+      <td></td>
+      <td>$util.formatAsPercentage($summary.features.passed, $items.size())</td>
+    </tr>
+  </tfoot>
+</table>
+
+#end

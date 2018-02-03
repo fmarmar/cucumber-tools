@@ -1,0 +1,24 @@
+#macro(includeBuildInfo)
+
+<table class="table table-bordered" id="build-info">
+  <thead>
+    <tr>
+      <th>Project</th>
+      #if($metadata.buildId)
+        <th>Build</th>
+      #end
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="info">
+      <td>$metadata.projectName</td>
+      #if($metadata.buildId)
+        <td>$metadata.buildId</td>
+      #end
+      <td>$metadata.buildTimestamp</td>
+    </tr>
+  </tbody>
+</table>
+
+#end

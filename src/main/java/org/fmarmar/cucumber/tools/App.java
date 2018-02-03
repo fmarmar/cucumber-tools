@@ -3,10 +3,13 @@ package org.fmarmar.cucumber.tools;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import org.fmarmar.cucumber.tools.report.html.HtmlReport;
 import org.fmarmar.cucumber.tools.rerun.Rerun;
 
 import com.beust.jcommander.JCommander;
+import com.google.common.base.Stopwatch;
 
 public class App {
 
@@ -16,7 +19,8 @@ public class App {
 
 		commands = Arrays.asList(
 				new Help(),
-				new Rerun()
+				new Rerun(),
+				new HtmlReport()
 				);
 		
 	}
@@ -27,8 +31,10 @@ public class App {
 		
 		JCommander jc = buildJcommander(app);
 		jc.parse(args);
-		
+				
+		Stopwatch stopwatch = Stopwatch.createStarted();
 		executeCommand(getCommand(jc));
+		System.out.println("Command " + jc.getParsedCommand() + " executed in " + stopwatch.stop().elapsed(TimeUnit.MILLISECONDS) + "ms");
 	}
 
 	private static JCommander buildJcommander(App app) {
