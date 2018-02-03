@@ -1,5 +1,8 @@
 package org.fmarmar.cucumber.tools.report.model.support;
 
+import org.fmarmar.cucumber.tools.report.model.ExecutionElement;
+import org.fmarmar.cucumber.tools.report.model.Result;
+
 import lombok.Data;
 
 @Data
@@ -39,6 +42,21 @@ public class ScenarioResult {
 				throw new IllegalArgumentException("Unknown StepStatus " + status);
 		}
 
+	}
+	
+	public static ScenarioResult result(Iterable<ExecutionElement> scenarioElements) {
+		
+		ScenarioResult result = new ScenarioResult();
+		
+		for (ExecutionElement element: scenarioElements) {
+			Result elementResult = element.getResult();
+			
+			result.addDuration(elementResult.getDuration());
+			result.evaluateStatus(elementResult.getStatus());
+		}
+		
+		return result;
+		
 	}
 
 }

@@ -10,21 +10,18 @@
     <div id="$keyword.toLowerCase()-$hookId" class="inner-level collapse collapsable-details #if (!$status.isPassed()) in #end">
       #foreach($hook in $hooks)
         <div class="hook">
-          <div class="brief $hook.getResult().getStatus().getRawName()">
+          <div class="brief $hook.status.name">
             <span class="keyword indention">$keyword</span>
-            #if ($hook.getMatch())
-              <span class="location name">$hook.getMatch().getLocation()</span>
+            #if ($hook.location)
+              <span class="location name">$hook.location</span>
             #end
-            #includeDuration($hook.getResult())
+            #includeDuration($hook.duration)
           </div>
 
-          #if ($hook.getResult())
-            #includeMessage("Error message", $hook.getResult().getErrorMessage())
-          #end
-
-          #set($isPassed = $hook.getResult().getStatus().isPassed())
-          #includeOutput($hook.getOutputs(), $isPassed)
-          #includeEmbeddings($hook.getEmbeddings())
+          #includeMessage("Error message", $hook.result.errorMessage)
+          
+          #includeOutput($hook.outputs, $hook.status.isPassed())
+          #includeEmbeddings($hook.embeddings)
         </div>
       #end
     </div>

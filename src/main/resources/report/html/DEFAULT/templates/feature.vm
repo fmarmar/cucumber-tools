@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  #parse("support/commonDirectives.vm")
+  #includeTitle("Feature: $feature.name")
+</head>
+<body>
+
+#includeNavigation()
+
+#includeReportInfo()
+
+#includeLead("Feature Report", $feature.uri)
+
+#includeReportTable("Feature", $feature)
+
+#includeExpandingButtons()
+
+<div class="container-fluid" id="report">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="feature">
+        #includeTags($feature.tags)
+        #includeBrief("Feature", $feature.status, $feature.name)
+        <div class="description indention">$feature.description</div>
+
+        <div class="elements inner-level">
+          #foreach($scenario in $feature.scenarios)
+            #includeScenario($scenario, false)
+          #end
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+#includeExpandingButtons()
+<br>
+
+#include("includes/footer.vm")
+
+</body>
+</html>

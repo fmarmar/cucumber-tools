@@ -1,31 +1,30 @@
-#macro(includeReportTable, $table_key, $reportable, $parallel)
+#macro(includeReportTable, $tableKey, $item)
 
 <div class="container-fluid" id="report">
   <div class="row">
     <div class="col-md-10 col-md-offset-1">
       <table class="stats-table">
 
-        #includeReportHeader($table_key, $parallel)
+        #includeReportHeader($tableKey)
 
         <tbody>
         <tr>
-          <td class="tagname">$reportable.getName()</td>
-          #if ($parallel)
-            <td>$reportable.getDeviceName()</td>
-          #end
-          <td #if ($reportable.getPassedSteps() != 0)     class="passed"    #end>$reportable.getPassedSteps()</td>
-          <td #if ($reportable.getFailedSteps() != 0)     class="failed"    #end>$reportable.getFailedSteps()</td>
-          <td #if ($reportable.getSkippedSteps() != 0)    class="skipped"   #end>$reportable.getSkippedSteps()</td>
-          <td #if ($reportable.getPendingSteps() != 0)    class="pending"   #end>$reportable.getPendingSteps()</td>
-          <td #if ($reportable.getUndefinedSteps() != 0)  class="undefined" #end>$reportable.getUndefinedSteps()</td>
-          <td class="total">$reportable.getSteps()</td>
+          <td class="tagname">$item.getName()</td>
+          
+          <td #if ($item.stepsSummary.passed != 0)     class="passed"    #end>$item.stepsSummary.passed</td>
+          <td #if ($item.stepsSummary.failed != 0)     class="failed"    #end>$item.stepsSummary.failed</td>
+          <td #if ($item.stepsSummary.skipped != 0)    class="skipped"   #end>$item.stepsSummary.skipped</td>
+          <td #if ($item.stepsSummary.pending != 0)    class="pending"   #end>$item.stepsSummary.pending</td>
+          <td #if ($item.stepsSummary.undefined != 0)  class="undefined" #end>$item.stepsSummary.undefined</td>
+          <td class="total">$item.stepsSummary.total</td>
 
-          <td #if ($reportable.getPassedScenarios() != 0) class="passed"    #end>$reportable.getPassedScenarios()</td>
-          <td #if ($reportable.getFailedScenarios() != 0) class="failed"    #end>$reportable.getFailedScenarios()</td>
-          <td class="total">$reportable.getScenarios()</td>
+          <td #if ($item.scenariosSummary.passed != 0) class="passed"    #end>$item.scenariosSummary.passed</td>
+           <td #if ($item.scenariosSummary.skipped != 0) class="skipped"    #end>$item.scenariosSummary.skipped</td>
+          <td #if ($item.scenariosSummary.failed != 0) class="failed"    #end>$item.scenariosSummary.failed</td>
+          <td class="total">$item.scenariosSummary.total</td>
 
-          <td class="duration" data-value="$reportable.getDuration()">$reportable.getFormattedDuration()</td>
-          <td class="$reportable.getStatus().getRawName()">$reportable.getStatus().getLabel()</td>
+          <td class="duration" data-value="$item.duration">$util.formatDuration($item.duration)</td>
+          <td class="$item.status.name">$item.status.label</td>
         </tr>
         </tbody>
 

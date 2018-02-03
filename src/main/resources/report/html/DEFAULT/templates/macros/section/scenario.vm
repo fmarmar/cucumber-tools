@@ -1,0 +1,33 @@
+#macro(includeScenario, $scenario, $linkToFeature)
+
+<div class="element">
+  #if ($linkToFeature)
+    <div class="indention">
+      <b>Feature:</b>
+      <a href="$scenario.getFeature().getReportFileName()">$scenario.getFeature().getName()</a>
+    </div>
+  #end
+
+  #includeTags($scenario.tags)
+  #includeDuration($scenario.duration)
+
+  #set($scenarioId = $counter.next())
+  <span data-toggle="collapse" class="#if ($scenario.status.isPassed()) collapsed #end collapsable-control" data-target="#element-$scenarioId">
+    #includeBrief($scenario.type, $scenario.status, $scenario.name, true)
+  </span>
+  <div class="description indention">$scenario.description</div>
+
+  <div id="element-$scenarioId" class="collapse collapsable-details #if(!$scenario.status.isPassed()) in #end">
+    #includeHooks("Before", $scenario.before, $utils.result($scenario.before).status)
+
+	#if ($scenario.backgroundSteps)
+		#includeSteps("Background steps", $scenario.backgroundSteps, $utils.result($scenario.backgroundSteps).status)
+    #end
+
+    #includeSteps("Steps", $scenario.steps, $utils.result($scenario.steps).status)
+
+    #includeHooks("After", $scenario.after, $utils.result($scenario.after).status)
+  </div>
+</div>
+
+#end

@@ -1,0 +1,12 @@
+#macro(includeBrief, $keyword, $status, $name, $expandable, $duration)
+
+<div class="brief $status.name">
+  <span class="keyword indention">$keyword</span>
+  <span class="name">$name</span>
+  #includeDuration($duration)
+  #if ($expandable)
+     <i class="chevron fa fa-fw"></i>
+  #end
+</div>
+
+#end

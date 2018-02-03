@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.fmarmar.cucumber.tools.report.json.deser.TagDeserializer;
+import org.fmarmar.cucumber.tools.report.model.support.GenericStatus;
 import org.fmarmar.cucumber.tools.report.model.support.PostProcessor;
 import org.fmarmar.cucumber.tools.report.model.support.ScenarioResult;
 import org.fmarmar.cucumber.tools.report.model.support.ScenarioType;
@@ -43,7 +44,7 @@ public class Scenario implements PostProcessor{
 	@Override
 	public void postProcess() {
 		stepsSummary = summary(steps);
-		result = result(Iterables.concat(before, steps, after));
+		result = ScenarioResult.result(Iterables.concat(before, steps, after));
 	}
 	
 	protected StepsSummary summary(Iterable<Step> steps) {
@@ -57,18 +58,14 @@ public class Scenario implements PostProcessor{
 		return summary;
 	}
 	
-	protected ScenarioResult result(Iterable<ExecutionElement> scenarioElements) {
-		
-		result = new ScenarioResult();
-		
-		for (ExecutionElement element: scenarioElements) {
-			Result elementResult = element.getResult();
-			
-			result.addDuration(elementResult.getDuration());
-		}
-		
-		return result;
-		
+	// Shortcut methods
+	
+	public long getDuration() {
+		return result.getDuration();
+	}
+	
+	public GenericStatus getStatus() {
+		return result.getStatus();
 	}
 	
 }

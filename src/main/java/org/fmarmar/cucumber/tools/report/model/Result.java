@@ -7,9 +7,11 @@ import lombok.Data;
 @Data
 public class Result {
 	
-	private StepStatus status;
+	private StepStatus status = StepStatus.UNDEFINED;
 	
 	// in nanoseconds
 	private long duration;
+	
+	private String errorMessage;
 	
 }

@@ -3,6 +3,8 @@ package org.fmarmar.cucumber.tools.report.model;
 import java.util.Collections;
 import java.util.List;
 
+import org.fmarmar.cucumber.tools.report.model.support.ScenarioResult;
+
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -28,6 +30,7 @@ public class ScenarioWithBackground extends Scenario {
 		this.before = Lists.newArrayList(Iterables.concat(background.before, scenario.before));
 		this.backgroundName = background.name;
 		this.backgroundSteps = background.steps;
+		this.steps = scenario.steps;
 		this.after = scenario.after;
 		
 	}
@@ -35,7 +38,7 @@ public class ScenarioWithBackground extends Scenario {
 	@Override
 	public void postProcess() {
 		stepsSummary = summary(Iterables.concat(backgroundSteps, steps));
-		result = result(Iterables.concat(before, backgroundSteps, steps, after));
+		result = ScenarioResult.result(Iterables.concat(before, backgroundSteps, steps, after));
 	}
 	
 	

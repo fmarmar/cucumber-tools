@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  #parse("support/headers.vm")
+  #parse("support/commonDirectives.vm")
   #includeTitle("Features Overview")
 
   <script type="text/javascript">
@@ -15,7 +15,7 @@
 
 #includeNavigation("features")
 
-#includeReportInfo(true)
+#includeReportInfo()
 
 #includeLead("Features Statistics", "The following graphs show passing and failing statistics for features")
 
@@ -67,7 +67,7 @@
 <div class="container-fluid" id="report">
   <div class="row">
     <div class="col-md-10 col-md-offset-1">
-      #includeStatsTable("Feature", $parallel, $features, $summary)
+      #includeStatsTable("Feature", $features, $summary)
     </div>
   </div>
 </div>

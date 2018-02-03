@@ -1,16 +1,14 @@
-#macro(includeStatsTable, $tableKey, $parallel, $items, $summary)
+#macro(includeStatsTable, $tableKey, $items, $summary)
 
 <table id="tablesorter" class="stats-table table-hover">
-  #includeReportHeader($tableKey, $parallel)
+  #includeReportHeader($tableKey)
 
   <tbody>
     #foreach($item in $items)
       <tr>
-        <td class="tagname"><a href="$item.getReportFileName()">$item.name</a></td>
-        #if ($parallel)
-          <td>$item.getDeviceName()</td>
-        #end
-
+      	#set ( $link = "features/" + $item.uuid + ".html" )
+        <td class="tagname"><a href="$link">$item.name</a></td>
+        
         <td #if ($item.stepsSummary.passed > 0)     class="passed"    #end>$item.stepsSummary.passed</td>
         <td #if ($item.stepsSummary.failed > 0)     class="failed"    #end>$item.stepsSummary.failed</td>
         <td #if ($item.stepsSummary.skipped > 0)    class="skipped"   #end>$item.stepsSummary.skipped</td>
@@ -23,8 +21,8 @@
         <td #if ($item.scenariosSummary.failed > 0) class="failed"    #end>$item.scenariosSummary.failed</td>
         <td class="total">$item.scenariosSummary.total</td>
 
-        <td class="duration" data-value="$item.result.duration">$item.result.duration</td>
-        <td class="$item.result.status">$item.result.status.label</td>
+        <td class="duration" data-value="$item.duration">$util.formatDuration($item.duration)</td>
+        <td class="$item.status.name">$item.status.label</td>
       </tr>
     #end
   </tbody>
@@ -32,9 +30,7 @@
   <tfoot class="total">
     <tr>
       <td></td>
-      #if ($parallel)
-        <td>-</td>
-      #end
+      
       <td>$summary.steps.passed</td>
       <td>$summary.steps.failed</td>
       <td>$summary.steps.skipped</td>
@@ -47,14 +43,12 @@
       <td>$summary.scenarios.failed</td>
       <td>$summary.scenarios.total</td>
 
-      <td class="duration">$summary.duration</td>
+      <td class="duration">$util.formatDuration($summary.duration)</td>
       <td>$items.size()</td>
     </tr>
     <tr>
       <td></td>
-      #if ($parallel)
-        <td>-</td>
-      #end
+      
       <td>$util.formatAsPercentage($summary.steps.passed, $summary.steps.total)</td>
       <td>$util.formatAsPercentage($summary.steps.failed, $summary.steps.total)</td>
       <td>$util.formatAsPercentage($summary.steps.skipped, $summary.steps.total)</td>

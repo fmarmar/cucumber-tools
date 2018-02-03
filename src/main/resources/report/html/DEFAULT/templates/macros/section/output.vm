@@ -14,7 +14,7 @@
           #**
            * DO NOT format the line below. Whitespace nodes are significant in a pre-block.
            *#
-          <pre>#foreach($message in $output.getMessages())<p>$message</p>#end</pre>
+          <pre>$output</pre>
         </div>
       </div>
     #end

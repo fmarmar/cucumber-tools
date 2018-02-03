@@ -13,6 +13,8 @@ public class Step extends ExecutionElement {
 	private String keyword;
 	
 	private String name;
+	
+	private List<Row> rows = Collections.emptyList();
 
 	private List<StepHook> before = Collections.emptyList();
 	

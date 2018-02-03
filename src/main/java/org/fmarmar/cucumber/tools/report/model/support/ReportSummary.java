@@ -15,8 +15,13 @@ public class ReportSummary {
 
 	private final StepsSummary steps = new StepsSummary();
 	
+	private long duration = 0;
+	
 	public void add(Feature feature) {
-		features.add(feature.getResult().getStatus());
+		FeatureResult result = feature.getResult();
+		
+		duration += result.getDuration();
+		features.add(result.getStatus());
 	}
 	
 	public void add(GenericSummary summary) {
