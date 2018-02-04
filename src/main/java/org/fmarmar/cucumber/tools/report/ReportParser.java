@@ -8,16 +8,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.fmarmar.cucumber.tools.report.model.Feature;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 /**
  * 
@@ -56,14 +60,17 @@ public class ReportParser {
 		ParserProcess process = new ParserProcess();
 		process.parse(reports);
 		
-		return process.features;
+		return mapper.convertValue(process.reports, featuresTypeReference);
 	}
-	
-	
 	
 	private class ParserProcess {
 		
-		private List<Feature> features = new ArrayList<>();
+		private static final String FEATURE_URI_FIELD_NAME = "uri";
+		
+		private static final String ELEMENTS_FIELD_NAME = "elements";
+		
+		private ArrayNode reports = null;
+		private Map<String, JsonNode> reportsIndex;
 		
 		private void parse(Path... paths) throws IOException {
 
@@ -84,7 +91,7 @@ public class ReportParser {
 				}
 				
 				if (isJsonFile(path)) {
-					features.addAll(parseReport(path));
+					parseReport(path);
 				}
 				
 			}
@@ -99,7 +106,7 @@ public class ReportParser {
 				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 
 					if (attrs.isRegularFile() && isJsonFile(file)) {
-						features.addAll(parseReport(file));
+						parseReport(file);
 					}
 
 					return FileVisitResult.CONTINUE;
@@ -109,11 +116,72 @@ public class ReportParser {
 			
 		}
 		
-		private Collection<Feature> parseReport(Path report) throws IOException {
+		private void parseReport(Path reportFile) throws IOException {
 			
-			try (InputStream is = Files.newInputStream(report)) {
-				return mapper.readValue(is, featuresTypeReference);
+			try (InputStream is = Files.newInputStream(reportFile)) {
+				JsonNode reportNode = mapper.readTree(is);
+				merge(reportNode);
 			}
+			
+		}
+
+		private void merge(JsonNode reportNode) {
+			
+			checkReportTree(reportNode);
+			
+			if (reports == null) {
+				reports = (ArrayNode) reportNode;
+				reportsIndex = indexFeatures(reports);
+				return;
+			}
+			
+			Map<String, JsonNode> nodeIndex = indexFeatures((ArrayNode) reportNode);
+
+			for (Entry<String, JsonNode> feature : nodeIndex.entrySet()) {
+				
+				String key = feature.getKey();
+				JsonNode value = feature.getValue();
+				
+				if (reportsIndex.containsKey(key)) {
+					mergeFeature(reportsIndex.get(key), value);
+				} else {
+					reports.add(value);
+					reportsIndex.put(key, value);			
+				}
+				
+			}
+			
+		}
+		
+		private void checkReportTree(JsonNode report) {
+			
+			if (!report.isArray()) {
+				throw new IllegalArgumentException("Report should be an array");
+			}
+			
+		}
+		
+		private Map<String, JsonNode> indexFeatures(ArrayNode rootNode) {
+			
+			Map<String, JsonNode> features = new HashMap<>();
+			
+			for (JsonNode featureNode : rootNode) {
+				features.put(buildFeatureKey(featureNode), featureNode);			
+			}
+			
+			return features;
+		}
+
+		private String buildFeatureKey(JsonNode featureNode) {
+			return featureNode.get(FEATURE_URI_FIELD_NAME).textValue();
+		}
+		
+		private void mergeFeature(JsonNode accFeatureNode, JsonNode featureNode) {
+
+			ArrayNode scenariosNode = (ArrayNode) accFeatureNode.get(ELEMENTS_FIELD_NAME);
+			ArrayNode newScenariosNode = (ArrayNode) featureNode.get(ELEMENTS_FIELD_NAME);
+			
+			scenariosNode.addAll(newScenariosNode);
 			
 		}
 		
