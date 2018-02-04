@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  #parse("support/commonDirectives.vm")
+  #includeHead($basePath)
   #includeTitle("Feature: $feature.name")
 </head>
 <body>

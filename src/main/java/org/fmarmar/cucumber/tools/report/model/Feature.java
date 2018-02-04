@@ -1,6 +1,5 @@
 package org.fmarmar.cucumber.tools.report.model;
 
-import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
@@ -8,25 +7,22 @@ import java.util.Set;
 
 import org.fmarmar.cucumber.tools.report.json.deser.TagDeserializer;
 import org.fmarmar.cucumber.tools.report.json.util.FeaturePostProcessor;
-import org.fmarmar.cucumber.tools.report.model.support.FeatureResult;
+import org.fmarmar.cucumber.tools.report.model.support.GenericResult;
 import org.fmarmar.cucumber.tools.report.model.support.GenericStatus;
 import org.fmarmar.cucumber.tools.report.model.support.GenericSummary;
 import org.fmarmar.cucumber.tools.report.model.support.PostProcessor;
 import org.fmarmar.cucumber.tools.report.model.support.ScenarioType;
 import org.fmarmar.cucumber.tools.report.model.support.StepsSummary;
+import org.fmarmar.cucumber.tools.report.utils.ReportUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.google.common.hash.HashFunction;
-import com.google.common.hash.Hashing;
 
 import lombok.Data;
 
 @Data
 @JsonDeserialize(converter=FeaturePostProcessor.class)
 public class Feature implements PostProcessor {
-
-	private static final HashFunction HF = Hashing.murmur3_128();
 
 	private String uri;
 
@@ -36,7 +32,7 @@ public class Feature implements PostProcessor {
 
 	private String description;
 
-	@JsonDeserialize(contentUsing=TagDeserializer.class)
+	@JsonDeserialize(contentUsing = TagDeserializer.class)
 	private Set<String> tags = new HashSet<>();
 
 	@JsonProperty("elements")
@@ -48,24 +44,19 @@ public class Feature implements PostProcessor {
 
 	private StepsSummary stepsSummary;
 
-	private FeatureResult result; 
+	private GenericResult result; 
 
 	@Override
 	public void postProcess() {
-		uuid = hash();
+		uuid = ReportUtils.hash(uri);
 		processScenarios();
 	}
-
-	private String hash() {
-		return HF.newHasher().putString(uri, StandardCharsets.UTF_8).hash().toString();
-	}
-
 
 	private void processScenarios() {
 
 		scenariosSummary = new GenericSummary();
 		stepsSummary = new StepsSummary();
-		result = new FeatureResult();
+		result = new GenericResult();
 
 		ListIterator<Scenario> it = scenarios.listIterator();
 		Scenario background = null;
@@ -89,12 +80,12 @@ public class Feature implements PostProcessor {
 				// postProcess scenario
 				currentScenario.postProcess();
 
-				// collect Feature data
-				scenariosSummary.add(currentScenario.result.getStatus());
-				stepsSummary.addSummary(currentScenario.stepsSummary);
+				// collect Scenario data
+				result.addDuration(currentScenario.getDuration());
+				result.evaluateStatus(currentScenario.getStatus());
 
-				result.addDuration(currentScenario.result.getDuration());
-				result.evaluateStatus(currentScenario.result.getStatus());
+				scenariosSummary.add(currentScenario.getStatus());
+				stepsSummary.addSummary(currentScenario.stepsSummary);
 
 			}
 

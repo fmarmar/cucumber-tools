@@ -17,7 +17,7 @@ public abstract class ExecutionElement {
 	private Result result;
 
 	@JsonProperty("match")
-	@JsonDeserialize(using=MatchDeserializer.class)
+	@JsonDeserialize(using = MatchDeserializer.class)
 	private String location;
 	
 	@JsonProperty("output")

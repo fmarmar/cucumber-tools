@@ -5,7 +5,7 @@
       <p class="navbar-text navbar-left">Cucumber Report</p>
       <ul class="nav navbar-nav navbar-right">
         <li role="presentation" #if($activeTab == "features") class="active" #end><a href="$basePath/features-overview.html">Features</a></li>
-##        <li role="presentation" #if($activeTab == "tags")     class="active" #end><a href="overview-tags.html">Tags</a></li>
+        <li role="presentation" #if($activeTab == "tags")     class="active" #end><a href="$basePath/tags-overview.html">Tags</a></li>
 ##        <li role="presentation" #if($activeTab == "steps")    class="active" #end><a href="overview-steps.html">Steps</a></li>
 ##        <li role="presentation" #if($activeTab == "failures") class="active" #end><a href="overview-failures.html">Failures</a></li>
       </ul>

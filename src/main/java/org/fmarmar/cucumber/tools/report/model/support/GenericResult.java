@@ -3,7 +3,7 @@ package org.fmarmar.cucumber.tools.report.model.support;
 import lombok.Data;
 
 @Data
-public class FeatureResult {
+public class GenericResult {
 
 	private GenericStatus status = GenericStatus.PASSED;
 

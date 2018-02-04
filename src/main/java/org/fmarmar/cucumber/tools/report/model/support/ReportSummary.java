@@ -18,7 +18,7 @@ public class ReportSummary {
 	private long duration = 0;
 	
 	public void add(Feature feature) {
-		FeatureResult result = feature.getResult();
+		GenericResult result = feature.getResult();
 		
 		duration += result.getDuration();
 		features.add(result.getStatus());

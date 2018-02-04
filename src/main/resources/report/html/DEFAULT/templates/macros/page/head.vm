@@ -1,3 +1,5 @@
+#macro(includeHead, $basePath)
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 <script type="text/javascript" src="$basePath/js/jquery.min.js"></script>
@@ -26,3 +28,5 @@ $(document).ready(function() {
     });
 });
 </script>
+
+#end

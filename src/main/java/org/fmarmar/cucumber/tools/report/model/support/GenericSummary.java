@@ -45,7 +45,5 @@ public class GenericSummary {
 	public int getTotal() {
 		return passed + skipped + failed;
 	}
-
-	
 	
 }
