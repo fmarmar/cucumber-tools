@@ -45,7 +45,6 @@ public class VelocityPageGenerator implements PageGenerator {
 			"macros/page/classifications.vm",
 			"macros/page/reportInfo.vm",
 			"macros/page/lead.vm",
-			"macros/report/reportHeader.vm",
 			"macros/report/statsTable.vm",
 			"macros/report/reportTable.vm",
 			"macros/report/expandAllButtons.vm",

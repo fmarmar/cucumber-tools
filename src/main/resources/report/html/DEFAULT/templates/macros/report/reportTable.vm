@@ -5,7 +5,31 @@
     <div class="col-md-10 col-md-offset-1">
       <table class="stats-table">
 
-        #includeReportHeader($tableKey)
+        <thead>
+		  <tr class="header dont-sort">
+		    <th></th>
+		    <th colspan="6">Steps</th>
+		    <th colspan="4">Scenarios</th>
+		    <th colspan="2">Features</th>
+		  </tr>
+		  <tr>
+		    <th>$tableKey</th>
+		    <th class="passed">Passed</th>
+		    <th class="failed">Failed</th>
+		    <th class="skipped">Skipped</th>
+		    <th class="pending">Pending</th>
+		    <th class="undefined">Undefined</th>
+		    <th class="total">Total</th>
+		
+		    <th class="passed">Passed</th>
+		    <th class="skipped">Skipped</th>
+		    <th class="failed">Failed</th>
+		    <th class="total">Total</th>
+		
+		    <th>Duration</th>
+		    <th>Status</th>
+		  </tr>
+		</thead>
 
         <tbody>
         <tr>
