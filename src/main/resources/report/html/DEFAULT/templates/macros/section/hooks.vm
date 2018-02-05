@@ -18,7 +18,7 @@
             #includeDuration($hook.duration)
           </div>
 
-          #includeMessage("Error message", $hook.result.errorMessage)
+          #includeMessage($hook.result.errorMessage, $hook.status.isPassed())
           
           #includeOutput($hook.outputs, $hook.status.isPassed())
           #includeEmbeddings($hook.embeddings)

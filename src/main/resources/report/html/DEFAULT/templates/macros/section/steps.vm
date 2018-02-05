@@ -13,7 +13,7 @@
         #includeBrief($step.keyword, $step.status, $step.name, false, $step.duration)
         #set($isPassed = $step.status.isPassed())
         
-        #includeMessage($step.result.errorMessageTitle, $step.result.errorMessage, $isPassed)
+        #includeMessage($step.result.errorMessage, $isPassed)
 
         #if (!$step.rows.isEmpty())
           <table class="step-arguments">

@@ -80,5 +80,9 @@ public final class TemplateUtils {
 		
 		return formatter;
 	}
+	
+	public String messageSummary(String message) {
+		return message.split("[\\r\\n]+")[0];
+	}
 
 }
