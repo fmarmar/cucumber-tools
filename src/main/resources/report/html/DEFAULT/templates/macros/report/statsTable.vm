@@ -1,7 +1,26 @@
 #macro(includeStatsTable, $tableKey, $items, $summary)
 
 <table id="tablesorter" class="stats-table table-hover">
-  #includeReportHeader($tableKey)
+
+  
+  <thead>
+  	<tr class="header dont-sort">
+      <th></th>
+      <th colspan="4">Scenarios</th>
+      <th colspan="2">Result</th>
+    </tr>
+    <tr>
+      <th>$tableKey</th>
+
+      <th class="passed">Passed</th>
+      <th class="skipped">Skipped</th>
+      <th class="failed">Failed</th>
+      <th class="total">Total</th>
+
+      <th>Duration</th>
+      <th>Status</th>
+    </tr>
+  </thead>
 
   <tbody>
     #foreach($item in $items)
@@ -9,13 +28,6 @@
       	#set ( $link = "features/" + $item.uuid + ".html" )
         <td class="tagname"><a href="$link">$item.name</a></td>
         
-        <td #if ($item.stepsSummary.passed > 0)     class="passed"    #end>$item.stepsSummary.passed</td>
-        <td #if ($item.stepsSummary.failed > 0)     class="failed"    #end>$item.stepsSummary.failed</td>
-        <td #if ($item.stepsSummary.skipped > 0)    class="skipped"   #end>$item.stepsSummary.skipped</td>
-        <td #if ($item.stepsSummary.pending > 0)    class="pending"   #end>$item.stepsSummary.pending</td>
-        <td #if ($item.stepsSummary.undefined > 0)  class="undefined" #end>$item.stepsSummary.undefined</td>
-        <td class="total">$item.stepsSummary.total</td>
-
         <td #if ($item.scenariosSummary.passed > 0) class="passed"    #end>$item.scenariosSummary.passed</td>
         <td #if ($item.scenariosSummary.skipped > 0) class="skipped"    #end>$item.scenariosSummary.skipped</td>
         <td #if ($item.scenariosSummary.failed > 0) class="failed"    #end>$item.scenariosSummary.failed</td>
@@ -30,13 +42,6 @@
   <tfoot class="total">
     <tr>
       <td></td>
-      
-      <td>$summary.steps.passed</td>
-      <td>$summary.steps.failed</td>
-      <td>$summary.steps.skipped</td>
-      <td>$summary.steps.pending</td>
-      <td>$summary.steps.undefined</td>
-      <td>$summary.steps.total</td>
 
       <td>$summary.scenarios.passed</td>
       <td>$summary.scenarios.skipped</td>
@@ -47,13 +52,6 @@
       <td>$items.size()</td>
     </tr>
     <tr>
-      <td></td>
-      
-      <td>$utils.percentage($summary.steps.passed, $summary.steps.total)</td>
-      <td>$utils.percentage($summary.steps.failed, $summary.steps.total)</td>
-      <td>$utils.percentage($summary.steps.skipped, $summary.steps.total)</td>
-      <td>$utils.percentage($summary.steps.pending, $summary.steps.total)</td>
-      <td>$utils.percentage($summary.steps.undefined, $summary.steps.total)</td>
       <td></td>
       <td>$utils.percentage($summary.scenarios.passed, $summary.scenarios.total)</td>
       <td>$utils.percentage($summary.scenarios.skipped, $summary.scenarios.total)</td>

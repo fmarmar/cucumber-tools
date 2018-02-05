@@ -7,7 +7,6 @@
   <script type="text/javascript">
   #parse("js/features-chart.js.vm")
   #parse("js/scenarios-chart.js.vm")
-  #parse("js/steps-chart.js.vm")
   </script>
 </head>
 
@@ -29,7 +28,6 @@
           <ol class="carousel-indicators">
             <li data-target="#featureChartCarousel" data-slide-to="0" class="active"></li>
             <li data-target="#featureChartCarousel" data-slide-to="1"></li>
-            <li data-target="#featureChartCarousel" data-slide-to="2"></li>
           </ol>
 
           <!-- Wrapper for slides -->
@@ -42,9 +40,6 @@
               <canvas id="scenarios-chart" height="120"></canvas>
             </div>
 
-            <div class="item">
-              <canvas id="steps-chart" height="120"></canvas>
-            </div>
           </div>
 
           <!-- Left and right controls -->
