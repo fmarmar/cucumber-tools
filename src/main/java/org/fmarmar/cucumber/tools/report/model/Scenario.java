@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.fmarmar.cucumber.tools.report.json.deser.TagDeserializer;
 import org.fmarmar.cucumber.tools.report.model.support.GenericStatus;
 import org.fmarmar.cucumber.tools.report.model.support.NamedElement;
@@ -19,13 +20,13 @@ import com.google.common.collect.Iterables;
 import lombok.Data;
 
 @Data
-public class Scenario implements NamedElement, PostProcessor{
+public class Scenario implements NamedElement, PostProcessor {
 	
 	protected String id;
 	
 	protected String name;
 	
-	protected String description;
+	protected String description = StringUtils.EMPTY;
 	
 	protected ScenarioType type = ScenarioType.SCENARIO;
 
