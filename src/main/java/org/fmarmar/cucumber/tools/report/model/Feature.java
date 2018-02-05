@@ -10,6 +10,7 @@ import org.fmarmar.cucumber.tools.report.json.util.FeaturePostProcessor;
 import org.fmarmar.cucumber.tools.report.model.support.GenericResult;
 import org.fmarmar.cucumber.tools.report.model.support.GenericStatus;
 import org.fmarmar.cucumber.tools.report.model.support.GenericSummary;
+import org.fmarmar.cucumber.tools.report.model.support.NamedElement;
 import org.fmarmar.cucumber.tools.report.model.support.PostProcessor;
 import org.fmarmar.cucumber.tools.report.model.support.ScenarioType;
 import org.fmarmar.cucumber.tools.report.model.support.StepsSummary;
@@ -22,7 +23,7 @@ import lombok.Data;
 
 @Data
 @JsonDeserialize(converter=FeaturePostProcessor.class)
-public class Feature implements PostProcessor {
+public class Feature implements NamedElement, PostProcessor {
 
 	private String uri;
 

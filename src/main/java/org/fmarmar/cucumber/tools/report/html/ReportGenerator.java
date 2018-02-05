@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import org.apache.commons.io.FileUtils;
 import org.fmarmar.cucumber.tools.report.html.page.PageGenerator;
 import org.fmarmar.cucumber.tools.report.html.page.PageGenerator.PageId;
 import org.fmarmar.cucumber.tools.report.html.report.FailuresReport;
+import org.fmarmar.cucumber.tools.report.html.support.AlphabeticalComparator;
 import org.fmarmar.cucumber.tools.report.model.Feature;
 import org.fmarmar.cucumber.tools.report.model.Scenario;
 import org.fmarmar.cucumber.tools.report.model.support.ReportSummary;
@@ -51,12 +53,16 @@ public class ReportGenerator {
 	}
 
 	public void generateReport(List<Feature> features) throws IOException {
+		
+		Collections.sort(features, AlphabeticalComparator.INSTANCE);
 
 		ReportSummary summary = new ReportSummary();
 		FailuresReport failuresReport = new FailuresReport();
 		
 		for (Feature feature : features) {
 
+			Collections.sort(feature.getScenarios(), AlphabeticalComparator.INSTANCE);
+			
 			executeTask(generateFeaturePage(feature));
 
 			collectFeatureInfo(feature, summary, failuresReport);

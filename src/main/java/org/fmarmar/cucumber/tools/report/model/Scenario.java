@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.fmarmar.cucumber.tools.report.json.deser.TagDeserializer;
 import org.fmarmar.cucumber.tools.report.model.support.GenericStatus;
+import org.fmarmar.cucumber.tools.report.model.support.NamedElement;
 import org.fmarmar.cucumber.tools.report.model.support.PostProcessor;
 import org.fmarmar.cucumber.tools.report.model.support.ScenarioResult;
 import org.fmarmar.cucumber.tools.report.model.support.ScenarioType;
@@ -18,7 +19,7 @@ import com.google.common.collect.Iterables;
 import lombok.Data;
 
 @Data
-public class Scenario implements PostProcessor{
+public class Scenario implements NamedElement, PostProcessor{
 	
 	protected String id;
 	
