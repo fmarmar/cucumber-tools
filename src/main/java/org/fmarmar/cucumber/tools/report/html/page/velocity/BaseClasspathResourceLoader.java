@@ -1,4 +1,4 @@
-package org.fmarmar.cucumber.tools.report.html.support;
+package org.fmarmar.cucumber.tools.report.html.page.velocity;
 
 import java.io.InputStream;
 

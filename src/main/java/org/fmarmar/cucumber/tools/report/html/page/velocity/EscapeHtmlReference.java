@@ -1,4 +1,4 @@
-package org.fmarmar.cucumber.tools.report.html.support;
+package org.fmarmar.cucumber.tools.report.html.page.velocity;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.velocity.app.event.ReferenceInsertionEventHandler;

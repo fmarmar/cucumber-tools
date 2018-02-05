@@ -18,9 +18,6 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.app.event.EventCartridge;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.fmarmar.cucumber.tools.report.html.page.PageGenerator;
-import org.fmarmar.cucumber.tools.report.html.support.BaseClasspathResourceLoader;
-import org.fmarmar.cucumber.tools.report.html.support.Counter;
-import org.fmarmar.cucumber.tools.report.html.support.EscapeHtmlReference;
 import org.fmarmar.cucumber.tools.report.html.support.ReportMetadata;
 
 import com.google.common.base.Joiner;
