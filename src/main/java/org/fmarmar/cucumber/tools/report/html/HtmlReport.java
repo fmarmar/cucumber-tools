@@ -11,6 +11,8 @@ import org.fmarmar.cucumber.tools.Command;
 import org.fmarmar.cucumber.tools.common.PathConverter;
 import org.fmarmar.cucumber.tools.exception.CommandException;
 import org.fmarmar.cucumber.tools.report.ReportParser;
+import org.fmarmar.cucumber.tools.report.html.page.PageGenerator;
+import org.fmarmar.cucumber.tools.report.html.page.velocity.VelocityPageGenerator;
 import org.fmarmar.cucumber.tools.report.model.Feature;
 import org.fmarmar.cucumber.tools.rerun.RerunFileConverter;
 
@@ -20,7 +22,9 @@ import com.beust.jcommander.Parameters;
 @Parameters(commandNames = "html-report", commandDescription = "")
 public class HtmlReport implements Command {
 
-	private static final Path DEFAULT_OUTPUT = Paths.get("reports", "html");
+	public static final int DEFAULT_THREADS_SIZE = 100;
+
+	public static final Path DEFAULT_OUTPUT = Paths.get("reports", "html");
 	
 	@Parameter(names = { "--reports", "-r" }, variableArity = true, description = "", converter = PathConverter.class)
 	private List<Path> reports;
@@ -56,7 +60,8 @@ public class HtmlReport implements Command {
 	
 	private void init() {
 		parser = new ReportParser();
-		generator = new ReportGenerator(output);
+		PageGenerator pageGenerator = new VelocityPageGenerator(DEFAULT_THREADS_SIZE);
+		generator = new ReportGenerator(pageGenerator, output, DEFAULT_THREADS_SIZE);
 	}
 
 	@Override

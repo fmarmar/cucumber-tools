@@ -1,4 +1,4 @@
-package org.fmarmar.cucumber.tools.report.html.support;
+package org.fmarmar.cucumber.tools.report.html.page.velocity;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -10,7 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.fmarmar.cucumber.tools.report.model.ExecutionElement;
 import org.fmarmar.cucumber.tools.report.model.support.ScenarioResult;
 
-public final class Util {
+public final class TemplateUtils {
 
 	// provide Locale so tests can validate . (instead of ,) separator
 	public static final NumberFormat PERCENT_FORMATTER = NumberFormat.getPercentInstance(Locale.US);
@@ -31,7 +31,7 @@ public final class Util {
 	
 	private static final NumberFormat MILLISECONDS_FORMATTER = DecimalFormat.getInstance(Locale.US);
 
-	public static final Util INSTANCE = new Util();
+	public static final TemplateUtils INSTANCE = new TemplateUtils();
 
 	//    private static final PeriodFormatter TIME_FORMATTER = new PeriodFormatterBuilder()
 	//            .appendHours()
@@ -45,9 +45,10 @@ public final class Util {
 	//            .appendMillis()
 	//            .toFormatter();
 
-	private Util() { }
+	private TemplateUtils() { }
 	
 	public String tagFileName(String tag) {
+		// FIXME escape chars like : > ...
 		return StringUtils.substringAfter(tag, "@") + ".html";
 	}
 

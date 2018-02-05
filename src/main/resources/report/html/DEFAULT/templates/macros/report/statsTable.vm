@@ -21,7 +21,7 @@
         <td #if ($item.scenariosSummary.failed > 0) class="failed"    #end>$item.scenariosSummary.failed</td>
         <td class="total">$item.scenariosSummary.total</td>
 
-        <td class="duration" data-value="$item.duration">$util.formatDuration($item.duration)</td>
+        <td class="duration" data-value="$item.duration">$utils.formatDuration($item.duration)</td>
         <td class="$item.status.name">$item.status.label</td>
       </tr>
     #end
@@ -43,24 +43,24 @@
       <td>$summary.scenarios.failed</td>
       <td>$summary.scenarios.total</td>
 
-      <td class="duration">$util.formatDuration($summary.duration)</td>
+      <td class="duration">$utils.formatDuration($summary.duration)</td>
       <td>$items.size()</td>
     </tr>
     <tr>
       <td></td>
       
-      <td>$util.formatAsPercentage($summary.steps.passed, $summary.steps.total)</td>
-      <td>$util.formatAsPercentage($summary.steps.failed, $summary.steps.total)</td>
-      <td>$util.formatAsPercentage($summary.steps.skipped, $summary.steps.total)</td>
-      <td>$util.formatAsPercentage($summary.steps.pending, $summary.steps.total)</td>
-      <td>$util.formatAsPercentage($summary.steps.undefined, $summary.steps.total)</td>
+      <td>$utils.formatAsPercentage($summary.steps.passed, $summary.steps.total)</td>
+      <td>$utils.formatAsPercentage($summary.steps.failed, $summary.steps.total)</td>
+      <td>$utils.formatAsPercentage($summary.steps.skipped, $summary.steps.total)</td>
+      <td>$utils.formatAsPercentage($summary.steps.pending, $summary.steps.total)</td>
+      <td>$utils.formatAsPercentage($summary.steps.undefined, $summary.steps.total)</td>
       <td></td>
-      <td>$util.formatAsPercentage($summary.scenarios.passed, $summary.scenarios.total)</td>
-      <td>$util.formatAsPercentage($summary.scenarios.skipped, $summary.scenarios.total)</td>
-      <td>$util.formatAsPercentage($summary.scenarios.failed, $summary.scenarios.total)</td>
+      <td>$utils.formatAsPercentage($summary.scenarios.passed, $summary.scenarios.total)</td>
+      <td>$utils.formatAsPercentage($summary.scenarios.skipped, $summary.scenarios.total)</td>
+      <td>$utils.formatAsPercentage($summary.scenarios.failed, $summary.scenarios.total)</td>
       <td></td>
       <td></td>
-      <td>$util.formatAsPercentage($summary.features.passed, $items.size())</td>
+      <td>$utils.formatAsPercentage($summary.features.passed, $items.size())</td>
     </tr>
   </tfoot>
 </table>

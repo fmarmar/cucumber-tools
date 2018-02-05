@@ -1,7 +1,7 @@
 #macro(includeDuration, $duration)
 
 #if ($duration)
-  <span class="lead-duration duration">$util.formatDuration($duration)</span>
+  <span class="lead-duration duration">$utils.formatDuration($duration)</span>
 #end
 
 #end
