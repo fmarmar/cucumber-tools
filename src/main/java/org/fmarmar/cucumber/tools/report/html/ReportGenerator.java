@@ -42,13 +42,14 @@ public class ReportGenerator {
 		executor = Executors.newFixedThreadPool(poolSize);
 	}
 
-	public void prepareReport() throws IOException {
+	public void prepareReport(Path embeddingsDirectory) throws IOException {
 
 		FileUtils.deleteQuietly(output.toFile());
 		Files.createDirectories(output);
 
 		pageGenerator.initialize(output);
 		executeTask(new CopyStaticResourcesTask());
+		executeTask(new CopyEmbeddingsTask(embeddingsDirectory));
 
 	}
 
@@ -137,6 +138,19 @@ public class ReportGenerator {
 		@Override
 		public Void call() throws Exception {
 			pageGenerator.copyStaticResources(output);
+			return null;
+		}
+
+	}
+	
+	@AllArgsConstructor
+	private class CopyEmbeddingsTask implements Callable<Void> {
+
+		private final Path embeddingsDirectory;
+		
+		@Override
+		public Void call() throws Exception {
+			pageGenerator.copyEmbeddings(embeddingsDirectory, output);
 			return null;
 		}
 

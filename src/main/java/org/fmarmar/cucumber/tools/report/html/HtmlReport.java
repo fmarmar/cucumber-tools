@@ -13,6 +13,7 @@ import org.fmarmar.cucumber.tools.exception.CommandException;
 import org.fmarmar.cucumber.tools.report.ReportParser;
 import org.fmarmar.cucumber.tools.report.html.page.PageGenerator;
 import org.fmarmar.cucumber.tools.report.html.page.velocity.VelocityPageGenerator;
+import org.fmarmar.cucumber.tools.report.html.support.ReportMetadata;
 import org.fmarmar.cucumber.tools.report.model.Feature;
 import org.fmarmar.cucumber.tools.rerun.RerunFileConverter;
 
@@ -39,7 +40,12 @@ public class HtmlReport implements Command {
 	@Override
 	public void initialize() {
 		checkOutput();
-		init();
+		
+		try {
+			init();
+		} catch (IOException e) {
+			throw new CommandException(e.getMessage(), e);
+		}
 	}
 	
 	private void checkOutput() {
@@ -58,9 +64,10 @@ public class HtmlReport implements Command {
 
 	}
 	
-	private void init() {
+	private void init() throws IOException {
 		parser = new ReportParser();
-		PageGenerator pageGenerator = new VelocityPageGenerator(DEFAULT_THREADS_SIZE);
+		ReportMetadata reportMetadata = new ReportMetadata(); // TODO build
+		PageGenerator pageGenerator = new VelocityPageGenerator(reportMetadata, DEFAULT_THREADS_SIZE);
 		generator = new ReportGenerator(pageGenerator, output, DEFAULT_THREADS_SIZE);
 	}
 
@@ -68,9 +75,10 @@ public class HtmlReport implements Command {
 	public void run() {
 		
 		try {
-			List<Feature> features = parser.parse(reports);
+			Path embeddingsDirectory = Files.createTempDirectory("embeddings");
+			List<Feature> features = parser.parse(embeddingsDirectory, reports);
 			
-			generator.prepareReport();
+			generator.prepareReport(embeddingsDirectory);
 			generator.generateReport(features);
 			generator.finishReport();
 			
@@ -78,11 +86,5 @@ public class HtmlReport implements Command {
 			throw new CommandException(e.getMessage(), e);
 		}
 	}
-	
-	
-
-	
-	
-	
 	
 }

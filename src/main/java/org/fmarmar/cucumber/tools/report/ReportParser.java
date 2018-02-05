@@ -18,6 +18,7 @@ import org.fmarmar.cucumber.tools.report.model.Feature;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,11 +33,16 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
  */
 public class ReportParser {
 	
+	public static final String CONFIG_ID = "configuration";
+	
 	private final ObjectMapper mapper = new ObjectMapper();
+	
+	private final ParserConfiguration config;
 	
 	private final TypeReference<List<Feature>> featuresTypeReference = new TypeReference<List<Feature>>() {};
 	
-	public ReportParser() {
+	public ReportParser() throws IOException {
+		config = new ParserConfiguration();
 		configureObjectMapper();
 	}
 
@@ -49,13 +55,18 @@ public class ReportParser {
         
         mapper.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
 		
+        // pass configuration to deserializers
+        InjectableValues values = new InjectableValues.Std().addValue(CONFIG_ID, config);
+        mapper.setInjectableValues(values);
 	}
 	
-	public List<Feature> parse(Collection<Path> reports) throws IOException {
-		return parse(reports.toArray(new Path[reports.size()]));
+	public List<Feature> parse(Path embeddingsDirectory, Collection<Path> reports) throws IOException {
+		return parse(embeddingsDirectory, reports.toArray(new Path[reports.size()]));
 	}
 	
-	public List<Feature> parse(Path... reports) throws IOException {
+	public List<Feature> parse(Path embeddingsDirectory, Path... reports) throws IOException {
+		
+		config.setEmbeddingsDirectory(embeddingsDirectory);
 		
 		ParserProcess process = new ParserProcess();
 		process.parse(reports);
@@ -116,6 +127,10 @@ public class ReportParser {
 			
 		}
 		
+		private boolean isJsonFile(Path path) {
+			return path.getFileName().toString().endsWith(".json");
+		}
+
 		private void parseReport(Path reportFile) throws IOException {
 			
 			try (InputStream is = Files.newInputStream(reportFile)) {
@@ -187,8 +202,30 @@ public class ReportParser {
 		
 	}
 	
-	private static boolean isJsonFile(Path path) {
-		return path.getFileName().toString().endsWith(".json");
+	public static class ParserConfiguration {
+		
+		private final Path defaultEmbeddingsDirectory;
+		
+		public Map<Long, Path> directoriesIndex = new HashMap<>();
+		
+		private ParserConfiguration() throws IOException {
+			defaultEmbeddingsDirectory = Files.createTempDirectory("default-embeddings");
+		}
+		
+		private void setEmbeddingsDirectory(Path dir) {
+			directoriesIndex.put(Thread.currentThread().getId(), dir);
+		}
+		
+		public Path getEmbeddingDirectory() {
+		
+			Path dir = directoriesIndex.get(Thread.currentThread().getId());
+			if (dir == null) {
+				return defaultEmbeddingsDirectory;
+			}
+			
+			return dir;
+			
+		}
 	}
 	
 }

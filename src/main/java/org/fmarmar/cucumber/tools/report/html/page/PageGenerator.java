@@ -9,12 +9,15 @@ public interface PageGenerator {
 	enum PageId {
 		FEATURES_OVERVIEW,
 		FEATURE,
-		TAGS_OVERVIEW
+		TAGS_OVERVIEW,
+		FAILURES_OVERVIEW
 	}
 	
 	void initialize(Path output) throws IOException;
 	
 	void copyStaticResources(Path output) throws IOException;
+	
+	void copyEmbeddings(Path embeddingsDirectory, Path output) throws IOException;
 	
 	Path resolvePagePath(PageId pageId);
 	

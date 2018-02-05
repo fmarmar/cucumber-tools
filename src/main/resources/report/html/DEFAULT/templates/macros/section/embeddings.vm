@@ -3,25 +3,25 @@
   #if (!$embeddings.isEmpty())
   <div class="embeddings inner-level">
     #foreach($embedding in $embeddings)
-    #if ($embedding.getMimeType() == "image/png")
+    #if ($embedding.mimeType == "image/png")
       #includeImageEmbedding($embedding, "png", $foreach.index)
-    #elseif ($embedding.getMimeType() == "image/gif")
+    #elseif ($embedding.mimeType == "image/gif")
       #includeImageEmbedding($embedding, "gif", $foreach.index)
-    #elseif ($embedding.getMimeType() == "image/bmp")
+    #elseif ($embedding.mimeType == "image/bmp")
       #includeImageEmbedding($embedding, "bmp", $foreach.index)
-    #elseif ($embedding.getMimeType() == "image/jpeg")
+    #elseif ($embedding.mimeType == "image/jpeg")
       #includeImageEmbedding($embedding, "jpeg", $foreach.index)
-    #elseif ($embedding.getMimeType() == "image/svg+xml")
+    #elseif ($embedding.mimeType == "image/svg+xml")
       #includeImageEmbedding($embedding, "svg", $foreach.index)
-    #elseif ($embedding.getMimeType() == "text/xml")
+    #elseif ($embedding.mimeType == "text/xml")
       #includeTextEmbedding($embedding, "XML text", $foreach.index)
-    #elseif ($embedding.getMimeType() == "text/plain")
+    #elseif ($embedding.mimeType == "text/plain")
       #includeTextEmbedding($embedding, "Plain text", $foreach.index)
-    #elseif ($embedding.getMimeType() == "text/html")
+    #elseif ($embedding.mimeType == "text/html")
       #includeHtmlEmbedding($embedding, "HTML", $foreach.index)
-    #elseif ($embedding.getMimeType() == "application/json")
+    #elseif ($embedding.mimeType == "application/json")
       #includeTextEmbedding($embedding, "JSON", $foreach.index)
-    #elseif ($embedding.getMimeType() == "image/url")
+    #elseif ($embedding.mimeType == "image/url")
       #includeImageReferenceEmbedding($embedding, $foreach.index)
     #else
       #includeUnknownEmbedding($embedding, $foreach.index)
@@ -38,14 +38,14 @@
   #set($embeddingId = $counter.next())
   <div data-toggle="collapse" data-target="#embedding-$embeddingId" class="collapsable-control">
     <a>Attachment $index ($format)</a>
-    <a href="embeddings/$embedding.getFileName()" download target="_blank">
+    <a href="$basePath/embeddings/$embedding.filename" download target="_blank">
       <span class="download-button glyphicon glyphicon-download-alt"></span>
     </a>
   </div>
   <div id="embedding-$embeddingId" class="collapse collapsable-details">
     <div class="embedding-content">
       <div class="html-content">
-        <iframe seamless="true" sandbox="allow-scripts" src="embeddings/$embedding.getFileName()" srcdoc="$embedding.getDecodedData()"></iframe>
+        <iframe seamless="true" sandbox="allow-scripts" src="$basePath/embeddings/$embedding.filename"></iframe>
       </div>
     </div>
   </div>
@@ -60,13 +60,13 @@
     #set($embeddingId = $counter.next())
     <div data-toggle="collapse" data-target="#embedding-$embeddingId" class="collapsable-control">
       <a>Attachment $index ($image_type)</a>
-      <a href="embeddings/$embedding.getFileName()" download target="_blank">
+      <a href="$basePath/embeddings/$embedding.filename" download target="_blank">
         <span class="download-button glyphicon glyphicon-download-alt"></span>
       </a>
     </div>
     <div id="embedding-$embeddingId" class="collapse collapsable-details">
       <div class="embedding-content">
-        <img src="embeddings/$embedding.getFileName()">
+        <img src="$basePath/embeddings/$embedding.filename">
       </div>
     </div>
   </div>
@@ -78,7 +78,7 @@
     #set($embeddingId = $counter.next())
     <div data-toggle="collapse" data-target="#embedding-$embeddingId" class="collapsable-control">
       <a>Attachment $index (Image)</a>
-      <a href="embeddings/$embedding.getFileName()" download target="_blank">
+      <a href="$basePath/embeddings/$embedding.filename" download target="_blank">
         <span class="download-button glyphicon glyphicon-download-alt"></span>
       </a>
     </div>
@@ -96,7 +96,7 @@
     #set($embeddingId = $counter.next())
     <div data-toggle="collapse" data-target="#embedding-$embeddingId" class="collapsable-control">
       <a>Attachment $index ($format)</a>
-      <a href="embeddings/$embedding.getFileName()" download target="_blank">
+      <a href="$basePath/embeddings/$embedding.filename" download target="_blank">
         <span class="download-button glyphicon glyphicon-download-alt"></span>
       </a>
     </div>
@@ -111,8 +111,8 @@
   <div class="embedding indention">
     #set($embeddingId = $counter.next())
     <div data-toggle="collapse" data-target="#embedding-$embeddingId" class="collapsable-control">
-      <a>Attachment $index ($embedding.getMimeType())</a>
-      <a href="embeddings/$embedding.getFileName()" download target="_blank">
+      <a>Attachment $index ($embedding.mimeType)</a>
+      <a href="$basePath/embeddings/$embedding.filename" download target="_blank">
         <span class="download-button glyphicon glyphicon-download-alt"></span>
       </a>
     </div>

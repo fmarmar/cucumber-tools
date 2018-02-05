@@ -5,9 +5,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -84,12 +89,12 @@ public class VelocityPageGenerator implements PageGenerator {
 
 	private final VelocityContext globalContext;
 
-	public VelocityPageGenerator(int parserPoolSize) {
+	public VelocityPageGenerator(ReportMetadata reportMetadata, int parserPoolSize) {
 
 		engine = new VelocityEngine();
 		engine.init(engineProperties(BASE_TEMPLATES, parserPoolSize));
 
-		globalContext = buildGlobalContext(new ReportMetadata());	
+		globalContext = buildGlobalContext(reportMetadata);	
 
 	}
 
@@ -133,6 +138,7 @@ public class VelocityPageGenerator implements PageGenerator {
 	@Override
 	public void initialize(Path output) throws IOException {
 		Files.createDirectories(output.resolve("features"));
+		Files.createDirectories(output.resolve("embeddings"));
 	}
 
 	@Override
@@ -157,6 +163,26 @@ public class VelocityPageGenerator implements PageGenerator {
 			}
 			ByteStreams.copy(is, os);
 		}
+		
+	}
+	
+	@Override
+	public void copyEmbeddings(Path embeddingsDirectory, final Path output) throws IOException {
+		
+		Files.walkFileTree(embeddingsDirectory, EnumSet.noneOf(FileVisitOption.class), 1, new SimpleFileVisitor<Path>() {
+
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+
+				if (attrs.isRegularFile()) {
+					Files.copy(file, output.resolve("embeddings").resolve(file.getFileName()));
+				}
+
+				return FileVisitResult.CONTINUE;
+			}
+
+		});
+		
 		
 	}
 	
