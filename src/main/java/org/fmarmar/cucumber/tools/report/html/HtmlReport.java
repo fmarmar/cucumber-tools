@@ -10,11 +10,11 @@ import java.util.List;
 import org.fmarmar.cucumber.tools.Command;
 import org.fmarmar.cucumber.tools.common.PathConverter;
 import org.fmarmar.cucumber.tools.exception.CommandException;
+import org.fmarmar.cucumber.tools.report.ParsedReports;
 import org.fmarmar.cucumber.tools.report.ReportParser;
 import org.fmarmar.cucumber.tools.report.html.page.PageGenerator;
 import org.fmarmar.cucumber.tools.report.html.page.velocity.VelocityPageGenerator;
 import org.fmarmar.cucumber.tools.report.html.support.ReportMetadata;
-import org.fmarmar.cucumber.tools.report.model.Feature;
 import org.fmarmar.cucumber.tools.rerun.RerunFileConverter;
 
 import com.beust.jcommander.Parameter;
@@ -75,11 +75,10 @@ public class HtmlReport implements Command {
 	public void run() {
 		
 		try {
-			Path embeddingsDirectory = Files.createTempDirectory("embeddings");
-			List<Feature> features = parser.parse(embeddingsDirectory, reports);
+			ParsedReports parsedReports = parser.parse(reports);
 			
-			generator.prepareReport(embeddingsDirectory);
-			generator.generateReport(features);
+			generator.prepareReport(parsedReports.getEmbeddingsDirectory());
+			generator.generateReport(parsedReports.getFeatures());
 			generator.finishReport();
 			
 		} catch (IOException e) {

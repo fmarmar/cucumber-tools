@@ -60,18 +60,20 @@ public class ReportParser {
         mapper.setInjectableValues(values);
 	}
 	
-	public List<Feature> parse(Path embeddingsDirectory, Collection<Path> reports) throws IOException {
-		return parse(embeddingsDirectory, reports.toArray(new Path[reports.size()]));
+	public ParsedReports parse(Collection<Path> reports) throws IOException {
+		return parse(reports.toArray(new Path[reports.size()]));
 	}
 	
-	public List<Feature> parse(Path embeddingsDirectory, Path... reports) throws IOException {
+	public ParsedReports parse(Path... reports) throws IOException {
 		
-		config.setEmbeddingsDirectory(embeddingsDirectory);
+		Path embeddingsDirectory = config.newEmbeddingsDirectory();
 		
 		ParserProcess process = new ParserProcess();
 		process.parse(reports);
 		
-		return mapper.convertValue(process.reports, featuresTypeReference);
+		List<Feature> features = mapper.convertValue(process.reports, featuresTypeReference);
+		
+		return new ParsedReports(features, embeddingsDirectory);
 	}
 	
 	private class ParserProcess {
@@ -209,11 +211,13 @@ public class ReportParser {
 		public Map<Long, Path> directoriesIndex = new HashMap<>();
 		
 		private ParserConfiguration() throws IOException {
-			defaultEmbeddingsDirectory = Files.createTempDirectory("default-embeddings");
+			defaultEmbeddingsDirectory = Files.createTempDirectory("default-embeddings-");
 		}
 		
-		private void setEmbeddingsDirectory(Path dir) {
-			directoriesIndex.put(Thread.currentThread().getId(), dir);
+		private Path newEmbeddingsDirectory() throws IOException {
+			Path embeddingsDirectory = Files.createTempDirectory("embeddings-");
+			directoriesIndex.put(Thread.currentThread().getId(), embeddingsDirectory);
+			return embeddingsDirectory;
 		}
 		
 		public Path getEmbeddingDirectory() {
