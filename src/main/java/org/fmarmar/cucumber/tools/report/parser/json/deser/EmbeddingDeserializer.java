@@ -25,8 +25,8 @@ public class EmbeddingDeserializer extends BaseDeserializer<Embedding> {
 
 		JsonNode node = p.getCodec().readTree(p);
 
-		MediaType mimeType = MediaType.parse(node.get("mime_type").textValue()).withoutParameters();
-		Path data = writeDataToFile(node.get("data").textValue(), mimeType, getConfiguration(ctxt));
+		MediaType mimeType = MediaType.parse(node.get("mime_type").textValue());
+		Path data = writeDataToFile(node.get("data").textValue(), mimeType.withoutParameters(), getConfiguration(ctxt));
 
 		return new Embedding(mimeType, data);
 	}
@@ -34,7 +34,7 @@ public class EmbeddingDeserializer extends BaseDeserializer<Embedding> {
 	private Path writeDataToFile(String data, MediaType mimeType, ParserConfiguration configuration) throws IOException {
 
 		Path baseDir = configuration.getEmbeddingDirectory();
-		Path file = baseDir.resolve(ReportUtils.hash(data) + '.' + extension(mimeType));
+		Path file = baseDir.resolve(ReportUtils.hash(data) + extension(mimeType));
 
 		if (!file.toFile().exists()) {
 			try (Reader dataReader = new StringReader(data)) {
@@ -46,17 +46,25 @@ public class EmbeddingDeserializer extends BaseDeserializer<Embedding> {
 	}
 
 	private String extension(MediaType mimeType) {
+		
+		if (MediaType.PLAIN_TEXT_UTF_8.is(mimeType)) {
+			return ".txt";
+		}
+		
+		if (mimeType.is(MediaType.SVG_UTF_8)) {
+			return ".svg";
+		}
 
-		if (mimeType.is(MediaType.ANY_IMAGE_TYPE)) {
-			return mimeType.subtype();
+		if (mimeType.is(MediaType.ANY_IMAGE_TYPE) || mimeType.is(MediaType.ANY_TEXT_TYPE)) {
+			return '.' + mimeType.subtype();
 		}
 
 		if (MediaType.JSON_UTF_8.is(mimeType)) {
-			return "json";
+			return ".json";
 		}
-
-		if (MediaType.XML_UTF_8.is(mimeType)) {
-			return "xml";
+		
+		if (MediaType.PDF.is(mimeType)) {
+			return ".pdf";
 		}
 
 		return "unknown";
