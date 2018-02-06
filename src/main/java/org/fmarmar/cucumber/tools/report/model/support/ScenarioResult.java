@@ -19,27 +19,10 @@ public class ScenarioResult {
 
 	public void evaluateStatus(StepStatus status) {
 
-		GenericStatus newStatus = map(status);
+		GenericStatus newStatus = GenericStatus.map(status);
 
 		if (newStatus.ordinal() > this.status.ordinal()) {
 			this.status = newStatus;
-		}
-
-	}
-
-	private GenericStatus map(StepStatus status) {
-
-		switch (status) {
-			case PASSED:
-				return GenericStatus.PASSED;
-			case SKIPPED:
-			case UNDEFINED:
-			case PENDING:
-				return GenericStatus.SKIPPED;
-			case FAILED:
-				return GenericStatus.FAILED;
-			default: // Should never happen
-				throw new IllegalArgumentException("Unknown StepStatus " + status);
 		}
 
 	}

@@ -22,11 +22,14 @@ import org.fmarmar.cucumber.tools.report.html.report.FailuresReport;
 import org.fmarmar.cucumber.tools.report.html.support.AlphabeticalComparator;
 import org.fmarmar.cucumber.tools.report.model.Feature;
 import org.fmarmar.cucumber.tools.report.model.Scenario;
+import org.fmarmar.cucumber.tools.report.model.support.GenericStatus;
 import org.fmarmar.cucumber.tools.report.model.support.ReportSummary;
 
 import lombok.AllArgsConstructor;
 
 public class ReportGenerator {
+	
+	public static final String FAILURES_KEY = "failures";
 	
 	private final Path output;
 
@@ -71,6 +74,7 @@ public class ReportGenerator {
 		}
 
 		executeTask(generateFeaturesOverviewPage(features, summary));
+		executeTask(generateFailuresPage(failuresReport));
 
 	}
 
@@ -83,6 +87,9 @@ public class ReportGenerator {
 		
 		for (Scenario scenario : feature.getScenarios()) {
 			
+			if (scenario.getStatus() == GenericStatus.FAILED) {
+				failuresReport.addFailure(feature, scenario);
+			}
 			
 		}
 		
@@ -92,10 +99,10 @@ public class ReportGenerator {
 
 		Path path = output.resolve(pageGenerator.resolvePagePath(PageId.FEATURE, feature.getUuid()));
 
-		Map<String, Object> featureModel = new HashMap<>();
-		featureModel.put("feature", feature);
+		Map<String, Object> model = new HashMap<>();
+		model.put("feature", feature);
 
-		return new GeneratePageTask(PageId.FEATURE, path, featureModel);
+		return new GeneratePageTask(PageId.FEATURE, path, model);
 
 	}
 	
@@ -103,11 +110,22 @@ public class ReportGenerator {
 
 		Path path = output.resolve(pageGenerator.resolvePagePath(PageId.FEATURES_OVERVIEW));
 		
-		Map<String, Object> featuresOvervieModel = new HashMap<>();
-		featuresOvervieModel.put("features", features);
-		featuresOvervieModel.put("summary", summary);
+		Map<String, Object> model = new HashMap<>();
+		model.put("features", features);
+		model.put("summary", summary);
 		
-		return new GeneratePageTask(PageId.FEATURES_OVERVIEW, path, featuresOvervieModel);
+		return new GeneratePageTask(PageId.FEATURES_OVERVIEW, path, model);
+
+	}
+	
+	private GeneratePageTask generateFailuresPage(FailuresReport failuresReport) throws IOException {
+
+		Path path = output.resolve(pageGenerator.resolvePagePath(PageId.FAILURES_OVERVIEW));
+		
+		Map<String, Object> model = new HashMap<>();
+		model.put(FAILURES_KEY, failuresReport.getFailures());
+		
+		return new GeneratePageTask(PageId.FAILURES_OVERVIEW, path, model);
 
 	}
 	

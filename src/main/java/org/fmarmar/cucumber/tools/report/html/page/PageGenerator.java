@@ -7,10 +7,16 @@ import java.util.Map;
 public interface PageGenerator {
 	
 	enum PageId {
-		FEATURES_OVERVIEW,
-		FEATURE,
-		TAGS_OVERVIEW,
-		FAILURES_OVERVIEW
+		FEATURES_OVERVIEW (true),
+		FEATURE (false),
+		TAGS_OVERVIEW (true),
+		FAILURES_OVERVIEW (true);
+		
+		public final boolean summaryPage;
+		
+		private PageId(boolean summaryPage) {
+			this.summaryPage = summaryPage;
+		}
 	}
 	
 	void initialize(Path output) throws IOException;

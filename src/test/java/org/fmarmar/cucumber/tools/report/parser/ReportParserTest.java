@@ -1,4 +1,4 @@
-package org.fmarmar.cucumber.tools.report;
+package org.fmarmar.cucumber.tools.report.parser;
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;

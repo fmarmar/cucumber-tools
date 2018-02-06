@@ -22,4 +22,21 @@ public enum GenericStatus {
 		return StringUtils.capitalize(getName());
 	}
 	
+	public static GenericStatus map(StepStatus status) {
+
+		switch (status) {
+			case PASSED:
+				return PASSED;
+			case UNDEFINED:
+			case PENDING:
+			case SKIPPED:
+				return SKIPPED;
+			case FAILED:
+				return FAILED;
+			default: // Should never happen
+				throw new IllegalArgumentException("Unknown StepStatus " + status);
+		}
+
+	}
+	
 }

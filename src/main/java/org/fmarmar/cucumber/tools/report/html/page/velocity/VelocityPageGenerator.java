@@ -26,7 +26,10 @@ import org.fmarmar.cucumber.tools.report.html.page.PageGenerator;
 import org.fmarmar.cucumber.tools.report.html.support.ReportMetadata;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.io.ByteStreams;
+
+import lombok.AllArgsConstructor;
 
 public class VelocityPageGenerator implements PageGenerator {
 	
@@ -37,6 +40,14 @@ public class VelocityPageGenerator implements PageGenerator {
 	private static final String BASE_STATIC = BASE_RESOURCES + "static/";
 	
 	private static final String PAGE_SUFFIX = ".html";
+	
+	private static final Map<PageId, PageIdInfo> PAGE_ID_MAP = new ImmutableMap.Builder<PageId, PageIdInfo>()
+			.put(PageId.FEATURES_OVERVIEW, new PageIdInfo("featuresOverview.vm", ".", null, "features-overview"))
+			.put(PageId.FEATURE, new PageIdInfo("feature.vm", "..", "features", null))
+			.put(PageId.TAGS_OVERVIEW, new PageIdInfo("tagOverview.vm", ".", null, "tags-overview"))
+			.put(PageId.FAILURES_OVERVIEW, new PageIdInfo("failuresOverview.vm", ".", null, "failures-overview"))
+			.build();
+			
 
 	private static final String[] MACROS = {
 			"macros/js/arrays.js.vm",
@@ -137,7 +148,13 @@ public class VelocityPageGenerator implements PageGenerator {
 	
 	@Override
 	public void initialize(Path output) throws IOException {
-		Files.createDirectories(output.resolve("features"));
+		
+		for (PageIdInfo pageIdInfo : PAGE_ID_MAP.values()) {
+			if (pageIdInfo.subDirectory != null) {
+				Files.createDirectories(output.resolve(pageIdInfo.subDirectory));
+			}
+		}
+		
 		Files.createDirectories(output.resolve("embeddings"));
 	}
 
@@ -189,14 +206,15 @@ public class VelocityPageGenerator implements PageGenerator {
 	@Override
 	public Path resolvePagePath(PageId pageId) {
 		
-		switch (pageId) {
-			case FEATURES_OVERVIEW:
-				return resolvePagePath(pageId, "features-overview");
-			case TAGS_OVERVIEW:
-				return resolvePagePath(pageId, "tags-overview");
-			default:
-				throw new IllegalArgumentException("Can't resolve page path for: " + pageId);
+		if (PAGE_ID_MAP.containsKey(pageId)) {
+			String name = PAGE_ID_MAP.get(pageId).name;
+			
+			if (name != null) {
+				return resolvePagePath(pageId, name);
+			}
 		}
+		
+		throw new IllegalArgumentException("Can't resolve page path for: " + pageId);
 		
 	}
 	
@@ -205,17 +223,17 @@ public class VelocityPageGenerator implements PageGenerator {
 		
 		String finalName = name + PAGE_SUFFIX;
 		
-		switch (pageId) {
+		if (PAGE_ID_MAP.containsKey(pageId)) {
+			String subDirectory = PAGE_ID_MAP.get(pageId).subDirectory;
 			
-			case FEATURES_OVERVIEW:
-			case TAGS_OVERVIEW:
+			if (subDirectory == null) {
 				return Paths.get(finalName);
-			case FEATURE:
-				return Paths.get("features", finalName);
-			default:
-				throw new IllegalArgumentException("Unknown pageId: " + pageId);
+			}
 			
-		}	
+			return Paths.get(subDirectory, finalName);
+		}
+		
+		throw new IllegalArgumentException("Unknown pageId: " + pageId);
 		
 	}
 	
@@ -228,16 +246,11 @@ public class VelocityPageGenerator implements PageGenerator {
 	
 	private String templateLocation(PageId pageId) {
 		
-		switch (pageId) {
-			case FEATURES_OVERVIEW:
-				return "featuresOverview.vm";
-			case FEATURE:
-				return "feature.vm";
-			case TAGS_OVERVIEW:
-				return "tagsOverview.vm";
-			default:
-				throw new IllegalArgumentException("Unknown pageId: " + pageId);
+		if (PAGE_ID_MAP.containsKey(pageId)) {
+			return PAGE_ID_MAP.get(pageId).templateName;
 		}
+		
+		throw new IllegalArgumentException("Unknown pageId: " + pageId);
 		
 	}
 
@@ -260,15 +273,11 @@ public class VelocityPageGenerator implements PageGenerator {
 
 	private String basePathForPage(PageId pageId) {
 		
-		switch (pageId) {
-			case FEATURES_OVERVIEW:
-			case TAGS_OVERVIEW:
-				return ".";
-			case FEATURE:
-				return "..";
-			default:
-				throw new IllegalArgumentException("Unknown pageId: " + pageId);
+		if (PAGE_ID_MAP.containsKey(pageId)) {
+			return PAGE_ID_MAP.get(pageId).basePath;
 		}
+		
+		throw new IllegalArgumentException("Unknown pageId: " + pageId);
 		
 	}
 
@@ -280,6 +289,16 @@ public class VelocityPageGenerator implements PageGenerator {
 			template.merge(pageContext, writer);
 		}
 
+	}
+	
+	@AllArgsConstructor
+	private static class PageIdInfo {
+		
+		private final String templateName;
+		private final String basePath;
+		private final String subDirectory;
+		private final String name;
+		
 	}
 
 }

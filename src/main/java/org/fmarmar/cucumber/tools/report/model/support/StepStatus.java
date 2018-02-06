@@ -11,10 +11,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public enum StepStatus {
 
     PASSED,
-    SKIPPED,
-    FAILED,
+    UNDEFINED,
     PENDING,
-    UNDEFINED;
+    SKIPPED,
+	FAILED;
 	
 	public boolean isPassed() {
 		return this == PASSED;

@@ -1,10 +1,12 @@
 package org.fmarmar.cucumber.tools.report.model;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.fmarmar.cucumber.tools.report.model.support.GenericResult;
 import org.fmarmar.cucumber.tools.report.model.support.GenericStatus;
 import org.fmarmar.cucumber.tools.report.model.support.GenericSummary;
@@ -20,24 +22,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @JsonDeserialize(converter=FeaturePostProcessor.class)
 public class Feature implements NamedElement, PostProcessor {
 
-	private String uri;
-
 	private String id;
 
-	private String name;
+	private String uri;
 
-	private String description;
+	private String name = StringUtils.EMPTY;
+
+	private String description = StringUtils.EMPTY;
 
 	@JsonDeserialize(contentUsing = TagDeserializer.class)
 	private Set<String> tags = new HashSet<>();
 
 	@JsonProperty("elements")
-	private List<Scenario> scenarios;
+	private List<Scenario> scenarios = Collections.emptyList();
 
 	private String uuid;
 
@@ -45,7 +49,12 @@ public class Feature implements NamedElement, PostProcessor {
 
 	private StepsSummary stepsSummary;
 
-	private GenericResult result; 
+	private GenericResult result;
+	
+	public Feature(String id, String uri) {
+		this.id = id;
+		this.uri = uri;
+	}
 
 	@Override
 	public void postProcess() {
