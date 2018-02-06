@@ -1,4 +1,4 @@
-package org.fmarmar.cucumber.tools.report;
+package org.fmarmar.cucumber.tools.report.parser;
 
 import java.nio.file.Path;
 import java.util.List;

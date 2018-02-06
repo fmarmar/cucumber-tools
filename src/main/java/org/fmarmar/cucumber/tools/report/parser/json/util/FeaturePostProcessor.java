@@ -1,4 +1,4 @@
-package org.fmarmar.cucumber.tools.report.json.util;
+package org.fmarmar.cucumber.tools.report.parser.json.util;
 
 import org.fmarmar.cucumber.tools.report.model.Feature;
 

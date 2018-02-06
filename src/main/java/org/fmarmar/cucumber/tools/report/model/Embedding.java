@@ -2,7 +2,7 @@ package org.fmarmar.cucumber.tools.report.model;
 
 import java.nio.file.Path;
 
-import org.fmarmar.cucumber.tools.report.json.deser.EmbeddingDeserializer;
+import org.fmarmar.cucumber.tools.report.parser.json.deser.EmbeddingDeserializer;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.net.MediaType;

@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.fmarmar.cucumber.tools.report.json.deser.TagDeserializer;
 import org.fmarmar.cucumber.tools.report.model.support.GenericStatus;
 import org.fmarmar.cucumber.tools.report.model.support.NamedElement;
 import org.fmarmar.cucumber.tools.report.model.support.PostProcessor;
 import org.fmarmar.cucumber.tools.report.model.support.ScenarioResult;
 import org.fmarmar.cucumber.tools.report.model.support.ScenarioType;
 import org.fmarmar.cucumber.tools.report.model.support.StepsSummary;
+import org.fmarmar.cucumber.tools.report.parser.json.deser.TagDeserializer;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.collect.Iterables;

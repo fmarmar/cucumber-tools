@@ -1,4 +1,4 @@
-package org.fmarmar.cucumber.tools.report.json.deser;
+package org.fmarmar.cucumber.tools.report.parser.json.deser;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -6,8 +6,8 @@ import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.fmarmar.cucumber.tools.report.ReportParser.ParserConfiguration;
 import org.fmarmar.cucumber.tools.report.model.Embedding;
+import org.fmarmar.cucumber.tools.report.parser.ReportParser.ParserConfiguration;
 import org.fmarmar.cucumber.tools.report.utils.ReportUtils;
 
 import com.fasterxml.jackson.core.JsonParser;

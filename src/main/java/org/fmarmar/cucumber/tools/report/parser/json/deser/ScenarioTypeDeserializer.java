@@ -1,4 +1,4 @@
-package org.fmarmar.cucumber.tools.report.json.deser;
+package org.fmarmar.cucumber.tools.report.parser.json.deser;
 
 import java.io.IOException;
 import java.util.Locale;

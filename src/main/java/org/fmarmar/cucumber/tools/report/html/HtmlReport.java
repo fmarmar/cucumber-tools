@@ -10,11 +10,11 @@ import java.util.List;
 import org.fmarmar.cucumber.tools.Command;
 import org.fmarmar.cucumber.tools.common.PathConverter;
 import org.fmarmar.cucumber.tools.exception.CommandException;
-import org.fmarmar.cucumber.tools.report.ParsedReports;
-import org.fmarmar.cucumber.tools.report.ReportParser;
 import org.fmarmar.cucumber.tools.report.html.page.PageGenerator;
 import org.fmarmar.cucumber.tools.report.html.page.velocity.VelocityPageGenerator;
 import org.fmarmar.cucumber.tools.report.html.support.ReportMetadata;
+import org.fmarmar.cucumber.tools.report.parser.ParsedReports;
+import org.fmarmar.cucumber.tools.report.parser.ReportParser;
 import org.fmarmar.cucumber.tools.rerun.RerunFileConverter;
 
 import com.beust.jcommander.Parameter;

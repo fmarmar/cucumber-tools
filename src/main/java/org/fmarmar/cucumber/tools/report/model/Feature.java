@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
-import org.fmarmar.cucumber.tools.report.json.deser.TagDeserializer;
-import org.fmarmar.cucumber.tools.report.json.util.FeaturePostProcessor;
 import org.fmarmar.cucumber.tools.report.model.support.GenericResult;
 import org.fmarmar.cucumber.tools.report.model.support.GenericStatus;
 import org.fmarmar.cucumber.tools.report.model.support.GenericSummary;
@@ -14,6 +12,8 @@ import org.fmarmar.cucumber.tools.report.model.support.NamedElement;
 import org.fmarmar.cucumber.tools.report.model.support.PostProcessor;
 import org.fmarmar.cucumber.tools.report.model.support.ScenarioType;
 import org.fmarmar.cucumber.tools.report.model.support.StepsSummary;
+import org.fmarmar.cucumber.tools.report.parser.json.deser.TagDeserializer;
+import org.fmarmar.cucumber.tools.report.parser.json.util.FeaturePostProcessor;
 import org.fmarmar.cucumber.tools.report.utils.ReportUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

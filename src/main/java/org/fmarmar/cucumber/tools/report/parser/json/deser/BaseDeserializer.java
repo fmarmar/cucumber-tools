@@ -1,7 +1,7 @@
-package org.fmarmar.cucumber.tools.report.json.deser;
+package org.fmarmar.cucumber.tools.report.parser.json.deser;
 
-import org.fmarmar.cucumber.tools.report.ReportParser;
-import org.fmarmar.cucumber.tools.report.ReportParser.ParserConfiguration;
+import org.fmarmar.cucumber.tools.report.parser.ReportParser;
+import org.fmarmar.cucumber.tools.report.parser.ReportParser.ParserConfiguration;
 
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;

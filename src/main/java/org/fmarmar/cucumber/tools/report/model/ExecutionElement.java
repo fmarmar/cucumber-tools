@@ -3,8 +3,8 @@ package org.fmarmar.cucumber.tools.report.model;
 import java.util.Collections;
 import java.util.List;
 
-import org.fmarmar.cucumber.tools.report.json.deser.MatchDeserializer;
 import org.fmarmar.cucumber.tools.report.model.support.StepStatus;
+import org.fmarmar.cucumber.tools.report.parser.json.deser.MatchDeserializer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

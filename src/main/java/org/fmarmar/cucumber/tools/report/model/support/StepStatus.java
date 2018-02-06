@@ -3,7 +3,7 @@ package org.fmarmar.cucumber.tools.report.model.support;
 import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
-import org.fmarmar.cucumber.tools.report.json.deser.StepStatusDeserializer;
+import org.fmarmar.cucumber.tools.report.parser.json.deser.StepStatusDeserializer;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 

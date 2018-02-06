@@ -1,4 +1,4 @@
-package org.fmarmar.cucumber.tools.report;
+package org.fmarmar.cucumber.tools.report.parser;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,7 +68,7 @@ public class ReportParser {
 		
 		Path embeddingsDirectory = config.newEmbeddingsDirectory();
 		
-		ParserProcess process = new ParserProcess();
+		ParseProcess process = new ParseProcess();
 		process.parse(reports);
 		
 		List<Feature> features = mapper.convertValue(process.reports, featuresTypeReference);
@@ -76,7 +76,35 @@ public class ReportParser {
 		return new ParsedReports(features, embeddingsDirectory);
 	}
 	
-	private class ParserProcess {
+	public static class ParserConfiguration {
+		
+		private final Path defaultEmbeddingsDirectory;
+		
+		public Map<Long, Path> directoriesIndex = new HashMap<>();
+		
+		private ParserConfiguration() throws IOException {
+			defaultEmbeddingsDirectory = Files.createTempDirectory("default-embeddings-");
+		}
+		
+		private Path newEmbeddingsDirectory() throws IOException {
+			Path embeddingsDirectory = Files.createTempDirectory("embeddings-");
+			directoriesIndex.put(Thread.currentThread().getId(), embeddingsDirectory);
+			return embeddingsDirectory;
+		}
+		
+		public Path getEmbeddingDirectory() {
+		
+			Path dir = directoriesIndex.get(Thread.currentThread().getId());
+			if (dir == null) {
+				return defaultEmbeddingsDirectory;
+			}
+			
+			return dir;
+			
+		}
+	}
+
+	private class ParseProcess {
 		
 		private static final String FEATURE_URI_FIELD_NAME = "uri";
 		
@@ -137,12 +165,12 @@ public class ReportParser {
 			
 			try (InputStream is = Files.newInputStream(reportFile)) {
 				JsonNode reportNode = mapper.readTree(is);
-				merge(reportNode);
+				add(reportNode);
 			}
 			
 		}
 
-		private void merge(JsonNode reportNode) {
+		private void add(JsonNode reportNode) {
 			
 			checkReportTree(reportNode);
 			
@@ -160,7 +188,7 @@ public class ReportParser {
 				JsonNode value = feature.getValue();
 				
 				if (reportsIndex.containsKey(key)) {
-					mergeFeature(reportsIndex.get(key), value);
+					addScenarios(reportsIndex.get(key), value);
 				} else {
 					reports.add(value);
 					reportsIndex.put(key, value);			
@@ -193,7 +221,7 @@ public class ReportParser {
 			return featureNode.get(FEATURE_URI_FIELD_NAME).textValue();
 		}
 		
-		private void mergeFeature(JsonNode accFeatureNode, JsonNode featureNode) {
+		private void addScenarios(JsonNode accFeatureNode, JsonNode featureNode) {
 
 			ArrayNode scenariosNode = (ArrayNode) accFeatureNode.get(ELEMENTS_FIELD_NAME);
 			ArrayNode newScenariosNode = (ArrayNode) featureNode.get(ELEMENTS_FIELD_NAME);
@@ -202,34 +230,6 @@ public class ReportParser {
 			
 		}
 		
-	}
-	
-	public static class ParserConfiguration {
-		
-		private final Path defaultEmbeddingsDirectory;
-		
-		public Map<Long, Path> directoriesIndex = new HashMap<>();
-		
-		private ParserConfiguration() throws IOException {
-			defaultEmbeddingsDirectory = Files.createTempDirectory("default-embeddings-");
-		}
-		
-		private Path newEmbeddingsDirectory() throws IOException {
-			Path embeddingsDirectory = Files.createTempDirectory("embeddings-");
-			directoriesIndex.put(Thread.currentThread().getId(), embeddingsDirectory);
-			return embeddingsDirectory;
-		}
-		
-		public Path getEmbeddingDirectory() {
-		
-			Path dir = directoriesIndex.get(Thread.currentThread().getId());
-			if (dir == null) {
-				return defaultEmbeddingsDirectory;
-			}
-			
-			return dir;
-			
-		}
 	}
 	
 }
