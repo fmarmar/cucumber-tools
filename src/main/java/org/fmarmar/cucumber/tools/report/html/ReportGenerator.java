@@ -16,6 +16,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.apache.commons.io.FileUtils;
+import org.fmarmar.cucumber.tools.exception.MultiException;
 import org.fmarmar.cucumber.tools.report.html.page.PageGenerator;
 import org.fmarmar.cucumber.tools.report.html.page.PageGenerator.PageId;
 import org.fmarmar.cucumber.tools.report.html.report.FailuresReport;
@@ -133,19 +134,23 @@ public class ReportGenerator {
 		tasks.add(executor.submit(task));
 	}
 	
-	public void finishReport() throws IOException {
+	public void finishReport() throws IOException, InterruptedException {
 		
 		executor.shutdown();
 		
-		Collection<Exception> errors = new ArrayList<>();
+		Collection<Throwable> errors = new ArrayList<>();
 		
 		for (Future<Void> task : tasks) {
 			try {
 				task.get();
-			} catch (InterruptedException | ExecutionException e) {
+			} catch (ExecutionException e) {
 				// FIXME we should throw the errors
-				errors.add(e);
+				errors.add(e.getCause());
 			}
+		}
+		
+		if (!errors.isEmpty()) {
+			throw new MultiException(errors);
 		}
 		
 	}

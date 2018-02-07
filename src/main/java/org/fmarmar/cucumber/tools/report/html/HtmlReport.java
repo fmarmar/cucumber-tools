@@ -81,7 +81,7 @@ public class HtmlReport implements Command {
 			generator.generateReport(parsedReports.getFeatures());
 			generator.finishReport();
 			
-		} catch (IOException e) {
+		} catch (IOException | InterruptedException e) {
 			throw new CommandException(e.getMessage(), e);
 		}
 	}

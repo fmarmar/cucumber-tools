@@ -56,7 +56,7 @@ public class ReportGeneratorTest {
 	}
 	
 	@Test
-	public void testNoFailuresReport() throws IOException {
+	public void testNoFailuresReport() throws IOException, InterruptedException {
 		
 		Feature feature = FeatureBuilder.newFeature()
 				.withScenarios(GenericStatus.PASSED, GenericStatus.PASSED, GenericStatus.SKIPPED)
@@ -72,7 +72,7 @@ public class ReportGeneratorTest {
 	}
 	
 	@Test
-	public void testFailuresReport() throws IOException {
+	public void testFailuresReport() throws IOException, InterruptedException {
 		
 		Feature feature = FeatureBuilder.newFeature()
 				.withScenarios(GenericStatus.PASSED, GenericStatus.FAILED, GenericStatus.SKIPPED)
@@ -89,7 +89,7 @@ public class ReportGeneratorTest {
 	}
 	
 	@Test
-	public void testFailedScenariosAreGroupedByFeatureInFailuresReport() throws IOException {
+	public void testFailedScenariosAreGroupedByFeatureInFailuresReport() throws IOException, InterruptedException {
 		
 		Feature feature = FeatureBuilder.newFeature()
 				.withScenarios(GenericStatus.PASSED, GenericStatus.FAILED, GenericStatus.FAILED)

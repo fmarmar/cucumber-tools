@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.fmarmar.cucumber.tools.report.model.support.GenericStatus;
 import org.fmarmar.cucumber.tools.report.model.support.ScenarioResult;
+import org.fmarmar.cucumber.tools.report.model.support.ScenarioType;
 import org.fmarmar.cucumber.tools.report.model.support.StepStatus;
 
 import com.google.common.collect.Iterables;
@@ -25,9 +26,15 @@ public class FeatureBuilder {
 	
 	private static EnhancedRandom SCENARIO_BUILDER = EnhancedRandomBuilder.aNewEnhancedRandomBuilder()
 			.overrideDefaultInitialization(true)
+			.collectionSizeRange(1, 3)
+			.exclude(FieldDefinitionBuilder.field().named("type").ofType(ScenarioType.class).get())
+			.exclude(FieldDefinitionBuilder.field().named("rows").get())
+			.exclude(FieldDefinitionBuilder.field().named("before").inClass(Step.class).get())
+			.exclude(FieldDefinitionBuilder.field().named("after").inClass(Step.class).get())
+			.exclude(FieldDefinitionBuilder.field().named("outputs").get())
+			.exclude(FieldDefinitionBuilder.field().named("embeddings").get())
 			.exclude(FieldDefinitionBuilder.field().named("stepsSummary").get())
 			.exclude(FieldDefinitionBuilder.field().named("result").ofType(ScenarioResult.class).get())
-			.exclude(FieldDefinitionBuilder.field().named("embeddings").get())
 			.build();
 			
 	private Random rand = new Random();
@@ -69,29 +76,40 @@ public class FeatureBuilder {
 	
 	private void ensureScenarioResult(Scenario scenario, GenericStatus result) {
 		
-		Iterable<ExecutionElement> allSteps = Iterables.concat(scenario.getBefore(), scenario.getSteps(), scenario.getAfter());
-		
-		if (scenario instanceof ScenarioWithBackground) {
-			allSteps = Iterables.concat(allSteps, ((ScenarioWithBackground) scenario).getBackgroundSteps());
-		}
+		Iterable<ExecutionElement> scenarioSteps = steps(scenario);
 		
 		boolean changeSteps = true;
 		
-		for (ExecutionElement step : allSteps) {
+		for (ExecutionElement step : scenarioSteps) {
 			
 			StepStatus stepStatus = step.getStatus();
 			
-			if (result != GenericStatus.map(stepStatus)) {
-				step.getResult().setStatus(StepStatus.PASSED);
+			if (result == GenericStatus.map(stepStatus)) {
 				changeSteps = false;
+			} else {
+				step.getResult().setStatus(StepStatus.PASSED);
 			}
 		}
 		
 		if (changeSteps) {
-			ExecutionElement step = Iterables.get(allSteps, rand.nextInt(Iterables.size(allSteps)));
+			ExecutionElement step = Iterables.get(scenarioSteps, rand.nextInt(Iterables.size(scenarioSteps)));
 			step.getResult().setStatus(map(result));
 		}
 		
+	}
+	
+	private Iterable<ExecutionElement> steps(Scenario scenario) {
+		
+		if (scenario instanceof ScenarioWithBackground) {
+			return steps((ScenarioWithBackground) scenario);
+		}
+		
+		return Iterables.concat(scenario.getBefore(), scenario.getSteps(), scenario.getAfter());
+		
+	}
+	
+	private Iterable<ExecutionElement> steps(ScenarioWithBackground scenario) {
+		return Iterables.concat(scenario.getBefore(), scenario.getBackgroundSteps(), scenario.getSteps(), scenario.getAfter());
 	}
 	
 	private StepStatus map(GenericStatus status) {
@@ -99,7 +117,7 @@ public class FeatureBuilder {
 			case PASSED:
 				return StepStatus.PASSED;
 			case SKIPPED:
-				return StepStatus.SKIPPED;
+				return StepStatus.PENDING;
 			case FAILED:
 				return StepStatus.FAILED;
 			default:

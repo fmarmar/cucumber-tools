@@ -1,5 +1,6 @@
 package org.fmarmar.cucumber.tools.report.html.page.velocity;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -12,16 +13,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.app.event.EventCartridge;
 import org.apache.velocity.runtime.RuntimeConstants;
+import org.fmarmar.cucumber.tools.exception.MultiException;
 import org.fmarmar.cucumber.tools.report.html.page.PageGenerator;
 import org.fmarmar.cucumber.tools.report.html.support.ReportMetadata;
 
@@ -29,17 +35,31 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.ByteStreams;
 
+import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+import io.github.lukehutch.fastclasspathscanner.matchprocessor.FileMatchProcessor;
+import io.github.lukehutch.fastclasspathscanner.matchprocessor.FilenameMatchProcessor;
+import io.github.lukehutch.fastclasspathscanner.scanner.ScanResult;
 import lombok.AllArgsConstructor;
 
 public class VelocityPageGenerator implements PageGenerator {
 	
 	private static final String BASE_RESOURCES = "report/html/DEFAULT/";
 
-	private static final String BASE_TEMPLATES = BASE_RESOURCES + "templates/";
-
-	private static final String BASE_STATIC = BASE_RESOURCES + "static/";
+//	private static final String BASE_TEMPLATES = BASE_RESOURCES + "templates/";
+//
+//	private static final String BASE_STATIC = BASE_RESOURCES + "static/";
+//	
+//	private static final String BASE_MACROS = BASE_TEMPLATES + "macros/";
+	
+	private static final String TEMPLATES_DIR = "templates/";
+	
+	private static final String MACROS_DIR = "macros/";
+	
+	private static final String STATIC_DIR = "static/";
 	
 	private static final String PAGE_SUFFIX = ".html";
+	
+	private static final String TEMPLATE_EXTENSION = "vm";
 	
 	private static final Map<PageId, PageIdInfo> PAGE_ID_MAP = new ImmutableMap.Builder<PageId, PageIdInfo>()
 			.put(PageId.FEATURES_OVERVIEW, new PageIdInfo("featuresOverview.vm", ".", null, "features-overview"))
@@ -47,70 +67,25 @@ public class VelocityPageGenerator implements PageGenerator {
 			.put(PageId.TAGS_OVERVIEW, new PageIdInfo("tagOverview.vm", ".", null, "tags-overview"))
 			.put(PageId.FAILURES_OVERVIEW, new PageIdInfo("failuresOverview.vm", ".", null, "failures-overview"))
 			.build();
-			
-
-	private static final String[] MACROS = {
-			"macros/js/arrays.js.vm",
-			"macros/page/head.vm",
-			"macros/page/title.vm",
-			"macros/page/navigation.vm",
-			"macros/page/buildinfo.vm",
-			"macros/page/classifications.vm",
-			"macros/page/reportInfo.vm",
-			"macros/page/lead.vm",
-			"macros/report/statsTable.vm",
-			"macros/report/reportTable.vm",
-			"macros/report/expandAllButtons.vm",
-			"macros/section/duration.vm",
-			"macros/section/brief.vm",
-			"macros/section/tags.vm",
-			"macros/section/message.vm",
-			"macros/section/output.vm",
-			"macros/section/embeddings.vm",
-			"macros/section/hooks.vm",
-			"macros/section/docstring.vm",
-			"macros/section/steps.vm",
-			"macros/section/scenario.vm"
-	};
-	
-	private static final String[] STATIC_RESOURCES = {
-			"css/bootstrap.min.css",
-			"css/cucumber.css",
-			"css/font-awesome.min.css",
-			"fonts/fontawesome-webfont.eot",
-			"fonts/fontawesome-webfont.svg",
-			"fonts/fontawesome-webfont.ttf",
-			"fonts/fontawesome-webfont.woff",
-			"fonts/fontawesome-webfont.woff2",
-			"fonts/FontAwesome.otf",
-			"fonts/glyphicons-halflings-regular.eot",
-			"fonts/glyphicons-halflings-regular.svg",
-			"fonts/glyphicons-halflings-regular.ttf",
-			"fonts/glyphicons-halflings-regular.woff",
-			"fonts/glyphicons-halflings-regular.woff2",
-			"images/favicon.png",
-			"js/bootstrap.min.js",
-			"js/Chart.min.js",
-			"js/jquery.min.js",
-			"js/jquery.tablesorter.min.js",
-			"js/moment.min.js",
-			"index.html"
-	};
 
 	private final VelocityEngine engine;
 
 	private final VelocityContext globalContext;
+	
+	private final String baseResources = BASE_RESOURCES;
+	
+	
 
-	public VelocityPageGenerator(ReportMetadata reportMetadata, int parserPoolSize) {
+	public VelocityPageGenerator(ReportMetadata reportMetadata, int parserPoolSize) throws IOException {
 
 		engine = new VelocityEngine();
-		engine.init(engineProperties(BASE_TEMPLATES, parserPoolSize));
+		engine.init(engineProperties(baseResources + TEMPLATES_DIR, parserPoolSize));
 
 		globalContext = buildGlobalContext(reportMetadata);	
 
 	}
 
-	private Properties engineProperties(String baseTemplates, int parserPoolSize) {
+	private Properties engineProperties(String baseTemplates, int parserPoolSize) throws IOException {
 
 		Properties veProps = new Properties();
 
@@ -125,9 +100,27 @@ public class VelocityPageGenerator implements PageGenerator {
 		veProps.setProperty(RuntimeConstants.INPUT_ENCODING, "UTF-8");
 		veProps.setProperty(RuntimeConstants.OUTPUT_ENCODING, "UTF-8");
 
-		veProps.setProperty(RuntimeConstants.VM_LIBRARY, Joiner.on(',').join(MACROS));
+		veProps.setProperty(RuntimeConstants.VM_LIBRARY, Joiner.on(',').join(getMacros(baseTemplates)));
 
 		return veProps;
+	}
+	
+	private Collection<String> getMacros(final String baseTemplates) throws IOException {
+		
+		final Collection<String> macros = new ArrayList<>();
+		
+		new FastClasspathScanner(toPackage(baseTemplates + MACROS_DIR))
+				.matchFilenameExtension(TEMPLATE_EXTENSION, new FilenameMatchProcessor() {
+
+					@Override
+					public void processMatch(File classpathElt, String relativePath) throws IOException {
+						macros.add(relativePath.substring(baseTemplates.length()));
+					}
+					
+				})
+				.scan();
+		
+		return macros;
 	}
 
 	private VelocityContext buildGlobalContext(ReportMetadata metadata) {
@@ -160,28 +153,39 @@ public class VelocityPageGenerator implements PageGenerator {
 	}
 
 	@Override
-	public void copyStaticResources(Path output) throws IOException {
+	public void copyStaticResources(final Path output) throws IOException {
 		
-		// FIXME make generic
+		final String baseStatic = baseResources + STATIC_DIR;
 		
-		for (String resource : STATIC_RESOURCES) {
-			copyClasspathResource(BASE_STATIC + resource, output.resolve(resource));
+		ScanResult scanResult = new FastClasspathScanner(toPackage(baseStatic))
+				.matchFilenamePattern(".*", new FileMatchProcessor() {
+
+					@Override
+					public void processMatch(String relativePath, InputStream is, long lengthBytes) throws IOException {
+
+						Path outputPath = output.resolve(relativePath.substring(baseStatic.length()));
+						Files.createDirectories(outputPath.getParent());
+						
+						try (OutputStream os = Files.newOutputStream(outputPath)) {
+							ByteStreams.copy(is, os);
+						}
+						
+					}
+					
+				})
+				.scan();
+		
+		List<Throwable> errors = scanResult.getMatchProcessorExceptions();
+		
+		if (!errors.isEmpty()) {
+			throw new MultiException("Error copying static resources", errors);
 		}
 		
 	}
 	
-	private void copyClasspathResource(String resourceLocation, Path outputPath) throws IOException {
-		
-		Files.createDirectories(outputPath.getParent());
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-
-		try (InputStream is = cl.getResourceAsStream(resourceLocation); OutputStream os = Files.newOutputStream(outputPath)) {
-			if (is == null) {
-				throw new IllegalArgumentException("Resource " + resourceLocation + " not found in classpath");
-			}
-			ByteStreams.copy(is, os);
-		}
-		
+	private static String toPackage(String path) {
+		String pkg = path.replaceAll("/+", ".");
+		return StringUtils.stripEnd(pkg, ".");
 	}
 	
 	@Override
