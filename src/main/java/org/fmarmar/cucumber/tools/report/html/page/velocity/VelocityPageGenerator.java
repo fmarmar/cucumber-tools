@@ -93,7 +93,8 @@ public class VelocityPageGenerator implements PageGenerator {
 			"js/Chart.min.js",
 			"js/jquery.min.js",
 			"js/jquery.tablesorter.min.js",
-			"js/moment.min.js"
+			"js/moment.min.js",
+			"index.html"
 	};
 
 	private final VelocityEngine engine;
