@@ -12,8 +12,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 
 public class ScenarioTypeDeserializer extends JsonDeserializer<ScenarioType> {
 	
-	private static final long serialVersionUID = 8749674249395896103L;
-
 	@Override
     public boolean isCachable() { 
 		return true; 

@@ -14,11 +14,11 @@ import lombok.Data;
 @Data
 public abstract class ExecutionElement {
 
-	private Result result;
+	protected Result result;
 
 	@JsonProperty("match")
 	@JsonDeserialize(using = MatchDeserializer.class)
-	private String location;
+	protected String location;
 	
 	@JsonProperty("output")
 	private List<String> outputs = Collections.emptyList();

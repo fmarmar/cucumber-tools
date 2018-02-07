@@ -76,7 +76,7 @@ public class FeatureBuilder {
 	
 	private void ensureScenarioResult(Scenario scenario, GenericStatus result) {
 		
-		Iterable<ExecutionElement> scenarioSteps = steps(scenario);
+		Iterable<ExecutionElement> scenarioSteps = ModelTestUtils.steps(scenario);
 		
 		boolean changeSteps = true;
 		
@@ -96,20 +96,6 @@ public class FeatureBuilder {
 			step.getResult().setStatus(map(result));
 		}
 		
-	}
-	
-	private Iterable<ExecutionElement> steps(Scenario scenario) {
-		
-		if (scenario instanceof ScenarioWithBackground) {
-			return steps((ScenarioWithBackground) scenario);
-		}
-		
-		return Iterables.concat(scenario.getBefore(), scenario.getSteps(), scenario.getAfter());
-		
-	}
-	
-	private Iterable<ExecutionElement> steps(ScenarioWithBackground scenario) {
-		return Iterables.concat(scenario.getBefore(), scenario.getBackgroundSteps(), scenario.getSteps(), scenario.getAfter());
 	}
 	
 	private StepStatus map(GenericStatus status) {

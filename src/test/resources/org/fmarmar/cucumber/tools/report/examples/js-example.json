@@ -1,0 +1,155 @@
+[
+  {
+    "keyword": "Feature",
+    "line": 3,
+    "name": "Cucumberjs 2.x feature",
+    "tags": [
+      {
+        "line": 1,
+        "name": "@myTag"
+      },
+      {
+        "line": 1,
+        "name": "@yourTag"
+      },
+      {
+        "line": 1,
+        "name": "@aTag"
+      }
+    ],
+    "uri": "features/js/simpleJs.feature",
+    "elements": [
+      {
+        "keyword": "Scenario",
+        "line": 7,
+        "name": "An scenario",
+        "tags": [
+          {
+            "line": 6,
+            "name": "@scenarioTag"
+          },
+          {
+            "line": 5,
+            "name": "@otherScenarioTag"
+          },
+          {
+            "line": 1,
+            "name": "@myTag"
+          },
+          {
+            "line": 1,
+            "name": "@yourTag"
+          },
+          {
+            "line": 1,
+            "name": "@aTag"
+          }
+        ],
+        "id": "cucumberjs-2.x-feature;an-scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Before",
+            "result": {
+              "status": "passed",
+              "duration": 0
+            },
+            "hidden": true,
+            "match": {
+              "location": "cucumber/lib/index.js:176"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Before",
+            "result": {
+              "status": "passed",
+              "duration": 17
+            },
+            "hidden": true,
+            "match": {
+              "location": "lib/core/cucumber-hooks.js:32"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "one Given step",
+            "result": {
+              "status": "passed",
+              "duration": 4243
+            },
+            "line": 11,
+            "match": {
+              "location": "cucumber/lib/given-steps.js:176"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "name": "the When step",
+            "result": {
+              "status": "passed",
+              "duration": 1970
+            },
+            "line": 12,
+            "match": {
+              "location": "cucumber/lib/when-steps.js:176"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "the And step after When",
+            "result": {
+              "status": "passed",
+              "duration": 498
+            },
+            "line": 13,
+            "match": {
+              "location": "cucumber/lib/when-steps.js:176"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "the Then step",
+            "result": {
+              "status": "passed",
+              "duration": 128
+            },
+            "line": 14,
+            "match": {
+              "location": "cucumber/lib/then-steps.js:176"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "After",
+            "result": {
+              "status": "passed",
+              "duration": 186
+            },
+            "hidden": true,
+            "match": {
+              "location": "lib/core/cucumber-hooks.js:49"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "After",
+            "result": {
+              "status": "passed",
+              "duration": 17
+            },
+            "hidden": true,
+            "match": {
+              "location": "cucumber/lib/index.js:176"
+            }
+          }
+        ]
+      }
+    ],
+    "id": "cucumberjs-2.x-feature"
+  }
+]
