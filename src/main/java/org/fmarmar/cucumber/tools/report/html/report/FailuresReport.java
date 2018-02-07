@@ -1,7 +1,7 @@
 package org.fmarmar.cucumber.tools.report.html.report;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.fmarmar.cucumber.tools.report.model.Feature;
@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class FailuresReport {
 
-	private final Map<String, Failure> failures = new HashMap<>();
+	private final Map<String, Failure> failures = new LinkedHashMap<>();
 	
 	public Collection<Failure> getFailures() {
 		return failures.values();
