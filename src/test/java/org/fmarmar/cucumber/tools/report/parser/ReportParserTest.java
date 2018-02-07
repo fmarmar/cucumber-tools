@@ -86,7 +86,8 @@ public class ReportParserTest {
 		assertThat(scenarios, contains(hasProperty("type", equalTo(ScenarioType.SCENARIO))));
 		assertThat(scenarios, contains(not(hasProperty("backgroundName"))));
 		assertThat(scenarios, contains(not(hasProperty("backgroundSteps"))));
-		assertThat(scenarios, contains(hasProperty("steps", not(empty()))));
+		assertThat(scenarios, contains(hasProperty("before", not(empty()))));
+		assertThat(scenarios, contains(hasProperty("after", not(empty()))));
 		assertThat(scenarios, contains(hasProperty("tags", hasItems(featureTags.toArray()))));
 		assertThat(scenarios, contains(hasProperty("result", not(nullValue()))));
 		

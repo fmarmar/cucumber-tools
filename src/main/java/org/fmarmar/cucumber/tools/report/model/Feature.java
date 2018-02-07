@@ -71,7 +71,7 @@ public class Feature implements NamedElement, PostProcessor {
 		ListIterator<Scenario> it = scenarios.listIterator();
 		Scenario background = null;
 
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			Scenario currentScenario = it.next();
 
 			if (currentScenario.getType() == ScenarioType.BACKGROUND) {

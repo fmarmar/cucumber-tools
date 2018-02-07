@@ -9,9 +9,13 @@ import org.fmarmar.cucumber.tools.report.parser.json.deser.MatchDeserializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class ExecutionElement {
 
 	protected Result result;

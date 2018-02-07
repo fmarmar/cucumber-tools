@@ -1,8 +1,11 @@
 package org.fmarmar.cucumber.tools.report.model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -33,11 +36,11 @@ public class Scenario implements NamedElement, PostProcessor {
 	@JsonDeserialize(contentUsing=TagDeserializer.class)
 	protected Set<String> tags = new HashSet<>();
 	
-	protected List<ScenarioHook> before = Collections.emptyList();
+	protected List<ScenarioHook> before = new ArrayList<>();
 	
 	protected List<Step> steps = Collections.emptyList();
 	
-	protected List<ScenarioHook> after = Collections.emptyList();
+	protected List<ScenarioHook> after = new ArrayList<>();
 	
 	protected StepsSummary stepsSummary;
 	
@@ -45,10 +48,44 @@ public class Scenario implements NamedElement, PostProcessor {
 
 	@Override
 	public void postProcess() {
+		processSteps();
 		stepsSummary = summary(steps);
 		result = ScenarioResult.result(Iterables.concat(before, steps, after));
 	}
 	
+	private void processSteps() { 
+		
+		Iterator<Step> it = steps.iterator();
+		
+		while (it.hasNext()) {
+			Step currentStep = it.next();
+			
+			if (currentStep.isHidden() && addToScenarioHook(currentStep)) {
+				it.remove();
+			}
+			
+		}
+		
+	}
+
+	private boolean addToScenarioHook(Step step) {
+		
+		ScenarioHook hook = new ScenarioHook(step.getResult(), step.getLocation(), step.getOutputs(), step.getEmbeddings());
+
+		String keyword = step.getKeyword().trim().toUpperCase(Locale.ENGLISH);
+		
+		switch (keyword) {
+			case "BEFORE":
+				return before.add(hook);
+			case "AFTER":
+				return after.add(hook);
+			default:
+				//TODO log
+				return false;
+		}
+		
+	}
+
 	protected StepsSummary summary(Iterable<Step> steps) {
 		
 		StepsSummary summary = new StepsSummary();
