@@ -34,7 +34,7 @@
 
 		<velocity.version>1.7</velocity.version>
 		<owasp.version>20171016.1</owasp.version>
-		<fast-classpath-scanner.version>2.18.0</fast-classpath-scanner.version>
+		<fast-classpath-scanner.version>2.18.1</fast-classpath-scanner.version>
 
 		<!-- test -->
 		<junit.version>4.12</junit.version>
