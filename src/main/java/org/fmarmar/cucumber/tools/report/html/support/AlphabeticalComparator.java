@@ -12,7 +12,7 @@ public class AlphabeticalComparator implements Comparator<NamedElement> {
 	
 	@Override
 	public int compare(NamedElement named1, NamedElement named2) {
-		return named1.getName().compareTo(named2.getName());
+		return named1.getName().compareToIgnoreCase(named2.getName());
 	}
 	
 }
