@@ -178,7 +178,7 @@ public class VelocityPageGenerator implements PageGenerator {
 		List<Throwable> errors = scanResult.getMatchProcessorExceptions();
 		
 		if (!errors.isEmpty()) {
-			throw new MultiException("Error copying static resources", errors);
+			throw MultiException.newInstance("Error copying static resources", errors);
 		}
 		
 	}

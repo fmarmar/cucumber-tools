@@ -150,7 +150,7 @@ public class ReportGenerator {
 		}
 		
 		if (!errors.isEmpty()) {
-			throw new MultiException(errors);
+			throw MultiException.newInstance(errors);
 		}
 		
 	}
