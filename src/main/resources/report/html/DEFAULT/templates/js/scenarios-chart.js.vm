@@ -9,7 +9,7 @@ $(document).ready(function() {
             ],
             backgroundColor: [
                 "#00B000",
-                "#080A0F",
+                "#80A0FF",
                 "#FF3030"
             ]
         }],
