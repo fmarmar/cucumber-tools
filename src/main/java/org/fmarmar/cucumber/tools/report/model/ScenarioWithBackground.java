@@ -38,7 +38,12 @@ public class ScenarioWithBackground extends Scenario {
 	@Override
 	public void postProcess() {
 		stepsSummary = summary(Iterables.concat(backgroundSteps, steps));
-		result = ScenarioResult.result(Iterables.concat(before, backgroundSteps, steps, after));
+		result = ScenarioResult.result(getExecutionElements());
+	}
+	
+	@Override
+	public Iterable<ExecutionElement> getExecutionElements() {
+		return Iterables.concat(before, executionElements(backgroundSteps), executionElements(steps), after);
 	}
 	
 	

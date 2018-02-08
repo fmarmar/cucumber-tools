@@ -1,13 +1,6 @@
-#macro(includeScenario, $scenario, $linkToFeature)
+#macro(includeScenario, $scenario)
 
 <div class="element">
-  #if ($linkToFeature)
-    <div class="indention">
-      <b>Feature:</b>
-      <a href="$scenario.getFeature().getReportFileName()">$scenario.getFeature().getName()</a>
-    </div>
-  #end
-
   #includeTags($scenario.tags)
   #includeDuration($scenario.duration)
 
@@ -21,10 +14,10 @@
     #includeHooks("Before", $scenario.before, $utils.result($scenario.before).status)
 
 	#if ($scenario.backgroundSteps)
-		#includeSteps("Background steps", $scenario.backgroundSteps, $utils.result($scenario.backgroundSteps).status)
+		#includeSteps("Background steps", $scenario.backgroundName, $scenario.backgroundSteps, $utils.result($scenario.backgroundSteps).status)
     #end
 
-    #includeSteps("Steps", $scenario.steps, $utils.result($scenario.steps).status)
+    #includeSteps("Steps", "", $scenario.steps, $utils.result($scenario.steps).status)
 
     #includeHooks("After", $scenario.after, $utils.result($scenario.after).status)
   </div>

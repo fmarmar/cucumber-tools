@@ -26,7 +26,7 @@
 
         <div class="elements inner-level">
           #foreach($scenario in $feature.scenarios)
-            #includeScenario($scenario, false)
+            #includeScenario($scenario)
           #end
         </div>
 

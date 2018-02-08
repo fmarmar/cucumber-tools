@@ -32,7 +32,7 @@
                               
             <div class="elements inner-level">
               #foreach($scenario in $failure.scenarios)
-                #includeScenario($scenario, false)
+                #includeScenario($scenario)
               #end
             </div>
           </div>

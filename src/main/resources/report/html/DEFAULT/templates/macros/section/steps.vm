@@ -1,14 +1,13 @@
-#macro(includeSteps, $keyword, $steps, $status)
+#macro(includeSteps, $keyword, $stepsGroupName, $steps, $status)
 
 <div class="steps inner-level">
   #set($stepsId = $counter.next())
   <div data-toggle="collapse" class="#if ($status.isPassed()) collapsed #end collapsable-control" data-target="#steps-$stepsId">
-    #includeBrief($keyword, $status, "", true)
+    #includeBrief($keyword, $status, $stepsGroupName, true)
   </div>
 
   <div id="steps-$stepsId" class="inner-level collapse collapsable-details #if (!$status.isPassed()) in #end">
     #foreach($step in $steps)
-      #includeHooks("Before", $step.before, $utils.result($step.before).status)
       <div class="step">
         #includeBrief($step.keyword, $step.status, $step.name, false, $step.duration)
         #set($isPassed = $step.status.isPassed())

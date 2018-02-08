@@ -1,6 +1,7 @@
 package org.fmarmar.cucumber.tools.report.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -50,7 +51,7 @@ public class Scenario implements NamedElement, PostProcessor {
 	public void postProcess() {
 		processSteps();
 		stepsSummary = summary(steps);
-		result = ScenarioResult.result(Iterables.concat(before, steps, after));
+		result = ScenarioResult.result(getExecutionElements());
 	}
 	
 	private void processSteps() { 
@@ -95,6 +96,22 @@ public class Scenario implements NamedElement, PostProcessor {
 		}
 		
 		return summary;
+	}
+	
+	public Iterable<ExecutionElement> getExecutionElements() {
+		return Iterables.concat(before, executionElements(steps), after);
+	}
+	
+	protected static final Iterable<ExecutionElement> executionElements(Collection<Step> steps) {
+		
+		List<ExecutionElement> executionElements = new ArrayList<>(steps.size());
+		
+		for (Step step : steps) {
+			Iterables.addAll(executionElements, step.getExecutionElements());
+		}
+		
+		return executionElements;
+		
 	}
 	
 	// Shortcut methods
