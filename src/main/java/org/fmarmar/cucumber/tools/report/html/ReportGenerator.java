@@ -144,7 +144,6 @@ public class ReportGenerator {
 			try {
 				task.get();
 			} catch (ExecutionException e) {
-				// FIXME we should throw the errors
 				errors.add(e.getCause());
 			}
 		}

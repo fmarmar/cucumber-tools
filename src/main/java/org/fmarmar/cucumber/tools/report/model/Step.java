@@ -9,6 +9,7 @@ import org.fmarmar.cucumber.tools.report.model.support.PostProcessor;
 import org.fmarmar.cucumber.tools.report.parser.json.util.StepPostProcessor;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 
 import lombok.Data;
@@ -41,7 +42,7 @@ public class Step extends ExecutionElement implements PostProcessor {
 	}
 
 	private boolean isJsStep() {
-		return JS_LOCATION_PATTERN.matcher(location).matches();
+		return !Strings.isNullOrEmpty(location) && JS_LOCATION_PATTERN.matcher(location).matches();
 	}
 	
 	Iterable<ExecutionElement> getExecutionElements() {
