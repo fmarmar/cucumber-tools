@@ -1,5 +1,6 @@
 package org.fmarmar.cucumber.tools;
 
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
@@ -27,6 +28,8 @@ public class App {
 	
 	public static void main(String... args) {
 
+		configureExceptionHandler();
+		
 		App app = new App();
 		
 		JCommander jc = buildJcommander(app);
@@ -35,6 +38,31 @@ public class App {
 		Stopwatch stopwatch = Stopwatch.createStarted();
 		executeCommand(getCommand(jc));
 		System.out.println("Command " + jc.getParsedCommand() + " executed in " + stopwatch.stop().elapsed(TimeUnit.MILLISECONDS) + "ms");
+	}
+	
+	private static void configureExceptionHandler() {
+
+		final long mainThreadId = Thread.currentThread().getId();
+		
+		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+			
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				String message = e.getMessage();
+				
+				//log.error(message, e);
+
+				if (message != null) {
+					System.err.println(e.getMessage());
+				}
+				e.printStackTrace(System.err);
+				
+				if (mainThreadId == t.getId()) {
+					System.exit(1);
+				}
+			}
+		});
+		
 	}
 
 	private static JCommander buildJcommander(App app) {
