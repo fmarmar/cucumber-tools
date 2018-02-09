@@ -2,7 +2,9 @@ package org.fmarmar.cucumber.tools.report;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assume.assumeThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
@@ -11,6 +13,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -35,6 +38,11 @@ public class ReportGeneratorTest {
 	private ReportGenerator reportGenerator;
 	
 	private PageGenerator pageGenerator;
+	
+	@Before
+	public void checkJava8Runtime() {
+		assumeThat(ManagementFactory.getRuntimeMXBean().getVmVersion(), startsWith("1.8"));
+	}
 	
 	@Before
 	public void configureTest() throws IOException {
