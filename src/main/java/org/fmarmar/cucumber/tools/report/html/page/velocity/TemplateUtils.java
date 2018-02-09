@@ -1,19 +1,29 @@
 package org.fmarmar.cucumber.tools.report.html.page.velocity;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import org.fmarmar.cucumber.tools.report.model.ExecutionElement;
+import org.fmarmar.cucumber.tools.report.model.Metadata;
 import org.fmarmar.cucumber.tools.report.model.support.ScenarioResult;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 
 public final class TemplateUtils {
+	
+	private static final String[] METADATA_LABELS = {"os", "language", "browser", "device"};
 	
 	private static final TimeUnit NANOSECONDS = TimeUnit.NANOSECONDS;
 	
 	public static final TemplateUtils INSTANCE = new TemplateUtils();
+	
+	private static final Cache<Metadata, String> METADATA_TOOLTIP_CACHE = CacheBuilder.newBuilder().maximumSize(20).build();
 
 	private TemplateUtils() { }
 	
@@ -83,6 +93,33 @@ public final class TemplateUtils {
 	
 	public String messageSummary(String message) {
 		return message.split("[\\r\\n]+")[0];
+	}
+	
+	public String metadataTooltip(Metadata metadata) {
+		
+		String tooltip = METADATA_TOOLTIP_CACHE.getIfPresent(metadata);
+		
+		if (tooltip == null) {
+			tooltip = buildMetadataTooltip(metadata);
+			METADATA_TOOLTIP_CACHE.put(metadata, tooltip);
+		}
+		
+		return tooltip;
+		
+	}
+
+	private String buildMetadataTooltip(Metadata metadata) {
+		
+		String[] metadataValues = {metadata.getOs(), metadata.getLanguage(), metadata.getBrowser(), metadata.getDevice()};
+		List<String> tooltipLines = new ArrayList<>(5);
+		
+		for (int idx=0; idx<metadataValues.length; idx++) {
+			if (!Strings.isNullOrEmpty(metadataValues[idx])) {
+				tooltipLines.add(METADATA_LABELS[idx] + " = " + metadataValues[idx]);
+			}
+		}
+		
+		return Joiner.on("&#10;").join(tooltipLines);
 	}
 
 }

@@ -26,7 +26,10 @@
     #foreach($item in $items)
       <tr>
       	#set ( $link = "features/" + $item.uuid + ".html" )
-        <td class="tagname"><a href="$link">$item.name</a></td>
+        <td class="tagname">
+        	<abbr title="$utils.metadataTooltip($item.metadata)" class="metadata"><img class="icon-label" src="images/label.png"></abbr>
+        	<a href="$link">$item.name</a>
+        </td>
         
         <td #if ($item.scenariosSummary.passed > 0) class="passed"    #end>$item.scenariosSummary.passed</td>
         <td #if ($item.scenariosSummary.skipped > 0) class="skipped"    #end>$item.scenariosSummary.skipped</td>

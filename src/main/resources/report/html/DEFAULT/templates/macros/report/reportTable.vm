@@ -42,9 +42,9 @@
           <td #if ($item.stepsSummary.undefined != 0)  class="undefined" #end>$item.stepsSummary.undefined</td>
           <td class="total">$item.stepsSummary.total</td>
 
-          <td #if ($item.scenariosSummary.passed != 0) class="passed"    #end>$item.scenariosSummary.passed</td>
-           <td #if ($item.scenariosSummary.skipped != 0) class="skipped"    #end>$item.scenariosSummary.skipped</td>
-          <td #if ($item.scenariosSummary.failed != 0) class="failed"    #end>$item.scenariosSummary.failed</td>
+          <td #if ($item.scenariosSummary.passed != 0)  class="passed"   #end>$item.scenariosSummary.passed</td>
+          <td #if ($item.scenariosSummary.skipped != 0) class="skipped"  #end>$item.scenariosSummary.skipped</td>
+          <td #if ($item.scenariosSummary.failed != 0)  class="failed"   #end>$item.scenariosSummary.failed</td>
           <td class="total">$item.scenariosSummary.total</td>
 
           <td class="duration" data-value="$item.duration">$utils.formatDuration($item.duration)</td>
