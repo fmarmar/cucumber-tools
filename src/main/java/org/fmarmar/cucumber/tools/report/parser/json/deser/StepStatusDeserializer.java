@@ -19,8 +19,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
  */
 public class StepStatusDeserializer extends JsonDeserializer<StepStatus> {
 	
-	private static final long serialVersionUID = -670883542269517284L;
-
 	/**
 	 * https://github.com/cucumber/cucumber-js/blob/1.x/lib/cucumber/status.js
 	 */

@@ -91,7 +91,7 @@ public class HtmlReport implements Command {
 
 	private void init() throws IOException {
 		parser = new ReportParser();
-		ReportMetadata reportMetadata = new ReportMetadata(projectName, buildId); // TODO build
+		ReportMetadata reportMetadata = new ReportMetadata(projectName, buildId);
 		PageGenerator pageGenerator = new VelocityPageGenerator(reportMetadata, DEFAULT_THREADS_SIZE);
 		generator = new ReportGenerator(pageGenerator, output, DEFAULT_THREADS_SIZE);
 	}
