@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.fmarmar.cucumber.tools.report.model.ExecutionElement;
 import org.fmarmar.cucumber.tools.report.model.Feature;
+import org.fmarmar.cucumber.tools.report.model.Metadata;
 import org.fmarmar.cucumber.tools.report.model.ModelTestUtils;
 import org.fmarmar.cucumber.tools.report.model.Scenario;
 import org.fmarmar.cucumber.tools.report.model.Step;
@@ -29,6 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 public class ReportParserTest {
 	
@@ -115,6 +117,52 @@ public class ReportParserTest {
 				}
 			}
 		}
+	}
+	
+	@Test
+	public void testNoMetadata() throws IOException {
+	
+		Path reportDir = Paths.get(BASE_PATH + "nometadata");
+				
+		ParsedReports parsedReports = parser.parse(reportDir);
+		List<Feature> features = parsedReports.getFeatures();
+		
+		assertThat(features, contains(hasProperty("metadata", equalTo(Metadata.NO_METADATA_INSTANCE))));
+		
+	}
+	
+	@Test
+	public void testMetadataIsRead() throws IOException {
+	
+		Path reportDir = Paths.get(BASE_PATH + "metadata");
+				
+		ParsedReports parsedReports = parser.parse(reportDir);
+		List<Feature> features = parsedReports.getFeatures();
+		
+		assertThat(features, contains(hasProperty("metadata", not(equalTo(Metadata.NO_METADATA_INSTANCE)))));
+		
+	}
+	
+	@Test
+	public void testSameFeatureMultipleMetadata() throws IOException {
+	
+		Path reportDir = Paths.get(BASE_PATH + "multiplemetadata");
+				
+		ParsedReports parsedReports = parser.parse(reportDir);
+		List<Feature> features = parsedReports.getFeatures();
+		
+		assertThat(features, hasSize(greaterThan(1)));
+		
+		Collection<String> metadatas = Lists.newArrayList("windows", "mac", "linux");
+		
+		for (Feature feature : features) {
+			assertThat(feature.getMetadata(), not(equalTo(Metadata.NO_METADATA_INSTANCE)));
+			metadatas.remove(feature.getMetadata().getOs());
+		}
+		
+		assertThat("No feature found with os declared in metadata: " + metadatas.toString(), metadatas, hasSize(equalTo(0)));
+		
+		
 	}
 	
 }

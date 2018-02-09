@@ -1,0 +1,300 @@
+[
+  {
+    "uri": "features/simple.feature",
+    "id": "feature-simple",
+    "keyword": "Feature",
+    "name": "Simple feature",
+    "description": "A description",
+    "line": 2,
+    "tags": [
+      {
+        "name": "@aTag",
+        "line": 1
+      }
+    ],
+    "elements": [
+      {
+        "keyword": "Background",
+        "name": "A Background",
+        "description": "",
+        "line": 5,
+        "type": "background",
+        "before": [
+          {
+            "match": {
+              "location": "vendor/cache/ruby/2.1.0/gems/library-2.12.1/lib/lib.rb:12"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 178667
+            }
+          },
+          {
+            "match": {
+              "location": "vendor/cache/ruby/2.1.0/gems/library-2.12.1/lib/lib.rb:20"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 158073
+            }
+          },
+          {
+            "match": {
+              "location": "vendor/cache/ruby/2.1.0/gems/library-1.0.14/lib/lib.rb:3"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 120445
+            }
+          },
+          {
+            "match": {
+              "location": "support/hooks.rb:6"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1039194456
+            }
+          }
+        ],
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "one Given step",
+            "line": 6,
+            "match": {
+              "location": "step_definitions/given_steps.rb:5"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2287172674
+            },
+            "after": [
+              {
+                "output": [
+                  "Output in after step hook"
+                ],
+                "match": {
+                  "location": "support/hooks.rb:227"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 505730644
+                }
+              }
+            ]
+          },
+          {
+            "keyword": "And ",
+            "name": "an And step",
+            "line": 7,
+            "match": {
+              "location": "step_definitions/given_steps.rb:49"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 983125311
+            },
+            "after": [
+              {
+                "output": [
+                  "Output in after step hook"
+                ],
+                "match": {
+                  "location": "support/hooks.rb:227"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 505354696
+                }
+              }
+            ]
+          },
+          {
+            "keyword": "And ",
+            "name": "other And step",
+            "line": 8,
+            "match": {
+              "location": "step_definitions/misc_steps.rb:716"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4995516109
+            },
+            "after": [
+              {
+                "output": [
+                  "Output in after step hook"
+                ],
+                "match": {
+                  "location": "support/hooks.rb:227"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 507760951
+                }
+              }
+            ]
+          },
+          {
+            "keyword": "And ",
+            "name": "third And step",
+            "line": 9,
+            "match": {
+              "location": "step_definitions/given_steps.rb:136"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 521130492
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "support/hooks.rb:227"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 800758401
+                }
+              }
+            ]
+          },
+          {
+            "keyword": "And ",
+            "name": "fourth And step",
+            "line": 10,
+            "match": {
+              "location": "step_definitions/given_steps.rb:140"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 122184547
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "support/hooks.rb:227"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 506212606
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "feature-simple;an-scenario",
+        "keyword": "Scenario",
+        "name": "An scenario",
+        "description": "",
+        "line": 33,
+        "type": "scenario",
+        "tags": [
+          {
+            "name": "@aTag",
+            "line": 1
+          },
+          {
+            "name": "@scenarioTag",
+            "line": 32
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "support/hooks.rb:6"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1039194456
+            }
+          }
+        ],
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "the Given step",
+            "line": 6,
+            "match": {
+              "location": "step_definitions/given_steps.rb:5"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2287172674
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "support/hooks.rb:227"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 505730644
+                }
+              }
+            ]
+          },
+          {
+            "keyword": "When ",
+            "name": "the When step",
+            "line": 34,
+            "match": {
+              "location": "step_definitions/when_steps.rb:235"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 108924331
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "support/hooks.rb:227"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 504733959
+                }
+              }
+            ]
+          },
+          {
+            "keyword": "Then ",
+            "name": "the Then step",
+            "line": 36,
+            "match": {
+              "location": "step_definitions/then_steps.rb:334"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 91506183
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "support/hooks.rb:227"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 505766506
+                }
+              }
+            ]
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "support/hooks.rb:197"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 348718001
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -3,6 +3,8 @@ package org.fmarmar.cucumber.tools.report.parser;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import org.fmarmar.cucumber.tools.report.model.Feature;
 
@@ -19,20 +22,32 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.NullNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ParserTask {
+	
+	public static final String METADATA_FILENAME = ".metadata";
 
 	private static final TypeReference<List<Feature>> FEATURES_TYPE_REF = new TypeReference<List<Feature>>() {};
+	
+	private static final JsonNode DEFAULT_METADATA = NullNode.getInstance();
 
 	private static final String FEATURE_URI_FIELD_NAME = "uri";
 
 	private static final String ELEMENTS_FIELD_NAME = "elements";
+	
+	private static final String METADATA_FIELD_NAME = "metadata";
 
 	private final ObjectMapper mapper;
 
 	private ArrayNode reports = null;
 
 	private Map<String, JsonNode> reportsIndex;
+	
+	private JsonNode currentMetadata = DEFAULT_METADATA;
+	
+	private Path currentMetadataPath = null;
 
 	public ParserTask(ObjectMapper mapper) {
 		this.mapper = mapper;
@@ -70,6 +85,29 @@ public class ParserTask {
 		Files.walkFileTree(dir, new SimpleFileVisitor<Path>() {
 
 			@Override
+			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+				
+				if (currentMetadata.isNull()) {
+					parseMetadata(dir);
+				}
+				
+				return FileVisitResult.CONTINUE;
+			}
+			
+			@Override
+			public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+			
+				super.postVisitDirectory(dir, exc);
+			
+				if (dir.equals(currentMetadataPath)) {
+					currentMetadata = DEFAULT_METADATA;
+					currentMetadataPath = null;
+				}
+				
+				return FileVisitResult.CONTINUE;
+			}
+			
+			@Override
 			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 
 				if (attrs.isRegularFile() && isJsonFile(file)) {
@@ -81,6 +119,24 @@ public class ParserTask {
 
 		});
 
+	}
+	
+	private void parseMetadata(Path path) throws IOException {
+		
+		File metadataFile = path.resolve(METADATA_FILENAME).toFile();
+		
+		if (metadataFile.exists() && metadataFile.isFile()) {
+			
+			try (Reader reader = Files.newBufferedReader(metadataFile.toPath(), StandardCharsets.UTF_8)) {
+				Properties props = new Properties();
+				props.load(reader);
+				
+				currentMetadata = mapper.valueToTree(props);
+				currentMetadataPath = path;
+			}
+			
+		}
+		
 	}
 
 	private boolean isJsonFile(Path path) {
@@ -137,14 +193,21 @@ public class ParserTask {
 		Map<String, JsonNode> features = new HashMap<>();
 
 		for (JsonNode featureNode : rootNode) {
-			features.put(buildFeatureKey(featureNode), featureNode);			
+			if (currentMetadata.isObject()) {
+				((ObjectNode) featureNode).set(METADATA_FIELD_NAME, currentMetadata);
+			}
+			
+			features.put(buildFeatureKey(featureNode, currentMetadata), featureNode);			
 		}
 
 		return features;
 	}
 
-	private String buildFeatureKey(JsonNode featureNode) {
-		return featureNode.get(FEATURE_URI_FIELD_NAME).textValue();
+	private static String buildFeatureKey(JsonNode featureNode, JsonNode currentMetadata) {
+		
+		String key = featureNode.get(FEATURE_URI_FIELD_NAME).textValue();
+		return (currentMetadata.isObject()) ? (key + currentMetadata.toString()) : key;
+		
 	}
 
 	private void addScenarios(JsonNode accFeatureNode, JsonNode featureNode) {

@@ -1,0 +1,129 @@
+[
+  {
+    "uri": "features/simple.feature",
+    "id": "feature-simple",
+    "keyword": "Feature",
+    "name": "Simple feature",
+    "description": "A description",
+    "line": 2,
+    "tags": [
+      {
+        "name": "@aTag",
+        "line": 1
+      }
+    ],
+    "elements": [
+      {
+        "id": "feature-simple;an-scenario",
+        "keyword": "Scenario",
+        "name": "An scenario",
+        "description": "",
+        "line": 33,
+        "type": "scenario",
+        "tags": [
+          {
+            "name": "@aTag",
+            "line": 1
+          },
+          {
+            "name": "@scenarioTag",
+            "line": 32
+          }
+        ],
+        "before": [
+          {
+            "match": {
+              "location": "support/hooks.rb:6"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1039194456
+            }
+          }
+        ],
+        "steps": [
+          {
+            "keyword": "Given ",
+            "name": "the Given step",
+            "line": 6,
+            "match": {
+              "location": "step_definitions/given_steps.rb:5"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2287172674
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "support/hooks.rb:227"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 505730644
+                }
+              }
+            ]
+          },
+          {
+            "keyword": "When ",
+            "name": "the When step",
+            "line": 34,
+            "match": {
+              "location": "step_definitions/when_steps.rb:235"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 108924331
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "support/hooks.rb:227"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 504733959
+                }
+              }
+            ]
+          },
+          {
+            "keyword": "Then ",
+            "name": "the Then step",
+            "line": 36,
+            "match": {
+              "location": "step_definitions/then_steps.rb:334"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 91506183
+            },
+            "after": [
+              {
+                "match": {
+                  "location": "support/hooks.rb:227"
+                },
+                "result": {
+                  "status": "passed",
+                  "duration": 505766506
+                }
+              }
+            ]
+          }
+        ],
+        "after": [
+          {
+            "match": {
+              "location": "support/hooks.rb:197"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 348718001
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

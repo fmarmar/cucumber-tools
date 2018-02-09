@@ -51,6 +51,8 @@ public class Feature implements NamedElement, PostProcessor {
 
 	private GenericResult result;
 	
+	private Metadata metadata = Metadata.NO_METADATA_INSTANCE;
+	
 	public Feature(String id, String uri) {
 		this.id = id;
 		this.uri = uri;
@@ -58,7 +60,7 @@ public class Feature implements NamedElement, PostProcessor {
 
 	@Override
 	public void postProcess() {
-		uuid = ReportUtils.hash(uri);
+		uuid = ReportUtils.hash(uri + metadata);
 		processScenarios();
 	}
 
