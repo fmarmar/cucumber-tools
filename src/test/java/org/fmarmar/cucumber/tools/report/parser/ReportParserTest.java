@@ -144,6 +144,30 @@ public class ReportParserTest {
 	}
 	
 	@Test
+	public void testMixedMetadata() throws IOException {
+	
+		Path reportDir = Paths.get(BASE_PATH + "mixedmetadata");
+				
+		ParsedReports parsedReports = parser.parse(reportDir);
+		List<Feature> features = parsedReports.getFeatures();
+		
+		assertThat(features, hasSize(greaterThan(1)));
+		
+		boolean noMetadataFound = false;
+		boolean metadataFound = false;
+		
+		for (Feature feature : features) {
+			if (feature.getMetadata().empty()) {
+				noMetadataFound = true;
+			} else {
+				metadataFound = true;
+			}
+		}
+		
+		assertThat("Features with metadata and without metadata should be found", (metadataFound && noMetadataFound), equalTo(true));
+	}
+	
+	@Test
 	public void testSameFeatureMultipleMetadata() throws IOException {
 	
 		Path reportDir = Paths.get(BASE_PATH + "multiplemetadata");
