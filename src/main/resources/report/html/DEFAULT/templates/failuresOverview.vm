@@ -9,7 +9,7 @@
 
 #includeNavigation("failures")
 
-#includeReportInfo()
+#includeReportInfo($metadata)
 
 #includeLead("Failures Overview", "The following summary displays scenarios that failed.")
 

@@ -1,12 +1,19 @@
-#macro(includeReportInfo)
+#macro(includeReportInfo, $reportMetadata, $featureMetadata)
 
 <div class="container-fluid">
   <div class="col-md-5 col-md-offset-1">
-    #includeBuildInfo()
+    #includeBuildInfo($reportMetadata)
   </div>
   <div class="col-md-3 col-md-offset-2">
-    #if ($classifications && !$classifications.isEmpty())
-      #includeClassifications()
+    #if ($featureMetadata)
+    <table class="table table-bordered" id="classifications">
+      <tbody>
+    	#if ($featureMetadata.os) <tr><th>OS</th><td class="info">$featureMetadata.os</td></tr> #end
+    	#if ($featureMetadata.language) <tr><th>Language</th><td class="info">$featureMetadata.language</td></tr> #end
+    	#if ($featureMetadata.browser) <tr><th>Browser</th><td class="info">$featureMetadata.browser</td></tr> #end
+    	#if ($featureMetadata.device) <tr><th>Device</th><td class="info">$featureMetadata.device</td></tr> #end     
+      </tbody>
+    </table>
     #end
   </div>
 </div>

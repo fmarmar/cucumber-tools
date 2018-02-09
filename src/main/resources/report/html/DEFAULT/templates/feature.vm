@@ -8,7 +8,7 @@
 
 #includeNavigation()
 
-#includeReportInfo()
+#includeReportInfo($metadata, $feature.metadata)
 
 #includeLead("Feature Report", $feature.uri)
 

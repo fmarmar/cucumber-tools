@@ -45,12 +45,6 @@ public class VelocityPageGenerator implements PageGenerator {
 	
 	private static final String BASE_RESOURCES = "report/html/DEFAULT/";
 
-//	private static final String BASE_TEMPLATES = BASE_RESOURCES + "templates/";
-//
-//	private static final String BASE_STATIC = BASE_RESOURCES + "static/";
-//	
-//	private static final String BASE_MACROS = BASE_TEMPLATES + "macros/";
-	
 	private static final String TEMPLATES_DIR = "templates/";
 	
 	private static final String MACROS_DIR = "macros/";
@@ -74,8 +68,6 @@ public class VelocityPageGenerator implements PageGenerator {
 	
 	private final String baseResources = BASE_RESOURCES;
 	
-	
-
 	public VelocityPageGenerator(ReportMetadata reportMetadata, int parserPoolSize) throws IOException {
 
 		engine = new VelocityEngine();

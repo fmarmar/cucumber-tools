@@ -1,4 +1,4 @@
-#macro(includeBuildInfo)
+#macro(includeBuildInfo, $metadata)
 
 <table class="table table-bordered" id="build-info">
   <thead>
