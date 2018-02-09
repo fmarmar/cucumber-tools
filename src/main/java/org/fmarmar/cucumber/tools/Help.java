@@ -2,7 +2,7 @@ package org.fmarmar.cucumber.tools;
 
 import com.beust.jcommander.Parameters;
 
-@Parameters(commandNames="help", commandDescription="")
+@Parameters(commandNames="help", commandDescription="Print this help")
 public class Help implements Command {
 
 	@Override
