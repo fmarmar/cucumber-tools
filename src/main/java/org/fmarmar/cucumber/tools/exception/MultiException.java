@@ -83,7 +83,7 @@ public class MultiException extends RuntimeException {
 
 		if (exceptions.size() == 1) {
 			
-			Throwable th = Iterables.getLast(exceptions);
+			Throwable th = Iterables.getOnlyElement(exceptions);
 			return new MultiException(buildMessage(msg, th), th);
 		}
 		
