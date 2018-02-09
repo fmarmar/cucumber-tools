@@ -29,7 +29,9 @@
       	    #set ( $link = "features/" + $feature.uuid + ".html" )
             <b>Feature:</b>
             <a href="$link">$feature.name</a>
+            #if (!$feature.metadata.empty())
             <abbr title="$utils.metadataTooltip($feature.metadata)" class="metadata"><img class="icon-label" src="images/label.png"></abbr>
+            #end
                               
             <div class="elements inner-level">
               #foreach($scenario in $failure.scenarios)

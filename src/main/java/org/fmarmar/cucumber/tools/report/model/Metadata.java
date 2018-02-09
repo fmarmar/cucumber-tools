@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicates;
+import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 
 import lombok.Data;
@@ -46,6 +47,10 @@ public class Metadata {
 		values = Iterables.filter(values, Predicates.notNull());
 		
 		return (Iterables.isEmpty(values)) ? StringUtils.EMPTY : Joiner.on(';').join(values);
+	}
+	
+	public boolean empty() {
+		return Strings.isNullOrEmpty(id);
 	}
 	
 }

@@ -5,7 +5,7 @@
     #includeBuildInfo($reportMetadata)
   </div>
   <div class="col-md-3 col-md-offset-2">
-    #if ($featureMetadata)
+    #if ($featureMetadata && !$featureMetadata.empty())
     <table class="table table-bordered" id="classifications">
       <tbody>
     	#if ($featureMetadata.os) <tr><th>OS</th><td class="info">$featureMetadata.os</td></tr> #end
