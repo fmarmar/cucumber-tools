@@ -2,14 +2,35 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.fmarmar</groupId>
+	<groupId>com.github.fmarmar</groupId>
 	<artifactId>cucumber-tools</artifactId>
 	<version>0.2.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>cucumber-tools</name>
-	<description></description>
+	<description>Tooling set for working with cucumber</description>
 	<url>https://github.com/fmarmar/cucumber-tools</url>
+
+	<licenses>
+		<license>
+			<name>LGPL 2.1</name>
+			<url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
+		</license>
+	</licenses>
+	
+	<developers>
+		<developer>
+			<id>fmarmar</id>
+			<name>Felix Martin</name>
+			<email>fmarmar@github</email>
+		</developer>
+	</developers>
+	
+	<scm>
+		<connection>scm:git:git://github.com/fmarmar/cucumber-tools.git</connection>
+		<developerConnection>scm:git:ssh://github.com:fmarmar/cucumber-tools.git</developerConnection>
+		<url>https://github.com/fmarmar/cucumber-tools/tree/master</url>
+	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -44,23 +65,7 @@
 		<mockito.version>2.13.0</mockito.version>
 		<random-beans.version>3.7.0</random-beans.version>
 
-	</properties>
-
-	<licenses>
-		<license>
-			<name>LGPL 2.1</name>
-			<url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
-		</license>
-	</licenses>
-
-	<developers>
-		<developer>
-			<id>fmarmar</id>
-			<email>fmarmar@github</email>
-		</developer>
-	</developers>
-
-	<dependencies>
+	</properties><dependencies>
 
 		<!-- lombok helper -->
 		<dependency>
@@ -171,7 +176,7 @@
 	</dependencies>
 
 	<build>
-	
+
 		<finalName>${project.artifactId}</finalName>
 
 		<pluginManagement>
