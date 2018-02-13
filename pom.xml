@@ -42,6 +42,9 @@
 
 		<!-- Plugins versions -->
 		<compiler.plugin.version>3.6.1</compiler.plugin.version>
+		<jar.plugin.version>2.6</jar.plugin.version>
+		<javadoc.plugin.version>3.0.0</javadoc.plugin.version>
+		<sources.plugin.version>3.0.1</sources.plugin.version>
 		<shade.plugin.version>3.1.0</shade.plugin.version>
 
 		<!-- Dependencies versions -->
@@ -190,13 +193,61 @@
 		</pluginManagement>
 
 		<plugins>
+		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>${jar.plugin.version}</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>false</addClasspath>
+							<mainClass>com.github.fmarmar.cucumber.tools.App</mainClass>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${sources.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${javadoc.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>attach-javadoc</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>${shade.plugin.version}</version>
 				<configuration>
-					<createSourcesJar>true</createSourcesJar>
-					<!-- put your configurations here -->
+					<finalName>${project.build.finalName}-cli</finalName>
+					<keepDependenciesWithProvidedScope>true</keepDependenciesWithProvidedScope>
+					<minimizeJar>true</minimizeJar>
+					<shadedArtifactAttached>true</shadedArtifactAttached>
+					<shadedClassifierName>cli</shadedClassifierName>
 				</configuration>
 				<executions>
 					<execution>
