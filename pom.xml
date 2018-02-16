@@ -17,7 +17,7 @@
 			<url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
 		</license>
 	</licenses>
-	
+
 	<developers>
 		<developer>
 			<id>fmarmar</id>
@@ -25,12 +25,23 @@
 			<email>fmarmar@github</email>
 		</developer>
 	</developers>
-	
+
 	<scm>
 		<connection>scm:git:git://github.com/fmarmar/cucumber-tools.git</connection>
 		<developerConnection>scm:git:ssh://github.com:fmarmar/cucumber-tools.git</developerConnection>
 		<url>https://github.com/fmarmar/cucumber-tools/tree/master</url>
 	</scm>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -46,6 +57,8 @@
 		<javadoc.plugin.version>3.0.0</javadoc.plugin.version>
 		<sources.plugin.version>3.0.1</sources.plugin.version>
 		<shade.plugin.version>3.1.0</shade.plugin.version>
+		<gpg.plugin.version>1.6</gpg.plugin.version>
+		<release.plugin.version>2.5.3</release.plugin.version>
 
 		<!-- Dependencies versions -->
 		<lombok.version>1.16.20</lombok.version>
@@ -68,7 +81,9 @@
 		<mockito.version>2.13.0</mockito.version>
 		<random-beans.version>3.7.0</random-beans.version>
 
-	</properties><dependencies>
+	</properties>
+	
+	<dependencies>
 
 		<!-- lombok helper -->
 		<dependency>
@@ -189,11 +204,23 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>${compiler.plugin.version}</version>
 				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>${release.plugin.version}</version>
+					<configuration>
+						<autoVersionSubmodules>true</autoVersionSubmodules>
+						<useReleaseProfile>false</useReleaseProfile>
+						<releaseProfiles>release</releaseProfiles>
+						<goals>deploy</goals>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 
 		<plugins>
-		
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -209,7 +236,7 @@
 					</archive>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -223,21 +250,7 @@
 					</execution>
 				</executions>
 			</plugin>
-		
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${javadoc.plugin.version}</version>
-				<executions>
-					<execution>
-						<id>attach-javadoc</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
@@ -262,5 +275,45 @@
 		</plugins>
 
 	</build>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+
+			<build>
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>${javadoc.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>attach-javadoc</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>${gpg.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
