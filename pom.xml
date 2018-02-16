@@ -27,9 +27,9 @@
 	</developers>
 
 	<scm>
+		<url>https://github.com/fmarmar/cucumber-tools</url>
 		<connection>scm:git:git://github.com/fmarmar/cucumber-tools.git</connection>
-		<developerConnection>scm:git:ssh://github.com:fmarmar/cucumber-tools.git</developerConnection>
-		<url>https://github.com/fmarmar/cucumber-tools/tree/master</url>
+		<developerConnection>scm:git:git@github.com::fmarmar/cucumber-tools.git</developerConnection>
 	</scm>
 
 	<distributionManagement>
