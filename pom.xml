@@ -28,8 +28,7 @@
 
 	<scm>
 		<url>https://github.com/fmarmar/cucumber-tools</url>
-		<connection>scm:git:git://github.com/fmarmar/cucumber-tools.git</connection>
-		<developerConnection>scm:git:git@github.com::fmarmar/cucumber-tools.git</developerConnection>
+		<connection>scm:git:https://github.com/fmarmar/cucumber-tools.git</connection>
 	</scm>
 
 	<distributionManagement>
@@ -82,7 +81,7 @@
 		<random-beans.version>3.7.0</random-beans.version>
 
 	</properties>
-	
+
 	<dependencies>
 
 		<!-- lombok helper -->
@@ -211,6 +210,9 @@
 					<version>${release.plugin.version}</version>
 					<configuration>
 						<autoVersionSubmodules>true</autoVersionSubmodules>
+						<pushChanges>false</pushChanges>
+						<localCheckout>true</localCheckout>
+						<tagNameFormat>@{project.version}</tagNameFormat>
 						<useReleaseProfile>false</useReleaseProfile>
 						<releaseProfiles>release</releaseProfiles>
 						<goals>deploy</goals>
