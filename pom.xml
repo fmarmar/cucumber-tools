@@ -28,7 +28,7 @@
 	<scm>
 		<url>https://github.com/fmarmar/cucumber-tools</url>
 		<connection>scm:git:https://github.com/fmarmar/cucumber-tools.git</connection>
-	  <tag>HEAD</tag>
+	  	<tag>HEAD</tag>
   </scm>
 
 	<distributionManagement>
