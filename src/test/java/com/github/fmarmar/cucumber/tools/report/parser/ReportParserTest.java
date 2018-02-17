@@ -186,7 +186,6 @@ public class ReportParserTest {
 		
 		assertThat("No feature found with os declared in metadata: " + metadatas.toString(), metadatas, hasSize(equalTo(0)));
 		
-		
 	}
 	
 }
