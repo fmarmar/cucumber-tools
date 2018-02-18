@@ -73,7 +73,7 @@
 		<gherkin.version>5.0.0</gherkin.version>
 		<tag-expressions.version>1.1.1</tag-expressions.version>
 
-		<velocity.version>1.7</velocity.version>
+		<velocity.version>2.0</velocity.version>
 		<owasp.version>20171016.1</owasp.version>
 		<fast-classpath-scanner.version>2.18.1</fast-classpath-scanner.version>
 
@@ -144,7 +144,7 @@
 		<!-- html-report dependencies -->
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity</artifactId>
+			<artifactId>velocity-engine-core</artifactId>
 			<version>${velocity.version}</version>
 		</dependency>
 

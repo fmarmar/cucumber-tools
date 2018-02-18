@@ -1,7 +1,8 @@
 package com.github.fmarmar.cucumber.tools.report.html.page.velocity;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.velocity.app.event.ReferenceInsertionEventHandler;
+import org.apache.velocity.context.Context;
 import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
 
@@ -18,14 +19,18 @@ public final class EscapeHtmlReference implements ReferenceInsertionEventHandler
             .toFactory();
 
     @Override
-    public Object referenceInsert(String reference, Object value) {
-        if (value == null) {
+	public Object referenceInsert(Context context, String reference, Object value) {
+		
+		if (value == null) {
             return null;
-        } else if(reference.startsWith("$_sanitize_")) {
-            return LINKS.sanitize(value.toString());
-        } else {
-            return StringEscapeUtils.escapeHtml(value.toString());
         }
-    }
+		
+		if(reference.startsWith("$_sanitize_")) {
+            return LINKS.sanitize(value.toString());
+        }
+		
+		return StringEscapeUtils.escapeHtml4(value.toString());
+        
+	}
 
 }

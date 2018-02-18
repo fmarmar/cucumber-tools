@@ -21,12 +21,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.app.event.EventCartridge;
 import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.RuntimeConstants.SpaceGobbling;
 
 import com.github.fmarmar.cucumber.tools.exception.MultiException;
 import com.github.fmarmar.cucumber.tools.report.html.page.PageGenerator;
@@ -80,6 +81,11 @@ public class VelocityPageGenerator implements PageGenerator {
 	private Properties engineProperties(String baseTemplates, int parserPoolSize) throws IOException {
 
 		Properties veProps = new Properties();
+		
+		// 1.x compatibility
+		veProps.setProperty("runtime.conversion.handler", "none");
+		veProps.setProperty(RuntimeConstants.SPACE_GOBBLING, SpaceGobbling.BC.name());
+		veProps.setProperty(RuntimeConstants.CHECK_EMPTY_OBJECTS, Boolean.FALSE.toString());
 
 		veProps.setProperty(RuntimeConstants.PARSER_POOL_SIZE, String.valueOf(parserPoolSize));
 
@@ -90,8 +96,7 @@ public class VelocityPageGenerator implements PageGenerator {
 
 		// Encoding
 		veProps.setProperty(RuntimeConstants.INPUT_ENCODING, "UTF-8");
-		veProps.setProperty(RuntimeConstants.OUTPUT_ENCODING, "UTF-8");
-
+		
 		veProps.setProperty(RuntimeConstants.VM_LIBRARY, Joiner.on(',').join(getMacros(baseTemplates)));
 
 		return veProps;
