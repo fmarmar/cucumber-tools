@@ -1,9 +1,7 @@
 package com.github.fmarmar.cucumber.tools.report;
 
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -19,6 +17,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Map;
 
+import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -75,7 +74,7 @@ public class ReportGeneratorTest {
 		
 		Collection<Failure> failures = getModelObject(PageId.FAILURES_OVERVIEW, ReportGenerator.FAILURES_KEY);
 		
-		assertThat(failures, empty());
+		assertThat(failures).isEmpty();
 		
 	}
 	
@@ -91,8 +90,10 @@ public class ReportGeneratorTest {
 		
 		Collection<Failure> failures = getModelObject(PageId.FAILURES_OVERVIEW, ReportGenerator.FAILURES_KEY);
 		
-		assertThat(failures, hasSize(1));
-		assertThat(Iterables.firstOf(failures).getScenarios(), hasSize(1));
+		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
+			softly.assertThat(failures).size().isEqualTo(1);
+			softly.assertThat(Iterables.firstOf(failures).getScenarios()).size().isEqualTo(1);
+		}
 		
 	}
 	
@@ -108,8 +109,10 @@ public class ReportGeneratorTest {
 		
 		Collection<Failure> failures = getModelObject(PageId.FAILURES_OVERVIEW, ReportGenerator.FAILURES_KEY);
 		
-		assertThat(failures, hasSize(1));
-		assertThat(Iterables.firstOf(failures).getScenarios(), hasSize(2));
+		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
+			softly.assertThat(failures).size().isEqualTo(1);
+			softly.assertThat(Iterables.firstOf(failures).getScenarios()).size().isEqualTo(2);
+		}
 		
 	}
 	

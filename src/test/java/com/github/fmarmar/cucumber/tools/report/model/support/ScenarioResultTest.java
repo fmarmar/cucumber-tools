@@ -1,15 +1,10 @@
 package com.github.fmarmar.cucumber.tools.report.model.support;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import com.github.fmarmar.cucumber.tools.report.model.support.GenericStatus;
-import com.github.fmarmar.cucumber.tools.report.model.support.ScenarioResult;
-import com.github.fmarmar.cucumber.tools.report.model.support.StepStatus;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -50,8 +45,8 @@ public class ScenarioResultTest {
 		for (String status : stepsStatus) {
 			result.evaluateStatus(StepStatus.valueOf(status));
 		}
-				
-		assertThat(result.getStatus(), equalTo(GenericStatus.valueOf(expectedStatus)));
+		
+		assertThat(result.getStatus()).isEqualTo(GenericStatus.valueOf(expectedStatus));
 		
 	}
 	
@@ -59,7 +54,7 @@ public class ScenarioResultTest {
 	public void evaluateResultsShouldConsiderAllStatuses() {
 		
 		for (StepStatus status: StepStatus.values()) {
-			result.evaluateStatus(status);
+			result.evaluateStatus(status); // This method throw an exception if the enum value is unknown
 		}
 		
 	}
