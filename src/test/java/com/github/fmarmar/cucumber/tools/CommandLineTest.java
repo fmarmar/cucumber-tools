@@ -64,7 +64,7 @@ public class CommandLineTest {
 		HtmlReport command = new HtmlReport();
 		JCommander jcommander = App.buildJcommander(null, Collections.singleton((Command) command));
 
-		jcommander.parse("html-report", "-r", "reports", "-o", "target/", "-p", "test", "-b", "666");
+		jcommander.parse("html-report", "-r", "reports", "-o", "target", "-p", "test", "-b", "666");
 		
 		Command parsedCommand = App.getCommand(jcommander);
 
