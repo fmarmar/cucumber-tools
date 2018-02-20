@@ -17,7 +17,8 @@ import com.github.fmarmar.cucumber.tools.report.html.page.velocity.VelocityPageG
 import com.github.fmarmar.cucumber.tools.report.html.support.ReportMetadata;
 import com.github.fmarmar.cucumber.tools.report.parser.ParsedReports;
 import com.github.fmarmar.cucumber.tools.report.parser.ReportParser;
-import com.github.fmarmar.cucumber.tools.rerun.RerunFileConverter;
+
+import lombok.Getter;
 
 @Parameters(
 		commandNames = "html-report", 
@@ -31,30 +32,31 @@ public class HtmlReport implements Command {
 	
 	public static final String DEFAULT_PROJECT_NAME = "No project";
 
+	@Getter
 	@Parameter(
 			names = { "--reports", "-r" }, 
 			variableArity = true, 
 			description = "Path(s) where to find the json reports", 
-			converter = PathConverter.class
-			)
+			converter = PathConverter.class)
 	private List<Path> reports;
 
+	@Getter
 	@Parameter(
 			names = { "--output", "-o" }, 
 			description = "Path where the report will be generated. Default: reports/html", 
-			converter = RerunFileConverter.class)
+			converter = PathConverter.class)
 	private Path output = DEFAULT_OUTPUT;
 	
+	@Getter
 	@Parameter(
 			names = { "--project", "-p" }, 
-			description = "Project name to print in the report. Default: " + DEFAULT_PROJECT_NAME, 
-			converter = RerunFileConverter.class)
+			description = "Project name to print in the report. Default: " + DEFAULT_PROJECT_NAME)
 	private String projectName = DEFAULT_PROJECT_NAME;
 	
+	@Getter
 	@Parameter(
 			names = { "--build", "-b" }, 
-			description = "Build id to print in the report. Default: (empty)", 
-			converter = RerunFileConverter.class)
+			description = "Build id to print in the report. Default: (empty)")
 	private String buildId = null;
 
 	private ReportParser parser;

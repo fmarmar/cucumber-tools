@@ -34,7 +34,7 @@ public class App {
 		
 		App app = new App();
 		
-		JCommander jc = buildJcommander(app);
+		JCommander jc = buildJcommander(app, app.commands);
 		jc.parse(args);
 				
 		Stopwatch stopwatch = Stopwatch.createStarted();
@@ -67,12 +67,15 @@ public class App {
 		
 	}
 
-	private static JCommander buildJcommander(App app) {
+	static JCommander buildJcommander(Object commonOptions, Collection<Command> commands) {
 
-		JCommander.Builder builder = JCommander.newBuilder()
-				.addObject(app);
+		JCommander.Builder builder = JCommander.newBuilder();
+		
+		if (commonOptions != null) {
+			builder.addObject(commonOptions);
+		}
 
-		for (Command command : app.commands) {
+		for (Command command : commands) {
 			builder.addCommand(command);
 		}
 
@@ -82,7 +85,7 @@ public class App {
 		return jc;
 	}
 	
-	private static Command getCommand(JCommander jc) {
+	static Command getCommand(JCommander jc) {
 		
 		Map<String, JCommander> commands = jc.getCommands();
 		
