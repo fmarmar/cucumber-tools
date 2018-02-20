@@ -22,8 +22,10 @@ import com.github.fmarmar.cucumber.tools.report.parser.json.deser.TagDeserialize
 import com.google.common.collect.Iterables;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
+@Slf4j
 public class Scenario implements NamedElement, PostProcessor {
 	
 	protected String id;
@@ -81,7 +83,7 @@ public class Scenario implements NamedElement, PostProcessor {
 			case "AFTER":
 				return after.add(hook);
 			default:
-				//TODO log
+				log.warn("Unknown hidden step {}. Keeping as step", keyword);
 				return false;
 		}
 		
