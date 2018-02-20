@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.filter;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -16,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.github.fmarmar.assertj.Conditions;
+import com.github.fmarmar.cucumber.tools.TestUtils;
 import com.github.fmarmar.cucumber.tools.report.model.Feature;
 import com.github.fmarmar.cucumber.tools.report.model.Metadata;
 import com.github.fmarmar.cucumber.tools.report.model.ModelTestUtils;
@@ -25,8 +25,6 @@ import com.github.fmarmar.cucumber.tools.report.model.support.ScenarioType;
 import com.google.common.collect.Iterables;
 
 public class ReportParserTest {
-
-	private static final String BASE_PATH = "src/test/resources/com/github/fmarmar/cucumber/tools/report/examples/";
 
 	private ReportParser parser;
 
@@ -38,7 +36,7 @@ public class ReportParserTest {
 	@Test
 	public void testParseRubyFeatureBackground() throws IOException {
 
-		Path report = Paths.get(BASE_PATH + "ruby-feature-background.json");
+		Path report = TestUtils.REPORTS_BASE_PATH.resolve("ruby-feature-background.json");
 
 		ParsedReports parsedReports = parser.parse(report);
 
@@ -74,7 +72,7 @@ public class ReportParserTest {
 	@Test
 	public void testParseJsReport() throws IOException {
 
-		Path report = Paths.get(BASE_PATH + "js-example.json");
+		Path report = TestUtils.REPORTS_BASE_PATH.resolve("js-example.json");
 
 		ParsedReports parsedReports = parser.parse(report);
 
@@ -108,8 +106,8 @@ public class ReportParserTest {
 	@Test
 	public void testMixedReportsDurationNanoseconds() throws IOException {
 
-		Path jsReport = Paths.get(BASE_PATH + "js-fixed-duration.json");
-		Path rubyReport = Paths.get(BASE_PATH + "ruby-fixed-duration.json");
+		Path jsReport = TestUtils.REPORTS_BASE_PATH.resolve("js-fixed-duration.json");
+		Path rubyReport = TestUtils.REPORTS_BASE_PATH.resolve("ruby-fixed-duration.json");
 
 		ParsedReports parsedReports = parser.parse(jsReport, rubyReport);
 		List<Feature> features = parsedReports.getFeatures();
@@ -127,7 +125,7 @@ public class ReportParserTest {
 	@Test
 	public void testNoMetadata() throws IOException {
 
-		Path reportDir = Paths.get(BASE_PATH + "nometadata");
+		Path reportDir = TestUtils.REPORTS_BASE_PATH.resolve("nometadata");
 
 		ParsedReports parsedReports = parser.parse(reportDir);
 		List<Feature> features = parsedReports.getFeatures();
@@ -138,7 +136,7 @@ public class ReportParserTest {
 	@Test
 	public void testMetadataIsRead() throws IOException {
 
-		Path reportDir = Paths.get(BASE_PATH + "metadata");
+		Path reportDir = TestUtils.REPORTS_BASE_PATH.resolve("metadata");
 
 		ParsedReports parsedReports = parser.parse(reportDir);
 		List<Feature> features = parsedReports.getFeatures();
@@ -150,7 +148,7 @@ public class ReportParserTest {
 	@Test
 	public void testMixedMetadata() throws IOException {
 
-		Path reportDir = Paths.get(BASE_PATH + "mixedmetadata");
+		Path reportDir = TestUtils.REPORTS_BASE_PATH.resolve("mixedmetadata");
 
 		ParsedReports parsedReports = parser.parse(reportDir);
 		List<Feature> features = parsedReports.getFeatures();
@@ -168,7 +166,7 @@ public class ReportParserTest {
 	@Test
 	public void testSameFeatureMultipleMetadata() throws IOException {
 
-		Path reportDir = Paths.get(BASE_PATH + "multiplemetadata");
+		Path reportDir = TestUtils.REPORTS_BASE_PATH.resolve("multiplemetadata");
 
 		ParsedReports parsedReports = parser.parse(reportDir);
 		List<Feature> features = parsedReports.getFeatures();
