@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,8 +24,9 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.fmarmar.cucumber.tools.report.model.Feature;
+import com.github.fmarmar.cucumber.tools.report.parser.json.util.PathRequestPayload;
 
-public class ParserTask {
+class ParserTask {
 	
 	public static final String METADATA_FILENAME = ".metadata";
 
@@ -147,6 +149,8 @@ public class ParserTask {
 		try (InputStream is = Files.newInputStream(reportFile)) {
 			JsonNode reportNode = mapper.readTree(is);
 			add(reportNode);
+		} catch (JsonParseException e) {
+			throw e.withRequestPayload(new PathRequestPayload(reportFile));
 		}
 
 	}

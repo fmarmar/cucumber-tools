@@ -1,6 +1,7 @@
 package com.github.fmarmar.cucumber.tools.report.parser;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.assertj.core.api.Assertions.filter;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import org.assertj.core.condition.AnyOf;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.github.fmarmar.assertj.Conditions;
 import com.github.fmarmar.cucumber.tools.TestUtils;
 import com.github.fmarmar.cucumber.tools.report.model.Feature;
@@ -179,6 +181,19 @@ public class ReportParserTest {
 			
 		}
 		
+	}
+	
+	@Test
+	public void testParseInvalidReportShowFile() throws IOException {
+		
+		Path invalidReport = TestUtils.REPORTS_BASE_PATH.resolve("invalid.json");
+		
+		try {
+			parser.parse(invalidReport);
+			fail("Parser should have failed parsing file: " + invalidReport);
+		} catch (JsonParseException e) {
+			assertThat(e).hasMessageContaining(invalidReport.toString());
+		}
 	}
 
 }
