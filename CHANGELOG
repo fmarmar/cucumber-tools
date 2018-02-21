@@ -1,9 +1,10 @@
 v0.2.2
 ======
 
+* html-report: Fix metadata tooltip formatting
 * html-report: Report conflictive file when JsonParseException is raised
 
 v0.2.1
 ======
 
-* Fix bug parsing optional arguments for command 'html-report'
+* html-report: Fix bug parsing optional arguments
