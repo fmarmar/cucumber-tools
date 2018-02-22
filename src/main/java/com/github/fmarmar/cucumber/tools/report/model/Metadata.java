@@ -60,7 +60,12 @@ public class Metadata {
 	
 	@Override
 	public boolean equals(Object anObject) {
-		return id.equals(anObject);
+		
+		if (anObject instanceof Metadata) {
+			return id.equals(((Metadata) anObject).id);
+		}
+		
+		return false;
 	}
 	
 	@Override
