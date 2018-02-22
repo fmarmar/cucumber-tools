@@ -11,9 +11,9 @@ import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class Metadata {
 	
 	public static Metadata NO_METADATA_INSTANCE = new Metadata(); 
@@ -51,6 +51,21 @@ public class Metadata {
 	
 	public boolean empty() {
 		return Strings.isNullOrEmpty(id);
+	}
+	
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object anObject) {
+		return id.equals(anObject);
+	}
+	
+	@Override
+	public String toString() {
+		return id;
 	}
 	
 }

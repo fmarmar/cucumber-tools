@@ -2,17 +2,17 @@ package com.github.fmarmar.cucumber.tools.report.html.support;
 
 import java.util.Comparator;
 
-import com.github.fmarmar.cucumber.tools.report.model.support.NamedElement;
+import com.github.fmarmar.cucumber.tools.report.model.support.ComparableElement;
 
-public class AlphabeticalComparator implements Comparator<NamedElement> {
+public class AlphabeticalComparator implements Comparator<ComparableElement> {
 
-	public static final Comparator<NamedElement> INSTANCE = new AlphabeticalComparator();
+	public static final Comparator<ComparableElement> INSTANCE = new AlphabeticalComparator();
 	
 	private AlphabeticalComparator() { }
 	
 	@Override
-	public int compare(NamedElement named1, NamedElement named2) {
-		return named1.getName().compareToIgnoreCase(named2.getName());
+	public int compare(ComparableElement named1, ComparableElement named2) {
+		return named1.comparable().compareToIgnoreCase(named2.comparable());
 	}
 	
 }

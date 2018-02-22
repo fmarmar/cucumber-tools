@@ -10,10 +10,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.github.fmarmar.cucumber.tools.report.model.support.ComparableElement;
 import com.github.fmarmar.cucumber.tools.report.model.support.GenericResult;
 import com.github.fmarmar.cucumber.tools.report.model.support.GenericStatus;
 import com.github.fmarmar.cucumber.tools.report.model.support.GenericSummary;
-import com.github.fmarmar.cucumber.tools.report.model.support.NamedElement;
 import com.github.fmarmar.cucumber.tools.report.model.support.PostProcessor;
 import com.github.fmarmar.cucumber.tools.report.model.support.ScenarioType;
 import com.github.fmarmar.cucumber.tools.report.model.support.StepsSummary;
@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @JsonDeserialize(converter=FeaturePostProcessor.class)
-public class Feature implements NamedElement, PostProcessor {
+public class Feature implements ComparableElement, PostProcessor {
 
 	private String id;
 
@@ -56,6 +56,11 @@ public class Feature implements NamedElement, PostProcessor {
 	public Feature(String id, String uri) {
 		this.id = id;
 		this.uri = uri;
+	}
+	
+	@Override
+	public String comparable() {
+		return name;
 	}
 
 	@Override

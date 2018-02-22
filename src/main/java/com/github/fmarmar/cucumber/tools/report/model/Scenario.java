@@ -12,8 +12,8 @@ import java.util.TreeSet;
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.github.fmarmar.cucumber.tools.report.model.support.ComparableElement;
 import com.github.fmarmar.cucumber.tools.report.model.support.GenericStatus;
-import com.github.fmarmar.cucumber.tools.report.model.support.NamedElement;
 import com.github.fmarmar.cucumber.tools.report.model.support.PostProcessor;
 import com.github.fmarmar.cucumber.tools.report.model.support.ScenarioResult;
 import com.github.fmarmar.cucumber.tools.report.model.support.ScenarioType;
@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Data
 @Slf4j
-public class Scenario implements NamedElement, PostProcessor {
+public class Scenario implements ComparableElement, PostProcessor {
 	
 	protected String id;
 	
@@ -48,6 +48,11 @@ public class Scenario implements NamedElement, PostProcessor {
 	protected StepsSummary stepsSummary;
 	
 	protected ScenarioResult result;
+	
+	@Override
+	public String comparable() {
+		return name;
+	}
 
 	@Override
 	public void postProcess() {
