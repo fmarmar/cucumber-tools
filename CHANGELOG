@@ -1,9 +1,11 @@
 v0.2.2
 ======
 
+* html-report: Remove feature tags from scenario tags
+* html-report: Sort Tags 
 * html-report: Fix metadata tooltip formatting
 * html-report: Report conflictive file when JsonParseException is raised
-
+ 
 v0.2.1
 ======
 

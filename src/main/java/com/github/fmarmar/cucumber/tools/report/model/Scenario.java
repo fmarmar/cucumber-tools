@@ -3,11 +3,11 @@ package com.github.fmarmar.cucumber.tools.report.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -37,7 +37,7 @@ public class Scenario implements NamedElement, PostProcessor {
 	protected ScenarioType type = ScenarioType.SCENARIO;
 
 	@JsonDeserialize(contentUsing=TagDeserializer.class)
-	protected Set<String> tags = new HashSet<>();
+	protected SortedSet<String> tags = new TreeSet<>();
 	
 	protected List<ScenarioHook> before = new ArrayList<>();
 	

@@ -6,9 +6,9 @@ import static org.assertj.core.api.Assertions.filter;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.assertj.core.condition.AnyOf;
@@ -33,6 +33,35 @@ public class ReportParserTest {
 	@Before
 	public void configureTest() throws IOException {
 		parser = new ReportParser();
+	}
+	
+	@Test
+	public void testBasicParse() throws IOException {
+		
+		Path report = TestUtils.REPORTS_BASE_PATH.resolve("simple.json");
+
+		ParsedReports parsedReports = parser.parse(report);
+
+		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
+			
+			List<Feature> features = parsedReports.getFeatures();
+			softly.assertThat(features).size().isGreaterThan(0);
+
+			Feature aFeature = features.get(0);
+			Collection<String> featureTags =  aFeature.getTags();
+			softly.assertThat(featureTags).size().isGreaterThan(0);
+			softly.assertThat(new ArrayList<>(featureTags)).isSorted();
+			
+			List<Scenario> scenarios = aFeature.getScenarios();
+			softly.assertThat(scenarios).size().isGreaterThan(0);
+			
+			Scenario aScenario = scenarios.get(0);
+			Collection<String> scenarioTags =  aScenario.getTags();
+			softly.assertThat(scenarioTags).size().isGreaterThan(0);
+			softly.assertThat(new ArrayList<>(scenarioTags)).isSorted();
+		}
+		
+		
 	}
 
 	@Test
@@ -64,7 +93,7 @@ public class ReportParserTest {
 				.areNot(Conditions.empty());
 
 			softly.assertThat(scenarios).extracting("steps", List.class).areNot(Conditions.empty());
-			softly.assertThat(scenarios).extracting("tags", Set.class).are(Conditions.contains(featureTags));
+			softly.assertThat(scenarios).extracting("tags", Collection.class).doesNotContain(featureTags);
 			softly.assertThat(scenarios).extracting("result").doesNotContainNull();
 
 		}
@@ -93,7 +122,7 @@ public class ReportParserTest {
 			softly.assertThat(scenarios).extracting("type", ScenarioType.class).are(Conditions.equalTo(ScenarioType.SCENARIO));
 			softly.assertThat(scenarios).extracting("before", List.class).areNot(Conditions.empty());
 			softly.assertThat(scenarios).extracting("after", List.class).areNot(Conditions.empty());
-			softly.assertThat(scenarios).extracting("tags", Set.class).are(Conditions.contains(featureTags));
+			softly.assertThat(scenarios).extracting("tags", Collection.class).doesNotContain(featureTags);
 			softly.assertThat(scenarios).extracting("result").doesNotContainNull();
 
 			Scenario anScenario = Iterables.getLast(scenarios);

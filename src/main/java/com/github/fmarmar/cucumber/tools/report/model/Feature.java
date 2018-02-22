@@ -1,10 +1,10 @@
 package com.github.fmarmar.cucumber.tools.report.model;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -38,7 +38,7 @@ public class Feature implements NamedElement, PostProcessor {
 	private String description = StringUtils.EMPTY;
 
 	@JsonDeserialize(contentUsing = TagDeserializer.class)
-	private Set<String> tags = new HashSet<>();
+	private SortedSet<String> tags = new TreeSet<>();
 
 	@JsonProperty("elements")
 	private List<Scenario> scenarios = Collections.emptyList();
@@ -86,8 +86,8 @@ public class Feature implements NamedElement, PostProcessor {
 				it.set(currentScenario);
 				background = null;
 
-				// Add Feature tags
-				currentScenario.getTags().addAll(tags);
+				// Remove Feature tags
+				currentScenario.getTags().removeAll(tags);
 
 				// postProcess scenario
 				currentScenario.postProcess();

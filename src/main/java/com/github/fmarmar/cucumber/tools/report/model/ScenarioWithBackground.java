@@ -25,7 +25,7 @@ public class ScenarioWithBackground extends Scenario {
 		this.name = scenario.name;
 		this.description = scenario.description;
 		this.type = scenario.type;
-		this.tags = Sets.newHashSet(Iterables.concat(background.tags, scenario.tags));
+		this.tags = Sets.newTreeSet(Iterables.concat(background.tags, scenario.tags));
 		this.before = Lists.newArrayList(Iterables.concat(background.before, scenario.before));
 		this.backgroundName = background.name;
 		this.backgroundSteps = background.steps;
