@@ -1,3 +1,9 @@
+v0.3.0
+======
+
+* html-report: Step hooks are hidden in detailed scenario report. Outputs and embeddings from a step hook are shown within the step
+* html-report: Util methods to aggregate outputs and embeddings from an step
+
 v0.2.2
 ======
 
