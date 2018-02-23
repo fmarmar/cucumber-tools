@@ -48,7 +48,7 @@
           <td class="total">$item.scenariosSummary.total</td>
 
           <td class="duration" data-value="$item.duration">$utils.formatDuration($item.duration)</td>
-          <td class="$item.status.name">$item.status.label</td>
+          <td class="$item.status">$item.status.label</td>
         </tr>
         </tbody>
 

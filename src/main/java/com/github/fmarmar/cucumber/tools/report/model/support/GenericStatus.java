@@ -14,12 +14,13 @@ public enum GenericStatus {
 		return this == PASSED;
 	}
 	
-	public String getName() {
-		return name().toLowerCase(Locale.ENGLISH);
+	public String getLabel() {
+		return StringUtils.capitalize(toString());
 	}
 	
-	public String getLabel() {
-		return StringUtils.capitalize(getName());
+	@Override
+	public String toString() {
+		return name().toLowerCase(Locale.ENGLISH);
 	}
 	
 	public static GenericStatus map(StepStatus status) {

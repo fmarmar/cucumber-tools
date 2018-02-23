@@ -10,7 +10,7 @@
     <div id="$keyword.toLowerCase()-$hookId" class="inner-level collapse collapsable-details #if (!$status.isPassed()) in #end">
       #foreach($hook in $hooks)
         <div class="hook">
-          <div class="brief $hook.status.name">
+          <div class="brief $hook.status">
             <span class="keyword indention">$keyword</span>
             #if ($hook.location)
               <span class="location name">$hook.location</span>

@@ -1,6 +1,6 @@
 #macro(includeBrief, $keyword, $status, $name, $expandable, $duration)
 
-<div class="brief $status.name">
+<div class="brief $status">
   <span class="keyword indention">$keyword</span>
   <span class="name">$name</span>
   #includeDuration($duration)
