@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import com.github.fmarmar.cucumber.tools.report.model.Embedding;
 import com.github.fmarmar.cucumber.tools.report.model.ExecutionElement;
 import com.github.fmarmar.cucumber.tools.report.model.Metadata;
+import com.github.fmarmar.cucumber.tools.report.model.Step;
+import com.github.fmarmar.cucumber.tools.report.model.StepHook;
 import com.github.fmarmar.cucumber.tools.report.model.support.ScenarioResult;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
@@ -119,6 +122,32 @@ public final class TemplateUtils {
 		}
 		
 		return Joiner.on("&#10;").join(tooltipLines);
+	}
+	
+	public List<String> outputs(Step step) {
+		
+		List<String> outputs = new ArrayList<>();
+		
+		outputs.addAll(step.getOutputs());
+		
+		for (StepHook afterHook : step.getAfter()) {
+			outputs.addAll(afterHook.getOutputs());
+		}
+		
+		return outputs;
+	}
+	
+	public List<Embedding> embeddings(Step step) {
+		
+		List<Embedding> embeddings = new ArrayList<>();
+		
+		embeddings.addAll(step.getEmbeddings());
+		
+		for (StepHook afterHook : step.getAfter()) {
+			embeddings.addAll(afterHook.getEmbeddings());
+		}
+		
+		return embeddings;
 	}
 
 }

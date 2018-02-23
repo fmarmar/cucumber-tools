@@ -27,10 +27,9 @@
         #end
 
         #includeDocString($step.docString)
-        #includeOutput($step.outputs, $isPassed)
-        #includeEmbeddings($step.embeddings)
+        #includeOutput($utils.outputs($step), $isPassed)
+        #includeEmbeddings($utils.embeddings($step))
       </div>
-      #includeHooks("After", $step.after, $utils.result($step.after).status)
     #end
   </div>
 </div>
