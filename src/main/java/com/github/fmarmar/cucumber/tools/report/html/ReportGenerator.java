@@ -21,11 +21,11 @@ import com.github.fmarmar.cucumber.tools.exception.MultiException;
 import com.github.fmarmar.cucumber.tools.report.html.page.PageGenerator;
 import com.github.fmarmar.cucumber.tools.report.html.page.PageGenerator.PageId;
 import com.github.fmarmar.cucumber.tools.report.html.report.FailuresReport;
+import com.github.fmarmar.cucumber.tools.report.html.report.ReportSummary;
 import com.github.fmarmar.cucumber.tools.report.html.support.AlphabeticalComparator;
 import com.github.fmarmar.cucumber.tools.report.model.Feature;
 import com.github.fmarmar.cucumber.tools.report.model.Scenario;
 import com.github.fmarmar.cucumber.tools.report.model.support.GenericStatus;
-import com.github.fmarmar.cucumber.tools.report.model.support.ReportSummary;
 
 import lombok.AllArgsConstructor;
 
@@ -62,7 +62,7 @@ public class ReportGenerator {
 		
 		Collections.sort(features, AlphabeticalComparator.INSTANCE);
 
-		ReportSummary summary = new ReportSummary();
+		ReportSummary reportSummary = new ReportSummary();
 		FailuresReport failuresReport = new FailuresReport();
 		
 		for (Feature feature : features) {
@@ -71,21 +71,20 @@ public class ReportGenerator {
 			
 			executeTask(generateFeaturePage(feature));
 
-			collectFeatureInfo(feature, summary, failuresReport);
+			collectFeatureInfo(feature, reportSummary, failuresReport);
 
 		}
 
-		executeTask(generateFeaturesOverviewPage(features, summary));
+		executeTask(generateFeaturesOverviewPage(features, reportSummary));
 		executeTask(generateFailuresPage(failuresReport));
 
 	}
 
-	private void collectFeatureInfo(Feature feature, ReportSummary summary, FailuresReport failuresReport) {
+	private void collectFeatureInfo(Feature feature, ReportSummary reportSummary, FailuresReport failuresReport) {
 		
 		// ReportSummary
-		summary.add(feature);
-		summary.add(feature.getScenariosSummary());
-		summary.add(feature.getStepsSummary());
+		reportSummary.add(feature);
+		reportSummary.add(feature.getScenariosSummary());
 		
 		for (Scenario scenario : feature.getScenarios()) {
 			
