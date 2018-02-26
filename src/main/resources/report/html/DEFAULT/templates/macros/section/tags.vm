@@ -4,7 +4,7 @@
   #if (!$tags.isEmpty())
     <b>Tags:</b>
     #foreach($tag in $tags)
-       <a href="$basePath/tags/$utils.tagFileName($tag)">$tag</a>
+       $tag
     #end
   #end
 </div>
