@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import com.github.fmarmar.cucumber.tools.report.html.page.PageGenerator.PageId;
 import com.github.fmarmar.cucumber.tools.report.model.Embedding;
 import com.github.fmarmar.cucumber.tools.report.model.ExecutionElement;
+import com.github.fmarmar.cucumber.tools.report.model.Feature;
 import com.github.fmarmar.cucumber.tools.report.model.Metadata;
 import com.github.fmarmar.cucumber.tools.report.model.Step;
 import com.github.fmarmar.cucumber.tools.report.model.StepHook;
@@ -29,14 +31,15 @@ public final class TemplateUtils {
 
 	private TemplateUtils() { }
 	
-	public String validFileName(String fileName) {
-		return fileName.replaceAll("[\\W]+", "-");
+	public String link(Object item) {
+		
+		if (item instanceof Feature) {
+			return VelocityPageGenerator.link(PageId.FEATURE, ((Feature) item).getUuid()).toString();
+		}
+	
+		return null;
 	}
-
-	public String tagFileName(String tag) {
-		return validFileName(tag.replace("@", "")) + ".html";
-	}
-
+	
 	public String formatDuration(long duration) {
 		
 		long remaining = duration;

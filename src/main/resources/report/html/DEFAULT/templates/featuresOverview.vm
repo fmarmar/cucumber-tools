@@ -5,8 +5,8 @@
   #includeTitle("Features Overview")
 
   <script type="text/javascript">
-  #parse("js/features-chart.js.vm")
-  #parse("js/scenarios-chart.js.vm")
+  #includePieChart("Features", "features-chart", $featuresReport.total)
+  #includeDoughnutChart("Scenarios", "scenarios-chart", $featuresReport.scenarios)
   </script>
 </head>
 
@@ -62,7 +62,7 @@
 <div class="container-fluid" id="report">
   <div class="row">
     <div class="col-md-10 col-md-offset-1">
-      #includeStatsTable("Feature", $features, $summary)
+      #includeStatsTable("Feature", $features, $featuresReport)
     </div>
   </div>
 </div>

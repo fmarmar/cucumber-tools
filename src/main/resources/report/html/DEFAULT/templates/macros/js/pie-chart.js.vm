@@ -1,13 +1,15 @@
+#macro(includePieChart, $title, $canvasId, $summary)
+
 $(document).ready(function() {
 
     var chartData = {
         datasets: [{
             data: [
-                   $summary.features.passed,
-                   $summary.features.skipped,
-                   $summary.features.failed
-               ],
-               backgroundColor: [
+                 $summary.passed,
+                 $summary.skipped,
+                 $summary.failed
+            ],
+            backgroundColor: [
                 "#00B000",
                 "#80A0FF",
                 "#FF3030"
@@ -20,7 +22,7 @@ $(document).ready(function() {
         ]
     };
 
-    var context = document.getElementById("features-chart");
+    var context = document.getElementById("$canvasId");
     window.myBar = new Chart(context, {
         type: "pie",
         data: chartData,
@@ -28,7 +30,7 @@ $(document).ready(function() {
             title: {
                 display: true,
                 fontSize: 20,
-                text: "Features"
+                text: "$title"
             },
             responsive: true,
             legend: {
@@ -40,7 +42,7 @@ $(document).ready(function() {
                         var allData = data.datasets[tooltipItem.datasetIndex].data;
                         var tooltipLabel = data.labels[tooltipItem.index];
                         var tooltipData = allData[tooltipItem.index];
-                        var tooltipPercentage = Math.round(10000 * tooltipData / $features.size()) / 100;
+                        var tooltipPercentage = Math.round(10000 * tooltipData / $summary.total) / 100;
                         return tooltipLabel + ": " + tooltipData + " (" + tooltipPercentage + "%)";
                     }
                 }
@@ -49,3 +51,5 @@ $(document).ready(function() {
     });
 
 });
+
+#end

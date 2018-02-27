@@ -1,11 +1,13 @@
+#macro(includeDoughnutChart, $title, $canvasId, $summary)
+
 $(document).ready(function() {
 
     var chartData = {
         datasets: [{
             data: [
-                $summary.scenarios.passed,
-                $summary.scenarios.skipped,
-                $summary.scenarios.failed
+                 $summary.passed,
+                 $summary.skipped,
+                 $summary.failed
             ],
             backgroundColor: [
                 "#00B000",
@@ -20,7 +22,7 @@ $(document).ready(function() {
         ]
     };
 
-    var context = document.getElementById("scenarios-chart");
+    var context = document.getElementById("$canvasId");
     window.myBar = new Chart(context, {
         type: "doughnut",
         data: chartData,
@@ -28,7 +30,7 @@ $(document).ready(function() {
             title: {
                 display: true,
                 fontSize: 20,
-                text: "Scenarios"
+                text: "$title"
             },
             circumference: Math.PI,
             rotation: Math.PI,
@@ -43,7 +45,7 @@ $(document).ready(function() {
                         var allData = data.datasets[tooltipItem.datasetIndex].data;
                         var tooltipLabel = data.labels[tooltipItem.index];
                         var tooltipData = allData[tooltipItem.index];
-                        var tooltipPercentage = Math.round(10000 * tooltipData / $summary.scenarios.total) / 100;
+                        var tooltipPercentage = Math.round(10000 * tooltipData / $summary.total) / 100;
                         return tooltipLabel + ": " + tooltipData + " (" + tooltipPercentage + "%)";
                     }
                 }
@@ -52,3 +54,5 @@ $(document).ready(function() {
     });
 
 });
+
+#end

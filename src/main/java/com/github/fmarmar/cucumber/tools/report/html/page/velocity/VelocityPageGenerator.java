@@ -59,7 +59,7 @@ public class VelocityPageGenerator implements PageGenerator {
 	private static final Map<PageId, PageIdInfo> PAGE_ID_MAP = new ImmutableMap.Builder<PageId, PageIdInfo>()
 			.put(PageId.FEATURES_OVERVIEW, new PageIdInfo("featuresOverview.vm", ".", null, "features-overview"))
 			.put(PageId.FEATURE, new PageIdInfo("feature.vm", "..", "features", null))
-			.put(PageId.TAGS_OVERVIEW, new PageIdInfo("tagOverview.vm", ".", null, "tags-overview"))
+			.put(PageId.TAGS_OVERVIEW, new PageIdInfo("tagsOverview.vm", ".", null, "tags-overview"))
 			.put(PageId.FAILURES_OVERVIEW, new PageIdInfo("failuresOverview.vm", ".", null, "failures-overview"))
 			.build();
 
@@ -222,6 +222,11 @@ public class VelocityPageGenerator implements PageGenerator {
 	
 	@Override
 	public Path resolvePagePath(PageId pageId, String name) {
+		return link(pageId, name);
+		
+	}
+	
+	public static Path link(PageId pageId, String name) {
 		
 		String finalName = name + PAGE_SUFFIX;
 		

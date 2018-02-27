@@ -21,7 +21,7 @@ import com.github.fmarmar.cucumber.tools.exception.MultiException;
 import com.github.fmarmar.cucumber.tools.report.html.page.PageGenerator;
 import com.github.fmarmar.cucumber.tools.report.html.page.PageGenerator.PageId;
 import com.github.fmarmar.cucumber.tools.report.html.report.FailuresReport;
-import com.github.fmarmar.cucumber.tools.report.html.report.ReportSummary;
+import com.github.fmarmar.cucumber.tools.report.html.report.FeaturesReport;
 import com.github.fmarmar.cucumber.tools.report.html.support.AlphabeticalComparator;
 import com.github.fmarmar.cucumber.tools.report.model.Feature;
 import com.github.fmarmar.cucumber.tools.report.model.Scenario;
@@ -30,6 +30,8 @@ import com.github.fmarmar.cucumber.tools.report.model.support.GenericStatus;
 import lombok.AllArgsConstructor;
 
 public class ReportGenerator {
+	
+	public static final String FEATURES_REPORT_KEY = "featuresReport";
 	
 	public static final String FAILURES_KEY = "failures";
 	
@@ -62,7 +64,7 @@ public class ReportGenerator {
 		
 		Collections.sort(features, AlphabeticalComparator.INSTANCE);
 
-		ReportSummary reportSummary = new ReportSummary();
+		FeaturesReport featuresReport = new FeaturesReport();
 		FailuresReport failuresReport = new FailuresReport();
 		
 		for (Feature feature : features) {
@@ -71,20 +73,19 @@ public class ReportGenerator {
 			
 			executeTask(generateFeaturePage(feature));
 
-			collectFeatureInfo(feature, reportSummary, failuresReport);
+			collectFeatureInfo(feature, featuresReport, failuresReport);
 
 		}
 
-		executeTask(generateFeaturesOverviewPage(features, reportSummary));
+		executeTask(generateFeaturesOverviewPage(features, featuresReport));
 		executeTask(generateFailuresPage(failuresReport));
 
 	}
 
-	private void collectFeatureInfo(Feature feature, ReportSummary reportSummary, FailuresReport failuresReport) {
+	private void collectFeatureInfo(Feature feature, FeaturesReport featuresReport, FailuresReport failuresReport) {
 		
-		// ReportSummary
-		reportSummary.add(feature);
-		reportSummary.add(feature.getScenariosSummary());
+		// Features report
+		featuresReport.add(feature);
 		
 		for (Scenario scenario : feature.getScenarios()) {
 			
@@ -107,19 +108,19 @@ public class ReportGenerator {
 
 	}
 	
-	private GeneratePageTask generateFeaturesOverviewPage(List<Feature> features, ReportSummary summary) throws IOException {
+	private Callable<Void> generateFeaturesOverviewPage(List<Feature> features, FeaturesReport featuresReport) throws IOException {
 
 		Path path = output.resolve(pageGenerator.resolvePagePath(PageId.FEATURES_OVERVIEW));
 		
 		Map<String, Object> model = new HashMap<>();
 		model.put("features", features);
-		model.put("summary", summary);
+		model.put(FEATURES_REPORT_KEY, featuresReport);
 		
 		return new GeneratePageTask(PageId.FEATURES_OVERVIEW, path, model);
 
 	}
-	
-	private GeneratePageTask generateFailuresPage(FailuresReport failuresReport) throws IOException {
+
+	private Callable<Void> generateFailuresPage(FailuresReport failuresReport) throws IOException {
 
 		Path path = output.resolve(pageGenerator.resolvePagePath(PageId.FAILURES_OVERVIEW));
 		

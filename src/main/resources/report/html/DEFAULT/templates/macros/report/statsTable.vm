@@ -1,4 +1,4 @@
-#macro(includeStatsTable, $tableKey, $features, $summary)
+#macro(includeStatsTable, $tableKey, $items, $summary)
 
 <table id="tablesorter" class="stats-table table-hover">
   
@@ -22,23 +22,23 @@
   </thead>
 
   <tbody>
-    #foreach($feature in $features)
+    #foreach($item in $items)
       <tr>
-      	#set ( $link = "features/" + $feature.uuid + ".html" )
+      	#set( $link = $utils.link($item) )
         <td class="tagname">
-        	<a href="$link">$feature.name</a>
-        	#if (!$feature.metadata.empty())
-        	<abbr title="$utils.metadataTooltip($feature.metadata)" class="metadata"><img class="icon-label" src="images/label.png"></abbr>
+        	#if ($link) <a href="$link">$item.name</a> #else $item.name #end
+        	#if (!$item.metadata.empty())
+        	<abbr title="$utils.metadataTooltip($item.metadata)" class="metadata"><img class="icon-label" src="images/label.png"></abbr>
         	#end
         </td>
         
-        <td #if ($feature.scenariosSummary.passed > 0) class="passed"    #end>$feature.scenariosSummary.passed</td>
-        <td #if ($feature.scenariosSummary.skipped > 0) class="skipped"    #end>$feature.scenariosSummary.skipped</td>
-        <td #if ($feature.scenariosSummary.failed > 0) class="failed"    #end>$feature.scenariosSummary.failed</td>
-        <td class="total">$feature.scenariosSummary.total</td>
+        <td #if ($item.scenariosSummary.passed > 0) class="passed"    #end>$item.scenariosSummary.passed</td>
+        <td #if ($item.scenariosSummary.skipped > 0) class="skipped"    #end>$item.scenariosSummary.skipped</td>
+        <td #if ($item.scenariosSummary.failed > 0) class="failed"    #end>$item.scenariosSummary.failed</td>
+        <td class="total">$item.scenariosSummary.total</td>
 
-        <td class="duration" data-value="$feature.duration">$utils.formatDuration($feature.duration)</td>
-        <td class="$feature.status">$feature.status.label</td>
+        <td class="duration" data-value="$item.duration">$utils.formatDuration($item.duration)</td>
+        <td class="$item.status">$item.status.label</td>
       </tr>
     #end
   </tbody>
@@ -53,7 +53,7 @@
       <td>$summary.scenarios.total</td>
 
       <td class="duration">$utils.formatDuration($summary.duration)</td>
-      <td>$features.size()</td>
+      <td>$items.size()</td>
     </tr>
     <tr>
       <td></td>
@@ -62,7 +62,7 @@
       <td>$utils.percentage($summary.scenarios.failed, $summary.scenarios.total)</td>
       <td></td>
       <td></td>
-      <td>$utils.percentage($summary.features.passed, $features.size())</td>
+      <td>$utils.percentage($summary.total.passed, $items.size())</td>
     </tr>
   </tfoot>
 </table>
