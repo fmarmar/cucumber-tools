@@ -22,10 +22,12 @@ import com.github.fmarmar.cucumber.tools.report.html.page.PageGenerator;
 import com.github.fmarmar.cucumber.tools.report.html.page.PageGenerator.PageId;
 import com.github.fmarmar.cucumber.tools.report.html.report.FailuresReport;
 import com.github.fmarmar.cucumber.tools.report.html.report.FeaturesReport;
+import com.github.fmarmar.cucumber.tools.report.html.report.TagsReport;
 import com.github.fmarmar.cucumber.tools.report.html.support.AlphabeticalComparator;
 import com.github.fmarmar.cucumber.tools.report.model.Feature;
 import com.github.fmarmar.cucumber.tools.report.model.Scenario;
 import com.github.fmarmar.cucumber.tools.report.model.support.GenericStatus;
+import com.google.common.collect.Iterables;
 
 import lombok.AllArgsConstructor;
 
@@ -34,6 +36,8 @@ public class ReportGenerator {
 	public static final String FEATURES_REPORT_KEY = "featuresReport";
 	
 	public static final String FAILURES_KEY = "failures";
+	
+	public static final String TAGS_REPORT_KEY = "tagsReport";
 	
 	private final Path output;
 
@@ -65,6 +69,7 @@ public class ReportGenerator {
 		Collections.sort(features, AlphabeticalComparator.INSTANCE);
 
 		FeaturesReport featuresReport = new FeaturesReport();
+		TagsReport tagsReport = new TagsReport();
 		FailuresReport failuresReport = new FailuresReport();
 		
 		for (Feature feature : features) {
@@ -73,21 +78,24 @@ public class ReportGenerator {
 			
 			executeTask(generateFeaturePage(feature));
 
-			collectFeatureInfo(feature, featuresReport, failuresReport);
+			collectFeatureInfo(feature, featuresReport, tagsReport, failuresReport);
 
 		}
 
 		executeTask(generateFeaturesOverviewPage(features, featuresReport));
+		executeTask(generateTagsPage(tagsReport));
 		executeTask(generateFailuresPage(failuresReport));
 
 	}
 
-	private void collectFeatureInfo(Feature feature, FeaturesReport featuresReport, FailuresReport failuresReport) {
+	private void collectFeatureInfo(Feature feature, FeaturesReport featuresReport, TagsReport tagsReport, FailuresReport failuresReport) {
 		
 		// Features report
 		featuresReport.add(feature);
 		
 		for (Scenario scenario : feature.getScenarios()) {
+			
+			tagsReport.collectTagsInfo(Iterables.concat(feature.getTags(), scenario.getTags()), scenario);
 			
 			if (scenario.getStatus() == GenericStatus.FAILED) {
 				failuresReport.addFailure(feature, scenario);
@@ -119,7 +127,18 @@ public class ReportGenerator {
 		return new GeneratePageTask(PageId.FEATURES_OVERVIEW, path, model);
 
 	}
-
+	
+	private Callable<Void> generateTagsPage(TagsReport tagsReport) {
+		
+		Path path = output.resolve(pageGenerator.resolvePagePath(PageId.TAGS_OVERVIEW));
+		
+		Map<String, Object> model = new HashMap<>();
+		model.put(TAGS_REPORT_KEY, tagsReport);
+		
+		return new GeneratePageTask(PageId.TAGS_OVERVIEW, path, model);
+		
+	}
+	
 	private Callable<Void> generateFailuresPage(FailuresReport failuresReport) throws IOException {
 
 		Path path = output.resolve(pageGenerator.resolvePagePath(PageId.FAILURES_OVERVIEW));

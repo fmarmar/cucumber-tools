@@ -1,27 +1,31 @@
 package com.github.fmarmar.cucumber.tools.report.html.report;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import com.github.fmarmar.cucumber.tools.report.model.Scenario;
 
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+
+@ToString 
+@EqualsAndHashCode
+@RequiredArgsConstructor
 public class TagsReport {
 	
-	private SortedMap<String, TagSummary> tagIndex = new TreeMap<>();
-
-	public void collectTagsInfo(Set<String> tags, Scenario scenario) {
+	private final SortedMap<String, TagSummary> tagIndex = new TreeMap<>();
+	
+	public void collectTagsInfo(Iterable<String> tags, Scenario scenario) {
 		
 		for (String tag : tags) {
 			
-			TagSummary summary;
+			TagSummary summary = tagIndex.get(tag);
 			
-			if (tagIndex.containsKey(tag)) {
-				summary = tagIndex.get(tag);
-			} else {
+			if (summary == null) {
 				summary = new TagSummary(tag);
-				tagIndex.put(tag, new TagSummary(tag));
+				tagIndex.put(tag, summary);
 			}
 			
 			summary.collectScenarioInfo(scenario);
@@ -30,12 +34,8 @@ public class TagsReport {
 		
 	}
 	
-	public Collection<String> getTagNames() {
-		return tagIndex.keySet();
-	}
-
 	public Collection<TagSummary> getTags() {
 		return tagIndex.values();
 	}
-		
+	
 }

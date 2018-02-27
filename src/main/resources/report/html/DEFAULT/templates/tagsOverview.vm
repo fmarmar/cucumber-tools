@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  #includeHead($basePath)
+  #includeTitle("Tags Overview")
+
+</head>
+<body>
+
+#includeNavigation("tags")
+
+#includeReportInfo($metadata)
+
+#includeLead("Tags Statistics", "The following graph shows passing and failing statistics for tags")
+
+<div class="container-fluid" id="report">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      #set($tags = $tagsReport.tags)
+      #if($tags.isEmpty())
+        <p>You have no tags in your cucumber report</p>
+      #else
+        #includeStatsTable("Tag", $tags)
+      #end
+    </div>
+  </div>
+</div>
+
+#include("includes/footer.vm")
+
+</body>
+</html>

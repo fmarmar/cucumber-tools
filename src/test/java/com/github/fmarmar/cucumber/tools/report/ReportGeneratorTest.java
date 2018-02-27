@@ -11,7 +11,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -27,6 +26,7 @@ import com.github.fmarmar.cucumber.tools.report.html.ReportGenerator;
 import com.github.fmarmar.cucumber.tools.report.html.page.PageGenerator;
 import com.github.fmarmar.cucumber.tools.report.html.page.PageGenerator.PageId;
 import com.github.fmarmar.cucumber.tools.report.html.report.Failure;
+import com.github.fmarmar.cucumber.tools.report.html.report.TagsReport;
 import com.github.fmarmar.cucumber.tools.report.model.Feature;
 import com.github.fmarmar.cucumber.tools.report.model.FeatureBuilder;
 import com.github.fmarmar.cucumber.tools.report.model.support.GenericStatus;
@@ -40,7 +40,7 @@ public class ReportGeneratorTest {
 	
 	@Before
 	public void checkJava8Runtime() {
-		assumeThat(ManagementFactory.getRuntimeMXBean().getVmVersion(), startsWith("1.8"));
+		assumeThat(System.getProperty("java.version"), startsWith("1.8"));
 	}
 	
 	@Before
@@ -93,6 +93,28 @@ public class ReportGeneratorTest {
 		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
 			softly.assertThat(failures).size().isEqualTo(1);
 			softly.assertThat(Iterables.firstOf(failures).getScenarios()).size().isEqualTo(1);
+		}
+		
+	}
+	
+	@Test
+	public void testTagsReport() throws IOException, InterruptedException {
+		
+		Feature feature = FeatureBuilder.newFeature()
+				.withRandoScenarios(10)
+				.build();
+		
+		reportGenerator.generateReport(Lists.newArrayList(feature));
+		reportGenerator.finishReport();
+		
+		TagsReport tagsReport = getModelObject(PageId.TAGS_OVERVIEW, ReportGenerator.TAGS_REPORT_KEY);
+		
+		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
+			
+			softly.assertThat(tagsReport).isNotNull();
+			
+			softly.assertThat(tagsReport.getTags()).size().isGreaterThan(0);
+
 		}
 		
 	}

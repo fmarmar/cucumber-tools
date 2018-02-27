@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.github.fmarmar.cucumber.tools.report.model.ExecutionElement;
-import com.github.fmarmar.cucumber.tools.report.model.Feature;
-import com.github.fmarmar.cucumber.tools.report.model.Scenario;
-import com.github.fmarmar.cucumber.tools.report.model.Step;
 import com.github.fmarmar.cucumber.tools.report.model.support.GenericStatus;
 import com.github.fmarmar.cucumber.tools.report.model.support.ScenarioResult;
 import com.github.fmarmar.cucumber.tools.report.model.support.ScenarioType;
@@ -57,6 +53,23 @@ public class FeatureBuilder {
 		return new FeatureBuilder();
 	}
 	
+	public FeatureBuilder withRandoScenarios(int numScenarios) {
+		
+		List<Scenario> scenarios = new ArrayList<>(numScenarios);
+		feature.setScenarios(scenarios);
+		
+		for (int counter = 0; counter < numScenarios; counter ++) {
+			scenarios.add(randomScenario());
+		}
+		
+		return this;
+		
+	}
+	
+	private Scenario randomScenario() {
+		return SCENARIO_BUILDER.nextObject(Scenario.class);
+	}
+	
 	public FeatureBuilder withScenarios(GenericStatus... results) {
 		
 		List<Scenario> scenarios = new ArrayList<>(results.length);
@@ -70,14 +83,10 @@ public class FeatureBuilder {
 	}
 	
 	private Scenario randomScenario(GenericStatus result) {
-		
-		Scenario scenario = SCENARIO_BUILDER.nextObject(Scenario.class);
-		ensureScenarioResult(scenario, result);
-		
-		return scenario;
+		return ensureScenarioResult(randomScenario(), result);
 	}
 	
-	private void ensureScenarioResult(Scenario scenario, GenericStatus result) {
+	private Scenario ensureScenarioResult(Scenario scenario, GenericStatus result) {
 		
 		Iterable<ExecutionElement> scenarioSteps = ModelTestUtils.steps(scenario);
 		
@@ -98,6 +107,8 @@ public class FeatureBuilder {
 			ExecutionElement step = Iterables.get(scenarioSteps, rand.nextInt(Iterables.size(scenarioSteps)));
 			step.getResult().setStatus(map(result));
 		}
+		
+		return scenario;
 		
 	}
 	

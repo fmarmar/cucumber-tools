@@ -27,7 +27,7 @@
       	#set( $link = $utils.link($item) )
         <td class="tagname">
         	#if ($link) <a href="$link">$item.name</a> #else $item.name #end
-        	#if (!$item.metadata.empty())
+        	#if ($item.metadata && !$item.metadata.empty())
         	<abbr title="$utils.metadataTooltip($item.metadata)" class="metadata"><img class="icon-label" src="images/label.png"></abbr>
         	#end
         </td>
@@ -42,7 +42,8 @@
       </tr>
     #end
   </tbody>
-
+  
+  #if ($summary)
   <tfoot class="total">
     <tr>
       <td></td>
@@ -65,6 +66,7 @@
       <td>$utils.percentage($summary.total.passed, $items.size())</td>
     </tr>
   </tfoot>
+  #end
 </table>
 
 #end
