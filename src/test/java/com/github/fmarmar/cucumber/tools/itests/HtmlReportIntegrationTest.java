@@ -28,6 +28,7 @@ public class HtmlReportIntegrationTest extends AbstractIntegrationTest {
 			assertThat(output.resolve("index.html").toFile()).exists().isFile();
 			assertThat(output.resolve("features-overview.html").toFile()).exists().isFile();
 			assertThat(output.resolve("failures-overview.html").toFile()).exists().isFile();
+			assertThat(output.resolve("tags-overview.html").toFile()).exists().isFile();
 			
 			assertThat(output.resolve("features").toFile()).exists().isDirectory();
 			assertThat(output.resolve("embeddings").toFile()).exists().isDirectory();
