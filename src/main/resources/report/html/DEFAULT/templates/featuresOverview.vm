@@ -4,10 +4,9 @@
   #includeHead($basePath)
   #includeTitle("Features Overview")
 
-  <script type="text/javascript">
   #includePieChart("Features", "features-chart", $featuresReport.total)
   #includeDoughnutChart("Scenarios", "scenarios-chart", $featuresReport.scenarios)
-  </script>
+
 </head>
 
 <body>

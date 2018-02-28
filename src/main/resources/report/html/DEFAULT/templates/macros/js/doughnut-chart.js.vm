@@ -1,5 +1,6 @@
 #macro(includeDoughnutChart, $title, $canvasId, $summary)
 
+<script type="text/javascript">
 $(document).ready(function() {
 
     var chartData = {
@@ -54,5 +55,6 @@ $(document).ready(function() {
     });
 
 });
+</script>
 
 #end
