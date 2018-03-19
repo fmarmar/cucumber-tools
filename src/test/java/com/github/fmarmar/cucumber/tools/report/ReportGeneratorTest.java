@@ -1,6 +1,7 @@
 package com.github.fmarmar.cucumber.tools.report;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assume.assumeThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,7 +41,7 @@ public class ReportGeneratorTest {
 	
 	@Before
 	public void checkJava8Runtime() {
-		assumeThat(System.getProperty("java.version"), startsWith("1.8"));
+		assumeThat(System.getProperty("java.version"), not(startsWith("1.7")));
 	}
 	
 	@Before
