@@ -81,6 +81,7 @@ public class App {
 
 		JCommander jc =  builder.build();
 		jc.setCaseSensitiveOptions(true);
+		jc.setExpandAtSign(false);
 		
 		return jc;
 	}

@@ -36,6 +36,7 @@ import gherkin.pickles.Pickle;
 import gherkin.pickles.PickleLocation;
 import gherkin.pickles.PickleTag;
 import io.cucumber.tagexpressions.Expression;
+import lombok.Getter;
 
 /**
  * 
@@ -47,15 +48,30 @@ import io.cucumber.tagexpressions.Expression;
 @Parameters(commandNames = "rerun", commandDescription = "")
 public class Rerun implements Command {
 
-	private static final Path DEFAULT_OUTPUT = Paths.get("target", RerunFileConverter.DEFAULT_FILE_NAME);
+	public static final Path DEFAULT_OUTPUT = Paths.get("target", RerunFileConverter.DEFAULT_FILE_NAME);
+	
+	public static final Expression DEFAULT_TAG_EXPRESSION = TagExpressionConverter.NO_EXPRESSION;
 
-	@Parameter(names = { "--tags", "-t" }, description = "", converter = TagExpressionConverter.class)
+	@Getter
+	@Parameter(
+			names = { "--tags", "-t" }, 
+			description = "", 
+			converter = TagExpressionConverter.class)
 	private Expression tagExpression = TagExpressionConverter.NO_EXPRESSION;
 
-	@Parameter(names = { "--features", "-f" }, variableArity = true, description = "", converter = PathConverter.class)
+	@Getter
+	@Parameter(
+			names = { "--features", "-f" }, 
+			variableArity = true, 
+			description = "", 
+			converter = PathConverter.class)
 	private List<Path> features;
 
-	@Parameter(names = { "--output", "-o" }, description = "", converter = RerunFileConverter.class)
+	@Getter
+	@Parameter(
+			names = { "--output", "-o" }, 
+			description = "", 
+			converter = RerunFileConverter.class)
 	private Path output = DEFAULT_OUTPUT;
 
 	private Parser<GherkinDocument> gherkinParser;

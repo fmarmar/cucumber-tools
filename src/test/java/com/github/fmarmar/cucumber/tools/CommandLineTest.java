@@ -8,9 +8,9 @@ import org.junit.Test;
 
 import com.beust.jcommander.JCommander;
 import com.github.fmarmar.cucumber.tools.report.html.HtmlReport;
+import com.github.fmarmar.cucumber.tools.rerun.Rerun;
 
 public class CommandLineTest {
-
 
 	@Test
 	public void testHtmlReportBasic() {
@@ -80,9 +80,27 @@ public class CommandLineTest {
 		}
 		
 	}
+	
+	@Test
+	public void testRerunTagExpression() {
 
+		Rerun command = new Rerun();
+		JCommander jcommander = App.buildJcommander(null, Collections.singleton((Command) command));
 
+		jcommander.parse("rerun", "--features", "features", "--tags", "@myTag and @otherTag");
+		
+		Command parsedCommand = App.getCommand(jcommander);
 
-
+		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
+			
+			softly.assertThat(parsedCommand).isEqualTo(command);
+			softly.assertThat(command.getFeatures()).size().isEqualTo(1);
+			softly.assertThat(command.getFeatures()).contains(Paths.get("features").toAbsolutePath());
+			softly.assertThat(command.getOutput()).isEqualTo(Rerun.DEFAULT_OUTPUT);
+			softly.assertThat(command.getTagExpression()).isNotEqualTo(Rerun.DEFAULT_TAG_EXPRESSION);
+			
+		}
+		
+	}
 
 }
