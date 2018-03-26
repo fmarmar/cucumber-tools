@@ -13,4 +13,6 @@ public final class TestUtils {
 	
 	public static final Path REPORTS_BASE_PATH = BASE_TEST_RESOURCES.resolve(CLASSPATH_REPORTS_PATH);
 	
+	public static final Path SPLIT_FEATURES_BASE_PATH = BASE_TEST_RESOURCES.resolve("split");
+	
 }

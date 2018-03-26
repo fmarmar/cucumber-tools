@@ -81,7 +81,7 @@ public abstract class AbstractIntegrationTest {
 		public final int exitCode;
 		
 		private ExecutionException(List<String> command, Path workingDirectory, int exitCode) {
-			super("Commnad '" + Joiner.on(' ').join(command) + "' executed on " + workingDirectory + " failed with exitCode " + exitCode);
+			super("Command '" + Joiner.on(' ').join(command) + "' executed on " + workingDirectory + " failed with exitCode " + exitCode);
 			this.exitCode = exitCode;
 		}
 		

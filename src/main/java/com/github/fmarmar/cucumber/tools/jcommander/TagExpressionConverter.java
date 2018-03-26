@@ -1,4 +1,4 @@
-package com.github.fmarmar.cucumber.tools.rerun;
+package com.github.fmarmar.cucumber.tools.jcommander;
 
 import java.util.List;
 

@@ -8,7 +8,8 @@ import org.junit.Test;
 
 import com.beust.jcommander.JCommander;
 import com.github.fmarmar.cucumber.tools.report.html.HtmlReport;
-import com.github.fmarmar.cucumber.tools.rerun.Rerun;
+import com.github.fmarmar.cucumber.tools.split.SplitFeatures;
+import com.github.fmarmar.cucumber.tools.split.SplitFeatures.Separator;
 
 public class CommandLineTest {
 
@@ -82,12 +83,12 @@ public class CommandLineTest {
 	}
 	
 	@Test
-	public void testRerunTagExpression() {
+	public void testSplitFeaturesTagExpression() {
 
-		Rerun command = new Rerun();
+		SplitFeatures command = new SplitFeatures();
 		JCommander jcommander = App.buildJcommander(null, Collections.singleton((Command) command));
 
-		jcommander.parse("rerun", "--features", "features", "--tags", "@myTag and @otherTag");
+		jcommander.parse("split-features", "--features", "features", "--tags", "@myTag and @otherTag", "-s", "eol");
 		
 		Command parsedCommand = App.getCommand(jcommander);
 
@@ -96,8 +97,10 @@ public class CommandLineTest {
 			softly.assertThat(parsedCommand).isEqualTo(command);
 			softly.assertThat(command.getFeatures()).size().isEqualTo(1);
 			softly.assertThat(command.getFeatures()).contains(Paths.get("features").toAbsolutePath());
-			softly.assertThat(command.getOutput()).isEqualTo(Rerun.DEFAULT_OUTPUT);
-			softly.assertThat(command.getTagExpression()).isNotEqualTo(Rerun.DEFAULT_TAG_EXPRESSION);
+			softly.assertThat(command.getOutput()).isEqualTo(SplitFeatures.DEFAULT_OUTPUT);
+			softly.assertThat(command.getTagExpression()).isNotEqualTo(SplitFeatures.DEFAULT_TAG_EXPRESSION);
+			softly.assertThat(command.getSeparator()).isEqualTo(Separator.EOL);
+			softly.assertThat(command.getNumber()).isEqualTo(1);
 			
 		}
 		
