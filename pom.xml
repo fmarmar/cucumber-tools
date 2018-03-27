@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.fmarmar</groupId>
 	<artifactId>cucumber-tools</artifactId>
-	<version>0.4.0</version>
+	<version>0.4.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>cucumber-tools</name>
@@ -28,7 +28,7 @@
 	<scm>
 		<url>https://github.com/fmarmar/cucumber-tools</url>
 		<connection>scm:git:https://github.com/fmarmar/cucumber-tools.git</connection>
-		<tag>v0.4.0</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<distributionManagement>
