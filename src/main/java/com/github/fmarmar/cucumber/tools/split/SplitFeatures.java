@@ -40,34 +40,34 @@ public class SplitFeatures implements Command {
 	@Parameter(
 			names = { "--features", "-f" }, 
 			variableArity = true, 
-			description = "", 
+			description = "Path to feature(s)", 
 			converter = PathConverter.class)
 	private List<Path> features;
 
 	@Getter
 	@Parameter(
 			names = { "--tags", "-t" }, 
-			description = "", 
+			description = "Tag expression to filter", 
 			converter = TagExpressionConverter.class)
 	private Expression tagExpression = TagExpressionConverter.NO_EXPRESSION;
 
 	@Getter
 	@Parameter(
 			names = { "--output", "-o" }, 
-			description = "", 
+			description = "Directory where output will be written (DEFAULT: target)", 
 			converter = PathConverter.class)
 	private Path output = DEFAULT_OUTPUT;
 
 	@Getter
 	@Parameter(
 			names = { "--separator", "-s" }, 
-			description = "")
+			description = "Separator character to use (eol|space) (DEFAULT: space)")
 	private Separator separator = Separator.SPACE;
 
 	@Getter
 	@Parameter(
 			names = { "--number", "-n" }, 
-			description = "")
+			description = "Number of files to create (DEFAULT: 1)")
 	private int number = 1;
 
 	private char separatorChar;
