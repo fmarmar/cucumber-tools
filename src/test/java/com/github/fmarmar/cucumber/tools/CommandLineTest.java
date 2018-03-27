@@ -7,6 +7,7 @@ import org.assertj.core.api.AutoCloseableSoftAssertions;
 import org.junit.Test;
 
 import com.beust.jcommander.JCommander;
+import com.github.fmarmar.cucumber.tools.jcommander.JcommanderUtils;
 import com.github.fmarmar.cucumber.tools.report.html.HtmlReport;
 import com.github.fmarmar.cucumber.tools.split.SplitFeatures;
 import com.github.fmarmar.cucumber.tools.split.SplitFeatures.Separator;
@@ -17,14 +18,16 @@ public class CommandLineTest {
 	public void testHtmlReportBasic() {
 
 		HtmlReport command = new HtmlReport();
-		JCommander jcommander = App.buildJcommander(null, Collections.singleton((Command) command));
+		JCommander jcommander = JcommanderUtils.buildJcommander(null, Collections.singleton((Command) command));
 
 		jcommander.parse("html-report", "--reports", "reports");
+		String commandName = jcommander.getParsedCommand();
 		
-		Command parsedCommand = App.getCommand(jcommander);
+		Command parsedCommand = JcommanderUtils.getCommandObject(jcommander, commandName);
 
 		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
 			
+			softly.assertThat(commandName).isEqualTo("html-report");
 			softly.assertThat(parsedCommand).isEqualTo(command);
 			softly.assertThat(command.getReports()).size().isEqualTo(1);
 			softly.assertThat(command.getReports()).contains(Paths.get("reports").toAbsolutePath());
@@ -40,14 +43,16 @@ public class CommandLineTest {
 	public void testHtmlReportLongOptions() {
 
 		HtmlReport command = new HtmlReport();
-		JCommander jcommander = App.buildJcommander(null, Collections.singleton((Command) command));
+		JCommander jcommander = JcommanderUtils.buildJcommander(null, Collections.singleton((Command) command));
 
 		jcommander.parse("html-report", "--reports", "reports", "--output", "target/", "--project", "test", "--build", "666");
+		String commandName = jcommander.getParsedCommand();
 		
-		Command parsedCommand = App.getCommand(jcommander);
+		Command parsedCommand =  JcommanderUtils.getCommandObject(jcommander, commandName);
 
 		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
 			
+			softly.assertThat(commandName).isEqualTo("html-report");
 			softly.assertThat(parsedCommand).isEqualTo(command);
 			softly.assertThat(command.getReports()).size().isEqualTo(1);
 			softly.assertThat(command.getReports()).contains(Paths.get("reports").toAbsolutePath());
@@ -63,14 +68,16 @@ public class CommandLineTest {
 	public void testHtmlReportShortOptions() {
 
 		HtmlReport command = new HtmlReport();
-		JCommander jcommander = App.buildJcommander(null, Collections.singleton((Command) command));
+		JCommander jcommander = JcommanderUtils.buildJcommander(null, Collections.singleton((Command) command));
 
 		jcommander.parse("html-report", "-r", "reports", "-o", "target", "-p", "test", "-b", "666");
+		String commandName = jcommander.getParsedCommand();
 		
-		Command parsedCommand = App.getCommand(jcommander);
-
+		Command parsedCommand = JcommanderUtils.getCommandObject(jcommander, commandName);
+		
 		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
 			
+			softly.assertThat(commandName).isEqualTo("html-report");
 			softly.assertThat(parsedCommand).isEqualTo(command);
 			softly.assertThat(command.getReports()).size().isEqualTo(1);
 			softly.assertThat(command.getReports()).contains(Paths.get("reports").toAbsolutePath());
@@ -86,14 +93,16 @@ public class CommandLineTest {
 	public void testSplitFeaturesTagExpression() {
 
 		SplitFeatures command = new SplitFeatures();
-		JCommander jcommander = App.buildJcommander(null, Collections.singleton((Command) command));
+		JCommander jcommander = JcommanderUtils.buildJcommander(null, Collections.singleton((Command) command));
 
 		jcommander.parse("split-features", "--features", "features", "--tags", "@myTag and @otherTag", "-s", "eol");
+		String commandName = jcommander.getParsedCommand();
 		
-		Command parsedCommand = App.getCommand(jcommander);
+		Command parsedCommand = JcommanderUtils.getCommandObject(jcommander, commandName);
 
 		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
 			
+			softly.assertThat(commandName).isEqualTo("split-features");
 			softly.assertThat(parsedCommand).isEqualTo(command);
 			softly.assertThat(command.getFeatures()).size().isEqualTo(1);
 			softly.assertThat(command.getFeatures()).contains(Paths.get("features").toAbsolutePath());
