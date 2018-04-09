@@ -141,18 +141,12 @@ public class SplitterByScenario {
 	public static class PickleInfo {
 		
 		private final Path feature;
-		private final List<String> locations;
+		private final int location;
 		private final List<String> tags;
 
 		private PickleInfo(Path feature, Pickle pickle) {
 			this.feature = feature;
-			
-			this.locations = Lists.transform(pickle.getLocations(), new Function<PickleLocation, String>() {
-				@Override
-				public String apply(PickleLocation input) {
-					return String.valueOf(input.getLine());
-				}
-			});
+			this.location = pickleLocationId(pickle.getLocations());
 			
 			this.tags = Lists.transform(pickle.getTags(), new Function<PickleTag, String>() {
 				@Override
@@ -163,13 +157,27 @@ public class SplitterByScenario {
 		}
 		
 		public void appendTo(Appendable appendable) throws IOException {
-			appendable.append(normalize(feature));
-			
-			for (String location : locations) {
-				appendable.append(':').append(location);
+			appendable.append(toString());
+		}
+		
+		@Override
+		public String toString() {
+			return normalize(feature) + ':' + location;
+		}
+		
+	}
+	
+	private static int pickleLocationId(List<PickleLocation> locations) {
+		
+		int pickleLocationId = 0; // The line of the scenario or the line of the example when is an scenario outline
+		
+		for (PickleLocation pickleLocation : locations) {
+			if (pickleLocation.getLine() > pickleLocationId) {
+				pickleLocationId = pickleLocation.getLine();
 			}
 		}
 		
+		return pickleLocationId;
 	}
 	
 	private static String normalize(Path path) {
