@@ -24,6 +24,25 @@ public class SplitFeaturesIntegrationTest extends AbstractIntegrationTest {
 			
 			assertThat(output.toFile()).exists().isDirectory();
 			assertThat(output.resolve("scenarios.txt").toFile()).exists().isFile();
+			assertThat(output.resolve("scenarios-001.txt").toFile()).doesNotExist();
+			
+		}
+		
+	}
+	
+	@Test
+	public void testSplitFeatureInTwo() throws IOException, InterruptedException {
+		
+		Path workingDir = execute("split-features", "-f", TestUtils.SPLIT_FEATURES_BASE_PATH.toFile().getCanonicalPath(), "-n", "2");
+		
+		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
+			
+			Path output = workingDir.resolve(SplitFeatures.DEFAULT_OUTPUT);
+			
+			assertThat(output.toFile()).exists().isDirectory();
+			assertThat(output.resolve("scenarios-001.txt").toFile()).exists().isFile();
+			assertThat(output.resolve("scenarios-002.txt").toFile()).exists().isFile();
+			assertThat(output.resolve("scenarios-003.txt").toFile()).doesNotExist();
 			
 		}
 		

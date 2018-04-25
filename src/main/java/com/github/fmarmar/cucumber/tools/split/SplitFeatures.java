@@ -1,5 +1,7 @@
 package com.github.fmarmar.cucumber.tools.split;
 
+import io.cucumber.tagexpressions.Expression;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
@@ -8,6 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import lombok.Getter;
+
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.github.fmarmar.cucumber.tools.Command;
@@ -15,10 +19,6 @@ import com.github.fmarmar.cucumber.tools.exception.CommandException;
 import com.github.fmarmar.cucumber.tools.jcommander.PathConverter;
 import com.github.fmarmar.cucumber.tools.jcommander.TagExpressionConverter;
 import com.github.fmarmar.cucumber.tools.split.SplitterByScenario.PickleInfo;
-import com.google.common.collect.Lists;
-
-import io.cucumber.tagexpressions.Expression;
-import lombok.Getter;
 
 /**
  * 
@@ -30,7 +30,7 @@ import lombok.Getter;
 @Parameters(commandNames = "split-features", commandDescription = "Split the given features")
 public class SplitFeatures implements Command {
 
-	public enum Separator { SPACE, EOL }
+	public enum Separator { SPACE, EOL, COMMA }
 
 	public static final Expression DEFAULT_TAG_EXPRESSION = TagExpressionConverter.NO_EXPRESSION;
 
@@ -104,7 +104,7 @@ public class SplitFeatures implements Command {
 			if (number == 1) {
 				generateOutput(output.resolve("scenarios.txt"), pickles);
 			} else {
-				List<List<PickleInfo>> partitions = Lists.partition(pickles, (int) Math.ceil(pickles.size() / number));
+				List<List<PickleInfo>> partitions = SplitUtils.splitList(pickles, number);
 
 				int idx = 1;
 				for (List<PickleInfo> partition : partitions) {
@@ -138,14 +138,14 @@ public class SplitFeatures implements Command {
 
 	}
 
-
-
 	private static char separatorChar(Separator sep) {
 		switch(sep) {
 			case SPACE:
 				return ' ';
 			case EOL:
 				return '\n';
+			case COMMA:
+				return ',';
 			default:
 				throw new IllegalArgumentException("Unknown separator value: " + sep);
 		}
