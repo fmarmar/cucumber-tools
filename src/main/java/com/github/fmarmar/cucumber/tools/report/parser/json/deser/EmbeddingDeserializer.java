@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fmarmar.cucumber.tools.report.model.Embedding;
 import com.github.fmarmar.cucumber.tools.report.parser.ReportParser.ParserConfiguration;
 import com.github.fmarmar.cucumber.tools.report.utils.ReportUtils;
+import com.google.common.base.CharMatcher;
 import com.google.common.io.BaseEncoding;
 import com.google.common.net.MediaType;
 
@@ -36,7 +37,7 @@ public class EmbeddingDeserializer extends BaseDeserializer<Embedding> {
 		Path file = baseDir.resolve(ReportUtils.hash(data) + extension(mimeType));
 
 		if (!file.toFile().exists()) {
-			try (Reader dataReader = new StringReader(data)) {
+			try (Reader dataReader = new StringReader(CharMatcher.whitespace().removeFrom(data))) {
 				Files.copy(BaseEncoding.base64().decodingStream(dataReader), file);
 			}
 		}
@@ -45,11 +46,11 @@ public class EmbeddingDeserializer extends BaseDeserializer<Embedding> {
 	}
 
 	private String extension(MediaType mimeType) {
-		
+
 		if (MediaType.PLAIN_TEXT_UTF_8.is(mimeType)) {
 			return ".txt";
 		}
-		
+
 		if (mimeType.is(MediaType.SVG_UTF_8)) {
 			return ".svg";
 		}
@@ -61,7 +62,7 @@ public class EmbeddingDeserializer extends BaseDeserializer<Embedding> {
 		if (MediaType.JSON_UTF_8.is(mimeType)) {
 			return ".json";
 		}
-		
+
 		if (MediaType.PDF.is(mimeType)) {
 			return ".pdf";
 		}
