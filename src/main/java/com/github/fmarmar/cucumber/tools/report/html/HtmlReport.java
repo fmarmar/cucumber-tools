@@ -21,7 +21,7 @@ import com.github.fmarmar.cucumber.tools.report.parser.ReportParser;
 import lombok.Getter;
 
 @Parameters(
-		commandNames = "html-report", 
+		commandNames = "html-report",
 		commandDescription = "Generate an html report from the given json reports"
 		)
 public class HtmlReport implements Command {
@@ -29,35 +29,41 @@ public class HtmlReport implements Command {
 	public static final int DEFAULT_THREADS_SIZE = 100;
 
 	public static final Path DEFAULT_OUTPUT = Paths.get("reports", "html");
-	
+
 	public static final String DEFAULT_PROJECT_NAME = "No project";
 
 	@Getter
 	@Parameter(
-			names = { "--reports", "-r" }, 
-			variableArity = true, 
-			description = "Path(s) where to find the json reports", 
+			names = { "--reports", "-r" },
+			variableArity = true,
+			description = "Path(s) where to find the json reports",
 			converter = PathConverter.class)
 	private List<Path> reports;
 
 	@Getter
 	@Parameter(
-			names = { "--output", "-o" }, 
-			description = "Path where the report will be generated. Default: reports/html", 
+			names = { "--output", "-o" },
+			description = "Path where the report will be generated. Default: reports/html",
 			converter = PathConverter.class)
 	private Path output = DEFAULT_OUTPUT;
-	
+
 	@Getter
 	@Parameter(
-			names = { "--project", "-p" }, 
+			names = { "--project", "-p" },
 			description = "Project name to print in the report. Default: " + DEFAULT_PROJECT_NAME)
 	private String projectName = DEFAULT_PROJECT_NAME;
-	
+
 	@Getter
 	@Parameter(
-			names = { "--build", "-b" }, 
+			names = { "--build", "-b" },
 			description = "Build id to print in the report. Default: (empty)")
 	private String buildId = null;
+
+	@Getter
+	@Parameter(
+			names = { "--debug", "-X" },
+			description = "Debug the process")
+	private boolean debugMode = false;
 
 	private ReportParser parser;
 
@@ -91,7 +97,7 @@ public class HtmlReport implements Command {
 	}
 
 	private void init() throws IOException {
-		parser = new ReportParser();
+		parser = new ReportParser(debugMode);
 		ReportMetadata reportMetadata = new ReportMetadata(projectName, buildId);
 		PageGenerator pageGenerator = new VelocityPageGenerator(reportMetadata, DEFAULT_THREADS_SIZE);
 		generator = new ReportGenerator(pageGenerator, output, DEFAULT_THREADS_SIZE);

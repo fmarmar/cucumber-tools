@@ -18,6 +18,7 @@ import java.util.Properties;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -27,30 +28,37 @@ import com.github.fmarmar.cucumber.tools.report.model.Feature;
 import com.github.fmarmar.cucumber.tools.report.parser.json.util.PathRequestPayload;
 
 class ParserTask {
-	
+
 	public static final String METADATA_FILENAME = ".metadata";
 
 	private static final TypeReference<List<Feature>> FEATURES_TYPE_REF = new TypeReference<List<Feature>>() {};
-	
+
 	private static final JsonNode DEFAULT_METADATA = NullNode.getInstance();
 
 	private static final String FEATURE_URI_FIELD_NAME = "uri";
 
 	private static final String ELEMENTS_FIELD_NAME = "elements";
-	
+
 	private static final String METADATA_FIELD_NAME = "metadata";
 
 	private final ObjectMapper mapper;
 
+	private final boolean debugMode;
+
 	private ArrayNode reports = null;
 
 	private Map<String, JsonNode> reportsIndex;
-	
+
 	private JsonNode currentMetadata = DEFAULT_METADATA;
-	
+
 	private Path currentMetadataPath = null;
 
 	public ParserTask(ObjectMapper mapper) {
+		this(mapper, false);
+	}
+
+	public ParserTask(ObjectMapper mapper, boolean debugMode) {
+		this.debugMode = debugMode;
 		this.mapper = mapper;
 	}
 
@@ -87,27 +95,27 @@ class ParserTask {
 
 			@Override
 			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-				
+
 				if (currentMetadata.isNull()) {
 					parseMetadata(dir);
 				}
-				
+
 				return FileVisitResult.CONTINUE;
 			}
-			
+
 			@Override
 			public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-			
+
 				super.postVisitDirectory(dir, exc);
-			
+
 				if (dir.equals(currentMetadataPath)) {
 					currentMetadata = DEFAULT_METADATA;
 					currentMetadataPath = null;
 				}
-				
+
 				return FileVisitResult.CONTINUE;
 			}
-			
+
 			@Override
 			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 
@@ -121,23 +129,23 @@ class ParserTask {
 		});
 
 	}
-	
+
 	private void parseMetadata(Path path) throws IOException {
-		
+
 		File metadataFile = path.resolve(METADATA_FILENAME).toFile();
-		
+
 		if (metadataFile.exists() && metadataFile.isFile()) {
-			
+
 			try (Reader reader = Files.newBufferedReader(metadataFile.toPath(), StandardCharsets.UTF_8)) {
 				Properties props = new Properties();
 				props.load(reader);
-				
+
 				currentMetadata = mapper.valueToTree(props);
 				currentMetadataPath = path;
 			}
-			
+
 		}
-		
+
 	}
 
 	private boolean isJsonFile(Path path) {
@@ -148,6 +156,15 @@ class ParserTask {
 
 		try (InputStream is = Files.newInputStream(reportFile)) {
 			JsonNode reportNode = mapper.readTree(is);
+
+			if (debugMode) {
+				try {
+					mapper.convertValue(reportNode, FEATURES_TYPE_REF);
+				} catch (IllegalArgumentException e) {
+					throw JsonMappingException.wrapWithPath(e, null, reportFile.toString());
+				}
+			}
+
 			add(reportNode);
 		} catch (JsonParseException e) {
 			throw e.withRequestPayload(new PathRequestPayload(reportFile));
@@ -176,7 +193,7 @@ class ParserTask {
 				addScenarios(reportsIndex.get(key), value);
 			} else {
 				reports.add(value);
-				reportsIndex.put(key, value);			
+				reportsIndex.put(key, value);
 			}
 
 		}
@@ -199,18 +216,18 @@ class ParserTask {
 			if (currentMetadata.isObject()) {
 				((ObjectNode) featureNode).set(METADATA_FIELD_NAME, currentMetadata);
 			}
-			
-			features.put(buildFeatureKey(featureNode, currentMetadata), featureNode);			
+
+			features.put(buildFeatureKey(featureNode, currentMetadata), featureNode);
 		}
 
 		return features;
 	}
 
 	private static String buildFeatureKey(JsonNode featureNode, JsonNode currentMetadata) {
-		
+
 		String key = featureNode.get(FEATURE_URI_FIELD_NAME).textValue();
 		return (currentMetadata.isObject()) ? (key + currentMetadata.toString()) : key;
-		
+
 	}
 
 	private void addScenarios(JsonNode accFeatureNode, JsonNode featureNode) {
