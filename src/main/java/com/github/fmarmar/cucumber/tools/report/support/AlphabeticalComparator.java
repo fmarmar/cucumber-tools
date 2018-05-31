@@ -1,4 +1,4 @@
-package com.github.fmarmar.cucumber.tools.report.html.support;
+package com.github.fmarmar.cucumber.tools.report.support;
 
 import java.util.Comparator;
 

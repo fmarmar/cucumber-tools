@@ -19,7 +19,7 @@ import com.github.fmarmar.cucumber.tools.report.model.support.ScenarioType;
 import com.github.fmarmar.cucumber.tools.report.model.support.StepsSummary;
 import com.github.fmarmar.cucumber.tools.report.parser.json.deser.TagDeserializer;
 import com.github.fmarmar.cucumber.tools.report.parser.json.util.FeaturePostProcessor;
-import com.github.fmarmar.cucumber.tools.report.utils.ReportUtils;
+import com.github.fmarmar.cucumber.tools.report.support.ReportUtils;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,14 +50,14 @@ public class Feature implements ComparableElement, PostProcessor {
 	private StepsSummary stepsSummary;
 
 	private GenericResult result;
-	
+
 	private Metadata metadata = Metadata.NO_METADATA_INSTANCE;
-	
+
 	public Feature(String id, String uri) {
 		this.id = id;
 		this.uri = uri;
 	}
-	
+
 	@Override
 	public String comparable() {
 		return name;

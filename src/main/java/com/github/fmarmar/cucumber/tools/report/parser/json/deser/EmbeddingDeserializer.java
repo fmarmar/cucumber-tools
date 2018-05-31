@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fmarmar.cucumber.tools.report.model.Embedding;
 import com.github.fmarmar.cucumber.tools.report.parser.ReportParser.ParserConfiguration;
-import com.github.fmarmar.cucumber.tools.report.utils.ReportUtils;
+import com.github.fmarmar.cucumber.tools.report.support.ReportUtils;
 import com.google.common.base.CharMatcher;
 import com.google.common.io.BaseEncoding;
 import com.google.common.net.MediaType;

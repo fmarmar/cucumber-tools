@@ -1,7 +1,7 @@
 #macro(includeStatsTable, $tableKey, $items, $summary)
 
 <table id="tablesorter" class="stats-table table-hover">
-  
+
   <thead>
   	<tr class="header dont-sort">
       <th></th>
@@ -31,7 +31,7 @@
         	<abbr title="$utils.metadataTooltip($item.metadata)" class="metadata"><img class="icon-label" src="images/label.png"></abbr>
         	#end
         </td>
-        
+
         <td #if ($item.scenariosSummary.passed > 0) class="passed"    #end>$item.scenariosSummary.passed</td>
         <td #if ($item.scenariosSummary.skipped > 0) class="skipped"    #end>$item.scenariosSummary.skipped</td>
         <td #if ($item.scenariosSummary.failed > 0) class="failed"    #end>$item.scenariosSummary.failed</td>
@@ -42,7 +42,7 @@
       </tr>
     #end
   </tbody>
-  
+
   #if ($summary)
   <tfoot class="total">
     <tr>

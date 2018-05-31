@@ -1,4 +1,4 @@
-package com.github.fmarmar.cucumber.tools.report;
+package com.github.fmarmar.cucumber.tools.report.html;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.not;
@@ -23,7 +23,6 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.internal.util.collections.Iterables;
 
-import com.github.fmarmar.cucumber.tools.report.html.ReportGenerator;
 import com.github.fmarmar.cucumber.tools.report.html.page.PageGenerator;
 import com.github.fmarmar.cucumber.tools.report.html.page.PageGenerator.PageId;
 import com.github.fmarmar.cucumber.tools.report.html.report.Failure;
@@ -33,124 +32,124 @@ import com.github.fmarmar.cucumber.tools.report.model.FeatureBuilder;
 import com.github.fmarmar.cucumber.tools.report.model.support.GenericStatus;
 import com.google.common.collect.Lists;
 
-public class ReportGeneratorTest {
-	
-	private ReportGenerator reportGenerator;
-	
+public class ReporterTest {
+
+	private Reporter reporter;
+
 	private PageGenerator pageGenerator;
-	
+
 	@Before
 	public void checkJava8Runtime() {
 		assumeThat(System.getProperty("java.version"), not(startsWith("1.7")));
 	}
-	
+
 	@Before
 	public void configureTest() throws IOException {
-		
+
 		Path tmpPath = Files.createTempDirectory("test-");
 		pageGenerator = basicPageGeneratorMock(tmpPath);
-		
-		reportGenerator = new ReportGenerator(pageGenerator, tmpPath, 1);
-		
+
+		reporter = new Reporter(pageGenerator, tmpPath, 1);
+
 	}
-	
+
 	private PageGenerator basicPageGeneratorMock(Path tmpPath) {
-		
+
 		PageGenerator generator = mock(PageGenerator.class);
 		when(generator.resolvePagePath(any(PageId.class))).thenReturn(tmpPath);
 		when(generator.resolvePagePath(any(PageId.class), any(String.class))).thenReturn(tmpPath);
-				
+
 		return generator;
 	}
-	
+
 	@Test
 	public void testNoFailuresReport() throws IOException, InterruptedException {
-		
+
 		Feature feature = FeatureBuilder.newFeature()
 				.withScenarios(GenericStatus.PASSED, GenericStatus.PASSED, GenericStatus.SKIPPED)
 				.build();
-		
-		reportGenerator.generateReport(Lists.newArrayList(feature));
-		reportGenerator.finishReport();
-		
-		Collection<Failure> failures = getModelObject(PageId.FAILURES_OVERVIEW, ReportGenerator.FAILURES_KEY);
-		
+
+		reporter.generateReport(Lists.newArrayList(feature));
+		reporter.finishReport();
+
+		Collection<Failure> failures = getModelObject(PageId.FAILURES_OVERVIEW, Reporter.FAILURES_KEY);
+
 		assertThat(failures).isEmpty();
-		
+
 	}
-	
+
 	@Test
 	public void testFailuresReport() throws IOException, InterruptedException {
-		
+
 		Feature feature = FeatureBuilder.newFeature()
 				.withScenarios(GenericStatus.PASSED, GenericStatus.FAILED, GenericStatus.SKIPPED)
 				.build();
-		
-		reportGenerator.generateReport(Lists.newArrayList(feature));
-		reportGenerator.finishReport();
-		
-		Collection<Failure> failures = getModelObject(PageId.FAILURES_OVERVIEW, ReportGenerator.FAILURES_KEY);
-		
+
+		reporter.generateReport(Lists.newArrayList(feature));
+		reporter.finishReport();
+
+		Collection<Failure> failures = getModelObject(PageId.FAILURES_OVERVIEW, Reporter.FAILURES_KEY);
+
 		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
 			softly.assertThat(failures).size().isEqualTo(1);
 			softly.assertThat(Iterables.firstOf(failures).getScenarios()).size().isEqualTo(1);
 		}
-		
+
 	}
-	
+
 	@Test
 	public void testTagsReport() throws IOException, InterruptedException {
-		
+
 		Feature feature = FeatureBuilder.newFeature()
 				.withRandoScenarios(10)
 				.build();
-		
-		reportGenerator.generateReport(Lists.newArrayList(feature));
-		reportGenerator.finishReport();
-		
-		TagsReport tagsReport = getModelObject(PageId.TAGS_OVERVIEW, ReportGenerator.TAGS_REPORT_KEY);
-		
+
+		reporter.generateReport(Lists.newArrayList(feature));
+		reporter.finishReport();
+
+		TagsReport tagsReport = getModelObject(PageId.TAGS_OVERVIEW, Reporter.TAGS_REPORT_KEY);
+
 		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
-			
+
 			softly.assertThat(tagsReport).isNotNull();
-			
+
 			softly.assertThat(tagsReport.getTags()).size().isGreaterThan(0);
 
 		}
-		
+
 	}
-	
+
 	@Test
 	public void testFailedScenariosAreGroupedByFeatureInFailuresReport() throws IOException, InterruptedException {
-		
+
 		Feature feature = FeatureBuilder.newFeature()
 				.withScenarios(GenericStatus.PASSED, GenericStatus.FAILED, GenericStatus.FAILED)
 				.build();
-		
-		reportGenerator.generateReport(Lists.newArrayList(feature));
-		reportGenerator.finishReport();
-		
-		Collection<Failure> failures = getModelObject(PageId.FAILURES_OVERVIEW, ReportGenerator.FAILURES_KEY);
-		
+
+		reporter.generateReport(Lists.newArrayList(feature));
+		reporter.finishReport();
+
+		Collection<Failure> failures = getModelObject(PageId.FAILURES_OVERVIEW, Reporter.FAILURES_KEY);
+
 		try (AutoCloseableSoftAssertions softly = new AutoCloseableSoftAssertions()) {
 			softly.assertThat(failures).size().isEqualTo(1);
 			softly.assertThat(Iterables.firstOf(failures).getScenarios()).size().isEqualTo(2);
 		}
-		
+
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private <T> T getModelObject(PageId pageId, String key) throws IOException {
-		
+
 		ArgumentCaptor<Map<String, Object>> modelCaptor = ArgumentCaptor.forClass(Map.class);
 		verify(pageGenerator, atLeastOnce()).generatePage(eq(pageId), any(Path.class), modelCaptor.capture());
-			
+
 		return (T) modelCaptor.getValue().get(key);
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 }

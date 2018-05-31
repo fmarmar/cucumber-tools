@@ -67,7 +67,7 @@ public class HtmlReport implements Command {
 
 	private ReportParser parser;
 
-	private ReportGenerator generator;
+	private Reporter reporter;
 
 	@Override
 	public void initialize() {
@@ -100,7 +100,7 @@ public class HtmlReport implements Command {
 		parser = new ReportParser(debugMode);
 		ReportMetadata reportMetadata = new ReportMetadata(projectName, buildId);
 		PageGenerator pageGenerator = new VelocityPageGenerator(reportMetadata, DEFAULT_THREADS_SIZE);
-		generator = new ReportGenerator(pageGenerator, output, DEFAULT_THREADS_SIZE);
+		reporter = new Reporter(pageGenerator, output, DEFAULT_THREADS_SIZE);
 	}
 
 	@Override
@@ -109,9 +109,9 @@ public class HtmlReport implements Command {
 		try {
 			ParsedReports parsedReports = parser.parse(reports);
 
-			generator.prepareReport(parsedReports.getEmbeddingsDirectory());
-			generator.generateReport(parsedReports.getFeatures());
-			generator.finishReport();
+			reporter.prepareReport(parsedReports.getEmbeddingsDirectory());
+			reporter.generateReport(parsedReports.getFeatures());
+			reporter.finishReport();
 
 		} catch (IOException | InterruptedException e) {
 			throw new CommandException(e.getMessage(), e);
