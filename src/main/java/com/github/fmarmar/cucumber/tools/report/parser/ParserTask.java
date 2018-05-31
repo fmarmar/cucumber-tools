@@ -27,6 +27,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.fmarmar.cucumber.tools.report.model.Feature;
 import com.github.fmarmar.cucumber.tools.report.parser.json.util.PathRequestPayload;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 class ParserTask {
 
 	public static final String METADATA_FILENAME = ".metadata";
@@ -155,14 +158,17 @@ class ParserTask {
 	private void parseReport(Path reportFile) throws IOException {
 
 		try (InputStream is = Files.newInputStream(reportFile)) {
-			JsonNode reportNode = mapper.readTree(is);
+			JsonNode node = mapper.readTree(is);
+
+			ArrayNode reportNode = checkReportTree(node);
+
+			if (reportNode.size() == 0) {
+				log.warn("Ignoring empty report file {}", reportFile);
+				return;
+			}
 
 			if (debugMode) {
-				try {
-					mapper.convertValue(reportNode, FEATURES_TYPE_REF);
-				} catch (IllegalArgumentException e) {
-					throw JsonMappingException.wrapWithPath(e, null, reportFile.toString());
-				}
+				checkReportFile(reportNode, reportFile);
 			}
 
 			add(reportNode);
@@ -172,17 +178,33 @@ class ParserTask {
 
 	}
 
-	private void add(JsonNode reportNode) {
+	private ArrayNode checkReportTree(JsonNode report) {
 
-		checkReportTree(reportNode);
+		if (report.isArray()) {
+			return (ArrayNode) report;
+		}
+
+		throw new IllegalArgumentException("Report should be an array");
+
+	}
+
+	private void checkReportFile(ArrayNode reportNode, Path reportFile) throws JsonMappingException {
+		try {
+			mapper.convertValue(reportNode, FEATURES_TYPE_REF);
+		} catch (IllegalArgumentException e) {
+			throw JsonMappingException.wrapWithPath(e, null, reportFile.toString());
+		}
+	}
+
+	private void add(ArrayNode reportNode) {
 
 		if (reports == null) {
-			reports = (ArrayNode) reportNode;
+			reports = reportNode;
 			reportsIndex = indexFeatures(reports);
 			return;
 		}
 
-		Map<String, JsonNode> nodeIndex = indexFeatures((ArrayNode) reportNode);
+		Map<String, JsonNode> nodeIndex = indexFeatures(reportNode);
 
 		for (Entry<String, JsonNode> feature : nodeIndex.entrySet()) {
 
@@ -196,14 +218,6 @@ class ParserTask {
 				reportsIndex.put(key, value);
 			}
 
-		}
-
-	}
-
-	private void checkReportTree(JsonNode report) {
-
-		if (!report.isArray()) {
-			throw new IllegalArgumentException("Report should be an array");
 		}
 
 	}
