@@ -1,3 +1,20 @@
+v0.5.0
+======
+
+* csv-report: New report
+* html-report: Add supoort old base64 encoders that insert CR/LFs into the encoded string
+
+v0.4.1
+======
+
+* split-features: Fix bug with scenario outlines
+
+v0.4.0
+======
+
+* split-features: Fix bug reading tag expression from command line
+* html-report: new Tag Overview page
+
 v0.3.0
 ======
 
@@ -8,10 +25,10 @@ v0.2.2
 ======
 
 * html-report: Remove feature tags from scenario tags
-* html-report: Sort Tags 
+* html-report: Sort Tags
 * html-report: Fix metadata tooltip formatting
 * html-report: Report conflictive file when JsonParseException is raised
- 
+
 v0.2.1
 ======
 
